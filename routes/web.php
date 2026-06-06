@@ -7,30 +7,29 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/clashers/create', [ClasherController::class, 'create']);
-Route::post('/clashers/store', [ClasherController::class, 'store']);
+/*
+|--------------------------------------------------------------------------
+| Clashers
+|--------------------------------------------------------------------------
+*/
 
+Route::controller(ClasherController::class)->group(function () {
 
-use Illuminate\Support\Facades\Http;
+    Route::get('/clashers', 'index')
+        ->name('clashers.index');
 
-Route::get('/test-coc', function () {
+    Route::get('/clashers/create', 'create')
+        ->name('clashers.create');
 
-    $tag = 'g2rlopo9u'; // ganti dengan tag akun Anda TANPA #
+    Route::post('/clashers/store', 'store')
+        ->name('clashers.store');
 
-    $response = Http::withHeaders([
-        'Authorization' => 'Bearer '.config('services.coc.token'),
-    ])->get(
-        "https://api.clashofclans.com/v1/players/%23{$tag}"
-    );
+    Route::get('/clashers/{clasher}/war-profile', 'warProfile')
+        ->name('clashers.war-profile');
 
-    return $response->json();
+    Route::post('/clashers/{clasher}/war-profile', 'saveWarProfile')
+        ->name('clashers.war-profile.save');
+
 });
 
-use App\Services\ClashOfClansService;
 
-Route::get('/player-test', function () {
-
-    $coc = new ClashOfClansService();
-
-    return $coc->getPlayer('#g2rlopo9u');
-});
