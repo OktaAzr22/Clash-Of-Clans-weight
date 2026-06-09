@@ -23,4 +23,15 @@ class ClashOfClansService
             ->get($this->baseUrl . "/players/%23{$tag}")
             ->json();
     }
+
+    public function getClan(string $tag)
+    {
+        $tag = str_replace('#', '', $tag);
+
+        return $this->client()
+            ->get(
+                $this->baseUrl . "/clans/%23{$tag}"
+            )
+            ->json();
+    }
 }
