@@ -21,10 +21,21 @@ class Clasher extends Model
         'queen',
         'warden',
         'champion',
+
+        'last_war_profile_update',
+    ];
+
+    protected $casts = [
+        'last_war_profile_update' => 'datetime',
     ];
 
     public function buildings()
-{
-    return $this->hasMany(ClasherBuilding::class);
-}
+    {
+        return $this->hasMany(ClasherBuilding::class);
+    }
+
+    public function clasherBuildings()
+    {
+        return $this->hasMany(ClasherBuilding::class);
+    }
 }

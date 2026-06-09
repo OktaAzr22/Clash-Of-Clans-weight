@@ -27,6 +27,8 @@ return new class extends Migration
             $table->unsignedSmallInteger('warden')->default(0);
             $table->unsignedSmallInteger('champion')->default(0);
 
+            $table->timestamp('last_war_profile_update')->nullable();
+
             $table->timestamps();
         });
     }

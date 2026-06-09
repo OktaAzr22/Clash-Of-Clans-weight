@@ -1,3 +1,8 @@
+<h2>Daftar Clasher</h2>
+
+<a href="{{ route('clashers.overview') }}">
+    Lihat Data TH dan Bangunannya
+</a>
 <table border="1">
 
     <tr>

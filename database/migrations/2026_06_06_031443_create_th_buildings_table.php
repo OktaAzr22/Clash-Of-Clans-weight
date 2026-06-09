@@ -22,6 +22,8 @@ return new class extends Migration
 
             $table->unsignedTinyInteger('quantity');
 
+            $table->unsignedTinyInteger('max_level');
+
             $table->timestamps();
         });
     }

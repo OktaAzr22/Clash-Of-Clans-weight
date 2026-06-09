@@ -22,4 +22,6 @@ class ClasherBuilding extends Model
     {
         return $this->belongsTo(Clasher::class);
     }
+
+    
 }

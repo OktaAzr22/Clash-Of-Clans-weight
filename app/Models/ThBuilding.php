@@ -10,6 +10,7 @@ class ThBuilding extends Model
         'town_hall',
         'building_id',
         'quantity',
+        'max_level',
     ];
 
     public function building()

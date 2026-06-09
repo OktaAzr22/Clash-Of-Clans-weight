@@ -25,13 +25,22 @@ class BuildingController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required'],
+            'name' => [
+                'required',
+                'string',
+                'max:100',
+                'unique:buildings,name',
+            ],
         ]);
 
         Building::create([
-            'name' => $request->name,
+            'name' => trim($request->name),
         ]);
 
-        return redirect('/buildings');
+        return redirect('/buildings')
+            ->with(
+                'success',
+                'Bangunan berhasil ditambahkan.'
+            );
     }
 }
