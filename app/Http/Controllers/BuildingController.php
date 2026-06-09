@@ -11,10 +11,7 @@ class BuildingController extends Controller
     {
         $buildings = Building::latest()->get();
 
-        return view(
-            'buildings.index',
-            compact('buildings')
-        );
+        return view('buildings.index', compact('buildings'));
     }
 
     public function create()
@@ -37,10 +34,8 @@ class BuildingController extends Controller
             'name' => trim($request->name),
         ]);
 
-        return redirect('/buildings')
-            ->with(
-                'success',
-                'Bangunan berhasil ditambahkan.'
-            );
+        return redirect()
+            ->route('buildings.index')
+            ->with('success', 'Bangunan berhasil ditambahkan.');
     }
 }
