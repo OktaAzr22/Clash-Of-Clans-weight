@@ -53,9 +53,6 @@ Route::controller(BuildingController::class)->group(function () {
     Route::get('/buildings', 'index')
         ->name('buildings.index');
 
-    Route::get('/buildings/create', 'create')
-        ->name('buildings.create');
-
     Route::post('/buildings', 'store')
         ->name('buildings.store');
 
