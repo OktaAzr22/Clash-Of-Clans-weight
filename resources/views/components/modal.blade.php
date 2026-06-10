@@ -24,8 +24,7 @@
 >
 
     <div
-        class="modal-container bg-white rounded-2xl shadow-2xl w-full {{ $width }} scale-95 transition-all duration-300"
-    >
+        class="modal-container bg-white rounded-2xl shadow-2xl w-full {{ $width }} scale-95 transition-all duration-300">
 
         <div class="flex items-center justify-between p-5 border-b">
             <h3 class="text-xl font-semibold text-slate-800">
@@ -34,8 +33,7 @@
 
             <button
                 type="button"
-                class="close-modal text-slate-400 hover:text-slate-600 text-3xl leading-none"
-            >
+                class="close-modal text-slate-400 hover:text-slate-600 text-3xl leading-none">
                 &times;
             </button>
         </div>
