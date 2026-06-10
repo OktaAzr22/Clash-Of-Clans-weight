@@ -1,3 +1,13 @@
+
+
+
+
+
+
+@extends('layouts.app')
+
+@section('content')
+<x-page-header />
 <h2>Tambah TH Building</h2>
 
 <form method="POST"
@@ -94,3 +104,4 @@
     </button>
 
 </form>
+@endsection

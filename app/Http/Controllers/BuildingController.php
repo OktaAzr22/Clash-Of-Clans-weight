@@ -36,7 +36,7 @@ class BuildingController extends Controller
         ]);
 
         return redirect()
-            ->route('buildings.index')
+            ->back()
             ->with('success', 'Bangunan berhasil ditambahkan.');
     }
 }

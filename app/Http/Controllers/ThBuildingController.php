@@ -10,17 +10,23 @@ use Illuminate\Http\Request;
 class ThBuildingController extends Controller
 {
     public function index()
-    {
-        $thBuildings = ThBuilding::with('building')
-            ->orderBy('town_hall')
-            ->orderBy('building_id')
-            ->get();
+{
+    $thBuildings = ThBuilding::with('building')
+        ->orderBy('town_hall')
+        ->orderBy('building_id')
+        ->get();
 
-        return view(
-            'th-buildings.index',
-            compact('thBuildings')
-        );
-    }
+    $buildings = Building::orderBy('name')
+        ->get();
+
+    return view(
+        'th-buildings.index',
+        compact(
+            'thBuildings',
+            'buildings'
+        )
+    );
+}
 
     public function create()
     {
@@ -39,7 +45,7 @@ class ThBuildingController extends Controller
             'town_hall' => [
                 'required',
                 'integer',
-                'min:1',
+                'min:12',
                 'max:17',
             ],
 

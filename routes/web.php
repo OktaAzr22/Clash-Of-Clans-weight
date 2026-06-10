@@ -13,6 +13,10 @@ Route::get('/', function () {
 Route::get('/a', function () {
     return view('test');
 });
+Route::view(
+    '/dashboard',
+    'dashboard'
+)->name('dashboard');
 /*
 |--------------------------------------------------------------------------
 | Clashers
@@ -48,15 +52,18 @@ Route::controller(ClasherController::class)->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::controller(BuildingController::class)->group(function () {
+Route::prefix('buildings')
+    ->name('buildings.')
+    ->controller(BuildingController::class)
+    ->group(function () {
 
-    Route::get('/buildings', 'index')
-        ->name('buildings.index');
+        Route::get('/', 'index')
+            ->name('index');
 
-    Route::post('/buildings', 'store')
-        ->name('buildings.store');
+        Route::post('/', 'store')
+            ->name('store');
 
-});
+    });
 
 
 /*

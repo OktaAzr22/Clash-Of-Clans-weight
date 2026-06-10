@@ -38,7 +38,7 @@
             </button>
         </div>
 
-        <div class="p-5">
+        <div class="p-5  overflow-y-auto max-h-[70vh]">
             {{ $slot }}
         </div>
 

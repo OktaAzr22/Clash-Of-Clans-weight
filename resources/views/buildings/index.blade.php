@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+
+<x-page-header />
+
+ 
 <div class="max-w-7xl mx-auto px-4 py-6">
 
     <div class="flex justify-between items-center mb-6">
