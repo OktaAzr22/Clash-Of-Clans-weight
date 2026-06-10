@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Velora</title>
+   
+    <script src="https://cdn.tailwindcss.com"></script>
+   
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4f46e5',
+                        'primary-dark': '#4338ca',
+                        secondary: '#0f172a',
+                        'soft-gray': '#f8fafc',
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 10px;
+        }
+        .transition-smooth {
+            transition: all 0.2s ease;
+        }
+    </style>
+</head>
+<body class="font-inter antialiased">
+
+    <div class="flex h-screen overflow-hidden bg-soft-gray">
+        
+        <aside class="w-72 bg-gradient-to-b from-secondary to-slate-800 text-white shadow-2xl flex-shrink-0 flex flex-col">
+            <div class="px-6 py-7 border-b border-slate-700/60 flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-lg">
+                    <i class="fas fa-chart-line text-xl text-white"></i>
+                </div>
+                <span class="text-xl font-bold tracking-tight">Velora<span class="text-primary">Admin</span></span>
+            </div>
+            
+            <nav class="flex-1 px-4 mt-6 space-y-1.5">
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/20 text-white font-medium transition-smooth group">
+                    <i class="fas fa-tachometer-alt w-5 text-lg"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-700/50 hover:text-white transition-smooth">
+                    <i class="fas fa-users w-5"></i>
+                    <span>Pengguna</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-700/50 hover:text-white transition-smooth">
+                    <i class="fas fa-chart-pie w-5"></i>
+                    <span>Analitik</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-700/50 hover:text-white transition-smooth">
+                    <i class="fas fa-cog w-5"></i>
+                    <span>Pengaturan</span>
+                </a>
+                <div class="pt-6 mt-6 border-t border-slate-700/50">
+                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-700/50 hover:text-red-300 transition-smooth">
+                        <i class="fas fa-sign-out-alt w-5"></i>
+                        <span>Keluar</span>
+                    </a>
+                </div>
+            </nav>
+            
+            <div class="p-4 border-t border-slate-700/60 mt-auto">
+                <div class="flex items-center gap-3 bg-slate-800/50 rounded-xl p-3">
+                    <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center shadow-md">
+                        <span class="text-sm font-bold">AD</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-semibold truncate">Admin Velora</p>
+                        <p class="text-xs text-slate-400 truncate">admin@velora.com</p>
+                    </div>
+                    <i class="fas fa-chevron-right text-slate-400 text-xs"></i>
+                </div>
+            </div>
+        </aside>
+        
+        <div class="flex-1 flex flex-col overflow-y-auto overflow-x-hidden">
+            
+            <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-10 border-b border-slate-200/70">
+                <div class="px-6 py-4 flex items-center justify-between">
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-800">Dashboard</h1>
+                        <nav class="text-sm mt-0.5">
+                            <ol class="list-none p-0 inline-flex items-center space-x-1.5">
+                                <li class="flex items-center">
+                                    <a href="#" class="text-slate-500 hover:text-primary transition">Beranda</a>
+                                    <i class="fas fa-chevron-right text-xs mx-1.5 text-slate-400"></i>
+                                </li>
+                                <li class="flex items-center">
+                                    <a href="#" class="text-slate-500 hover:text-primary transition">Admin</a>
+                                    <i class="fas fa-chevron-right text-xs mx-1.5 text-slate-400"></i>
+                                </li>
+                                <li class="text-primary font-medium">Dashboard</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-r from-primary to-indigo-500 flex items-center justify-center text-white text-sm font-bold shadow-md">
+                                AD
+                            </div>
+                            <span class="hidden sm:inline-block text-sm font-medium text-slate-700">Admin</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <main class="p-6 md:p-8">
+                <div class="mb-8 bg-gradient-to-r from-indigo-50 via-white to-purple-50 rounded-2xl p-5 shadow-sm border border-indigo-100">
+                    <div class="flex flex-wrap justify-between items-center">
+                        <div>
+                            <h2 class="text-2xl font-bold text-slate-800">Selamat datang kembali, <span class="text-primary">Admin!</span></h2>
+                            <p class="text-slate-500 mt-1">Berikut ringkasan aktivitas dan statistik hari ini.</p>
+                        </div>
+                        <div class="mt-3 sm:mt-0">
+                            <span class="bg-white/60 text-slate-700 px-4 py-2 rounded-xl shadow-sm text-sm flex items-center gap-2"><i class="far fa-calendar-alt text-primary"></i> Kamis, 10 Juni 2026</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Card 1 -->
+                    <div class="bg-white rounded-2xl shadow-md p-5 border border-slate-100 hover:shadow-lg transition-all duration-300 group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-slate-500 text-sm font-medium">Total Pengguna</p>
+                                <h3 class="text-3xl font-bold text-slate-800 mt-2">12,543</h3>
+                                <span class="inline-flex items-center text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full mt-3"><i class="fas fa-arrow-up mr-1 text-[10px]"></i> +12%</span>
+                            </div>
+                            <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                <i class="fas fa-users text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="bg-white rounded-2xl shadow-md p-5 border border-slate-100 hover:shadow-lg transition-all duration-300 group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-slate-500 text-sm font-medium">Pendapatan</p>
+                                <h3 class="text-3xl font-bold text-slate-800 mt-2">Rp 89.2Jt</h3>
+                                <span class="inline-flex items-center text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full mt-3"><i class="fas fa-arrow-up mr-1"></i> +23%</span>
+                            </div>
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-chart-line text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="bg-white rounded-2xl shadow-md p-5 border border-slate-100 hover:shadow-lg transition-all duration-300 group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-slate-500 text-sm font-medium">Order Selesai</p>
+                                <h3 class="text-3xl font-bold text-slate-800 mt-2">1,892</h3>
+                                <span class="inline-flex items-center text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded-full mt-3"><i class="fas fa-chart-simple mr-1"></i> stabil</span>
+                            </div>
+                            <div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-600 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-shopping-cart text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="bg-white rounded-2xl shadow-md p-5 border border-slate-100 hover:shadow-lg transition-all duration-300 group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-slate-500 text-sm font-medium">Tingkat Konversi</p>
+                                <h3 class="text-3xl font-bold text-slate-800 mt-2">68.9%</h3>
+                                <span class="inline-flex items-center text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full mt-3"><i class="fas fa-arrow-up mr-1"></i> +5.2%</span>
+                            </div>
+                            <div class="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-percent text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                
+                <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 text-center md:text-left">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div>
+                            <h4 class="font-bold text-slate-800">Ingin menambahkan data produk?</h4>
+                            <p class="text-slate-500 text-sm mt-1">Klik tombol di samping untuk membuka form modal.</p>
+                        </div>
+                        <button id="openModalBtnSecond" class="bg-primary text-white px-5 py-2.5 rounded-xl shadow-md hover:bg-primary-dark transition flex items-center gap-2"><i class="fas fa-folder-plus"></i> Tambah Produk Baru</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="modalOverlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 invisible opacity-0 transition-all duration-300">
+        <div id="modalContainer" class="bg-white rounded-2xl w-full max-w-md mx-4 shadow-2xl transform scale-95 transition-all duration-300">
+            <div class="flex justify-between items-center p-5 border-b border-slate-200">
+                <h3 class="text-xl font-bold text-slate-800 flex gap-2 items-center"><i class="fas fa-plus-circle text-primary"></i> Form Tambah Data</h3>
+                <button id="closeModalBtn" class="text-slate-400 hover:text-slate-600 transition text-2xl leading-5">&times;</button>
+            </div>
+            <div class="p-5">
+                <div class="mb-4">
+                    <label class="block text-slate-700 text-sm font-medium mb-1">Nama Lengkap</label>
+                    <input type="text" class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition" placeholder="Masukkan nama">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-slate-700 text-sm font-medium mb-1">Kategori / Item</label>
+                    <input type="text" class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition" placeholder="Contoh: Produk, Jasa, Layanan">
+                </div>
+                <div class="mb-5">
+                    <label class="block text-slate-700 text-sm font-medium mb-1">Status</label>
+                    <select class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-primary/30 focus:border-primary">
+                        <option>Aktif</option>
+                        <option>Pending</option>
+                        <option>Selesai</option>
+                    </select>
+                </div>
+                <button class="w-full bg-primary text-white py-2.5 rounded-xl hover:bg-primary-dark transition font-medium shadow-sm">Simpan Data</button>
+                <p class="text-xs text-center text-slate-400 mt-3">*Halaman tampilan, tombol tidak menyimpan data</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalContainer = document.getElementById('modalContainer');
+        const openModalBtns = document.querySelectorAll('#openModalBtn, #openModalBtnAlt, #openModalBtnSecond');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        
+        function openModal() {
+            modalOverlay.classList.remove('invisible', 'opacity-0');
+            modalOverlay.classList.add('visible', 'opacity-100');
+            modalContainer.classList.remove('scale-95');
+            modalContainer.classList.add('scale-100');
+        }
+        
+        function closeModal() {
+            modalOverlay.classList.add('invisible', 'opacity-0');
+            modalOverlay.classList.remove('visible', 'opacity-100');
+            modalContainer.classList.add('scale-95');
+            modalContainer.classList.remove('scale-100');
+        }
+        
+        openModalBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openModal();
+            });
+        });
+        
+        closeModalBtn.addEventListener('click', closeModal);
+        
+        modalOverlay.addEventListener('click', (e) => {
+            if(e.target === modalOverlay) closeModal();
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'Escape' && modalOverlay.classList.contains('visible')) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
