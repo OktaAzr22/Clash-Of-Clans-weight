@@ -62,8 +62,9 @@ if ($routeName) {
 
 @endphp
 
-<header class="bg-white/80 backdrop-blur-md border-b border-slate-200/70">
-
+<header
+    class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-10 border-b border-slate-200/70"
+>
     <div class="px-6 py-4 flex items-center justify-between">
 
         <div>
@@ -72,9 +73,9 @@ if ($routeName) {
                 {{ $title }}
             </h1>
 
-            <nav class="text-sm mt-1">
+            <nav class="text-sm mt-0.5">
 
-                <ol class="flex items-center">
+                <ol class="inline-flex items-center space-x-1.5">
 
                     @foreach($breadcrumbs as $breadcrumb)
 
@@ -91,7 +92,7 @@ if ($routeName) {
 
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    class="h-3 w-3 mx-2 text-slate-400"
+                                    class="w-3 h-3 mx-1.5 text-slate-400"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
@@ -107,7 +108,7 @@ if ($routeName) {
                             @else
 
                                 <span
-                                    class="font-medium text-blue-600"
+                                    class="text-blue-600 font-medium"
                                 >
                                     {{ $breadcrumb['label'] }}
                                 </span>
@@ -124,16 +125,31 @@ if ($routeName) {
 
         </div>
 
-        @isset($actions)
+        <div class="flex items-center gap-4">
+
+            @isset($actions)
+                <div class="flex items-center gap-2">
+                    {{ $actions }}
+                </div>
+            @endisset
 
             <div class="flex items-center gap-2">
 
-                {{ $actions }}
+                <div
+                    class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-indigo-500 flex items-center justify-center text-white text-sm font-bold shadow-md"
+                >
+                    AD
+                </div>
+
+                <span
+                    class="hidden sm:inline-block text-sm font-medium text-slate-700"
+                >
+                    Admin
+                </span>
 
             </div>
 
-        @endisset
+        </div>
 
     </div>
-
 </header>

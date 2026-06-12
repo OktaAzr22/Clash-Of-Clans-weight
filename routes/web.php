@@ -28,8 +28,7 @@ Route::controller(ClasherController::class)->group(function () {
     Route::get('/clashers', 'index')
         ->name('clashers.index');
 
-    Route::get('/clashers/create', 'create')
-        ->name('clashers.create');
+    
 
     Route::post('/clashers/store', 'store')
         ->name('clashers.store');
@@ -52,17 +51,10 @@ Route::controller(ClasherController::class)->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('buildings')
-    ->name('buildings.')
-    ->controller(BuildingController::class)
-    ->group(function () {
-
-        
-
-        Route::post('/', 'store')
-            ->name('store');
-
-    });
+Route::post(
+    '/buildings',
+    [BuildingController::class, 'store']
+)->name('buildings.store');
 
 
 /*

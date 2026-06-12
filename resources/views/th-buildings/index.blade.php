@@ -1,81 +1,163 @@
+
+
+
+
+
+
 @extends('layouts.app')
-
 @section('content')
-<x-page-header />
 
-<h2>Daftar TH Building</h2>
+<div class="space-y-6">
 
-<br>
-<div class="flex gap-2">
+    {{-- Header Actions --}}
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
-    <x-button
-        data-modal-target="createThBuildingModal">
-        Tambah Konfigurasi
-    </x-button>
+        <div>
+            <h2 class="text-2xl font-bold text-slate-800">
+                Daftar TH Building
+            </h2>
 
-    <x-button
-        variant="secondary"
-        data-modal-target="createBuildingModal">
-        Tambah Building
-    </x-button>
+            <p class="text-sm text-slate-500 mt-1">
+                Kelola konfigurasi Town Hall dan building Clash of Clans.
+            </p>
+        </div>
 
-    <x-button
-        variant="info"
-        data-modal-target="viewBuildingModal">
-        Lihat Building
-    </x-button>
+        <div class="flex flex-wrap gap-2">
+
+            <x-button data-modal-target="createThBuildingModal">
+                <i class="fa-solid fa-plus mr-2"></i>
+                Tambah Konfigurasi
+            </x-button>
+
+            <x-button
+                variant="secondary"
+                data-modal-target="createBuildingModal"
+            >
+                <i class="fa-solid fa-building mr-2"></i>
+                Tambah Building
+            </x-button>
+
+            <x-button
+                variant="info"
+                data-modal-target="viewBuildingModal"
+            >
+                <i class="fa-solid fa-eye mr-2"></i>
+                Lihat Building
+            </x-button>
+
+        </div>
+
+    </div>
+
+    {{-- Table Card --}}
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+
+        <div class="px-6 py-4 border-b border-slate-200">
+
+            <h3 class="font-semibold text-slate-800">
+                Data Konfigurasi TH Building
+            </h3>
+
+        </div>
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full text-sm">
+
+                <thead class="bg-slate-50">
+
+                    <tr class="text-slate-600">
+
+                        <th class="px-6 py-4 text-left font-semibold">
+                            ID
+                        </th>
+
+                        <th class="px-6 py-4 text-left font-semibold">
+                            Town Hall
+                        </th>
+
+                        <th class="px-6 py-4 text-left font-semibold">
+                            Building
+                        </th>
+
+                        <th class="px-6 py-4 text-left font-semibold">
+                            Jumlah
+                        </th>
+
+                        <th class="px-6 py-4 text-left font-semibold">
+                            Max Level
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody class="divide-y divide-slate-100">
+
+                    @forelse($thBuildings as $item)
+
+                        <tr class="hover:bg-slate-50 transition">
+
+                            <td class="px-6 py-4">
+                                {{ $item->id }}
+                            </td>
+
+                            <td class="px-6 py-4">
+
+                                <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
+                                    TH {{ $item->town_hall }}
+                                </span>
+
+                            </td>
+
+                            <td class="px-6 py-4 font-medium text-slate-700">
+                                {{ $item->building->name }}
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ $item->quantity }}
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ $item->max_level }}
+                            </td>
+
+                        </tr>
+
+                    @empty
+
+                        <tr>
+
+                            <td
+                                colspan="5"
+                                class="px-6 py-12 text-center"
+                            >
+
+                                <div class="flex flex-col items-center">
+
+                                    <i class="fa-regular fa-folder-open text-4xl text-slate-300 mb-3"></i>
+
+                                    <p class="text-slate-500">
+                                        Belum ada konfigurasi TH Building.
+                                    </p>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
 
 </div>
-<table border="1" cellpadding="5">
-
-    <tr>
-        <th>ID</th>
-        <th>TH</th>
-        <th>Building</th>
-        <th>Jumlah</th>
-        <th>Max Level</th>
-    </tr>
-
-    @forelse($thBuildings as $item)
-
-        <tr>
-
-            <td>
-                {{ $item->id }}
-            </td>
-
-            <td>
-                TH {{ $item->town_hall }}
-            </td>
-
-            <td>
-                {{ $item->building->name }}
-            </td>
-
-            <td>
-                {{ $item->quantity }}
-            </td>
-
-            <td>
-                {{ $item->max_level }}
-            </td>
-
-        </tr>
-
-    @empty
-
-        <tr>
-
-            <td colspan="5">
-                Belum ada konfigurasi TH Building.
-            </td>
-
-        </tr>
-
-    @endforelse
-
-</table>
-
 <x-modal id="createBuildingModal" title="Tambah Building">
 
     <form
@@ -211,8 +293,7 @@
 <x-modal
     id="viewBuildingModal"
     title="Daftar Building"
-    size="3xl"
->
+    size="3xl">
 
     <div class="overflow-x-auto ">
 

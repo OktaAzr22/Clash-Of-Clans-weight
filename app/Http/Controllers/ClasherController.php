@@ -21,53 +21,68 @@ class ClasherController extends Controller
         );
     }
 
-    public function create()
-    {
-        return view('clashers.create');
-    }
+    
 
-    public function store(Request $request, ClashOfClansService $coc)
-    {
-        $request->validate([
-            'tag' => ['required', 'string'],
-        ]);
+    public function store(
+    Request $request,
+    ClashOfClansService $coc
+) {
+    $request->validate([
+        'tag' => ['required', 'string'],
+    ]);
+
+    try {
 
         $data = $coc->getPlayer($request->tag);
 
-        $heroes = collect($data['heroes'] ?? []);
+    } catch (\Exception $e) {
 
-        Clasher::updateOrCreate(
-            [
-                'tag' => $data['tag'],
-            ],
-            [
-                'name' => $data['name'],
+        return back()
+            ->withErrors([
+                'tag' => $e->getMessage(),
+            ])
+            ->withInput();
 
-                'clan_name' => $data['clan']['name'] ?? null,
-                'clan_tag' => $data['clan']['tag'] ?? null,
-
-                'town_hall' => $data['townHallLevel'],
-
-                'war_stars' => $data['warStars'] ?? 0,
-                'exp_level' => $data['expLevel'] ?? 0,
-
-                'king' => $heroes
-                    ->firstWhere('name', 'Barbarian King')['level'] ?? 0,
-
-                'queen' => $heroes
-                    ->firstWhere('name', 'Archer Queen')['level'] ?? 0,
-
-                'warden' => $heroes
-                    ->firstWhere('name', 'Grand Warden')['level'] ?? 0,
-
-                'champion' => $heroes
-                    ->firstWhere('name', 'Royal Champion')['level'] ?? 0,
-            ]
-        );
-
-        return redirect('/clashers')
-            ->with('success', 'Clasher berhasil disimpan.');
     }
+
+    $heroes = collect($data['heroes'] ?? []);
+
+    Clasher::updateOrCreate(
+        [
+            'tag' => $data['tag'],
+        ],
+        [
+            'name' => $data['name'],
+
+            'clan_name' => $data['clan']['name'] ?? null,
+            'clan_tag' => $data['clan']['tag'] ?? null,
+
+            'town_hall' => $data['townHallLevel'],
+
+            'war_stars' => $data['warStars'] ?? 0,
+            'exp_level' => $data['expLevel'] ?? 0,
+
+            'king' => $heroes
+                ->firstWhere('name', 'Barbarian King')['level'] ?? 0,
+
+            'queen' => $heroes
+                ->firstWhere('name', 'Archer Queen')['level'] ?? 0,
+
+            'warden' => $heroes
+                ->firstWhere('name', 'Grand Warden')['level'] ?? 0,
+
+            'champion' => $heroes
+                ->firstWhere('name', 'Royal Champion')['level'] ?? 0,
+        ]
+    );
+
+    return redirect()
+        ->route('clashers.index')
+        ->with(
+            'success',
+            'Clasher berhasil disimpan.'
+        );
+}
 
     public function warProfile(Clasher $clasher)
     {
