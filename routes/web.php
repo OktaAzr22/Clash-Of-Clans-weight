@@ -84,30 +84,19 @@ Route::controller(ThBuildingController::class)->group(function () {
 });
 
 
-/*
-|--------------------------------------------------------------------------
-| Clans
-|--------------------------------------------------------------------------
-*/
 
-Route::get('/clans/search', [ClanController::class, 'search'])
-    ->name('clans.search');
+Route::get('/clan', [ClanController::class, 'index'])
+    ->name('clan.index');
 
-Route::post('/clans/result', [ClanController::class, 'result'])
-    ->name('clans.result');
+Route::post('/clan/search', [ClanController::class, 'search'])
+    ->name('clan.search');
 
-Route::post('/clans/analyze', [ClanController::class, 'analyze'])
-    ->name('clans.analyze');
+    Route::post(
+    '/clan/store-members',
+    [ClanController::class, 'storeMembers']
+)->name('clan.store-members');
 
-Route::post('/clans/generate', [ClanController::class, 'generate'])
-    ->name('clans.generate');
-
-
-/*
-|--------------------------------------------------------------------------
-| Wars
-|--------------------------------------------------------------------------
-*/
-
-Route::post('/wars/store', [WarController::class, 'store'])
-    ->name('wars.store');
+Route::post(
+    '/clan/store-member-progress',
+    [ClanController::class, 'storeMemberProgress']
+)->name('clan.store-member-progress');
