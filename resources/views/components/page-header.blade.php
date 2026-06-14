@@ -1,63 +1,70 @@
 @php
 
+use Illuminate\Support\Facades\Route;
+
 $routeName = request()->route()?->getName();
+
+$showBreadcrumb = $routeName !== 'dashboard';
 
 $title = 'Dashboard';
 
-$breadcrumbs = [];
+$breadcrumbs = [
+    [
+        'label' => 'Dashboard',
+        'url' => route('dashboard'),
+    ],
+];
 
 if ($routeName) {
 
     $parts = explode('.', $routeName);
 
-    $resource = $parts[0] ?? null;
-    $action = $parts[1] ?? null;
-
-    $resourceName = ucfirst(
-        str($resource)
-            ->replace('_', ' ')
-            ->singular()
+    $filteredParts = array_values(
+        array_filter($parts, fn ($part) => $part !== 'index')
     );
 
-    $breadcrumbs[] = [
-        'label' => 'Dashboard',
-        'url' => route('dashboard')
-    ];
+    foreach ($filteredParts as $index => $part) {
 
-    if ($resource) {
+        $label = str($part)
+            ->replace(['-', '_'], ' ')
+            ->title()
+            ->toString();
 
-        $breadcrumbs[] = [
-            'label' => $resourceName,
-            'url' => route($resource . '.index')
+        $isLast = $index === count($filteredParts) - 1;
+
+        $breadcrumb = [
+            'label' => $label,
         ];
 
-        $title = $resourceName;
+        if (! $isLast) {
+
+        if ($index === 0) {
+
+            $route = $part . '.index';
+
+        } else {
+
+            $route = implode(
+                '.',
+                array_slice($filteredParts, 0, $index + 1)
+            );
+        }
+
+        if (Route::has($route)) {
+
+            $breadcrumb['url'] = route($route);
+
+        }
     }
 
-    switch ($action) {
+        $breadcrumbs[] = $breadcrumb;
 
-        case 'create':
-            $title = "Tambah {$resourceName}";
-            $breadcrumbs[] = [
-                'label' => 'Tambah'
-            ];
-            break;
+        if ($isLast) {
 
-        case 'edit':
-            $title = "Edit {$resourceName}";
-            $breadcrumbs[] = [
-                'label' => 'Edit'
-            ];
-            break;
+            $title = $label;
 
-        case 'show':
-            $title = "Detail {$resourceName}";
-            $breadcrumbs[] = [
-                'label' => 'Detail'
-            ];
-            break;
+        }
     }
-
 }
 
 @endphp
@@ -73,64 +80,82 @@ if ($routeName) {
                 {{ $title }}
             </h1>
 
-            <nav class="text-sm mt-0.5">
+            <div class="h-5 mt-0.5">
+                @if($showBreadcrumb)
 
-                <ol class="inline-flex items-center space-x-1.5">
+                <nav class="text-sm mt-0.5">
 
-                    @foreach($breadcrumbs as $breadcrumb)
+                    <ol class="inline-flex items-center space-x-1.5">
 
-                        <li class="flex items-center">
+                        @foreach($breadcrumbs as $breadcrumb)
 
-                            @if(!$loop->last)
+                            <li class="flex items-center">
 
-                                <a
-                                    href="{{ $breadcrumb['url'] }}"
-                                    class="text-slate-500 hover:text-blue-600 transition"
-                                >
-                                    {{ $breadcrumb['label'] }}
-                                </a>
+                                @if(!$loop->last && isset($breadcrumb['url']))
 
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="w-3 h-3 mx-1.5 text-slate-400"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M9 5l7 7-7 7"
-                                    />
-                                </svg>
+                                    <a
+                                        href="{{ $breadcrumb['url'] }}"
+                                        class="text-slate-500 hover:text-blue-600 transition"
+                                    >
+                                        {{ $breadcrumb['label'] }}
+                                    </a>
 
-                            @else
+                                @else
 
-                                <span
-                                    class="text-blue-600 font-medium"
-                                >
-                                    {{ $breadcrumb['label'] }}
-                                </span>
+                                    <span
+                                        class="{{ $loop->last
+                                            ? 'text-blue-600 font-medium'
+                                            : 'text-slate-500' }}"
+                                    >
+                                        {{ $breadcrumb['label'] }}
+                                    </span>
 
-                            @endif
+                                @endif
 
-                        </li>
+                                @unless($loop->last)
 
-                    @endforeach
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="w-3 h-3 mx-1.5 text-slate-400"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M9 5l7 7-7 7"
+                                        />
+                                    </svg>
 
-                </ol>
+                                @endunless
 
-            </nav>
+                            </li>
+
+                        @endforeach
+
+                    </ol>
+
+                </nav>
+
+            @endif
+            </div>
+
+            
 
         </div>
 
         <div class="flex items-center gap-4">
 
             @isset($actions)
+
                 <div class="flex items-center gap-2">
+
                     {{ $actions }}
+
                 </div>
+
             @endisset
 
             <div class="flex items-center gap-2">

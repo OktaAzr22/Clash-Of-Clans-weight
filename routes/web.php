@@ -6,6 +6,7 @@ use App\Http\Controllers\ClanController;
 use App\Http\Controllers\ThBuildingController;
 use App\Http\Controllers\WarController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -13,9 +14,11 @@ Route::get('/', function () {
 Route::get('/a', function () {
     return view('test');
 });
-Route::view(
+
+
+Route::get(
     '/dashboard',
-    'dashboard'
+    [DashboardController::class, 'index']
 )->name('dashboard');
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +44,8 @@ Route::controller(ClasherController::class)->group(function () {
 
     Route::get('/clashers/overview', 'overview')
         ->name('clashers.overview');
+
+        
 
 });
 

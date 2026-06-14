@@ -44,6 +44,13 @@
         .transition-smooth {
             transition: all 0.2s ease;
         }
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        .card-hover:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.15);
+        }
     </style>
 </head>
 <body class="font-inter antialiased">
@@ -196,7 +203,185 @@
                     </div>
                 </div>
                 
-                
+                <!-- ============================================================ -->
+                <!-- SECTION CARD PEMAIN: NAMA, TAG, TH, CLAN, KET, INFERNO, EAGLE, X-BOW -->
+                <!-- ============================================================ -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-between flex-wrap gap-3 mb-5">
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fas fa-shield-haltered text-primary text-2xl"></i> 
+                                Data Pertahanan & Pasukan Elite
+                            </h3>
+                            <p class="text-slate-500 text-sm mt-1">Informasi lengkap level Inferno, Eagle, X-Bow dalam tampilan card modern</p>
+                        </div>
+                        <div class="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
+                            <i class="fas fa-sync-alt text-xs"></i>
+                            <span>Live Data · 5 Pemain</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Grid Card - BUKAN TABEL -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        
+                        <!-- CARD 1 - Arjuna X -->
+                        <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden card-hover">
+                            <div class="bg-gradient-to-r from-indigo-600 to-primary px-5 py-3 flex justify-between items-center">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-sm">AX</div>
+                                    <h4 class="font-bold text-white text-lg">Arjuna X</h4>
+                                </div>
+                                <span class="bg-amber-400/30 text-amber-100 text-xs px-2 py-1 rounded-full font-mono">#ARJ88P9L</span>
+                            </div>
+                            <div class="p-5">
+                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+                                    <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-flag-checkered text-primary w-4"></i><span class="text-sm font-medium">TH Level:</span></div>
+                                    <span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-sm font-bold">TH16</span>
+                                </div>
+                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+                                    <div class="flex items-center gap-2 text-slate-600"></i><span class="text-sm font-medium">Clan:</span></div>
+                                    <span class="text-sm font-semibold text-slate-700">Phoenix Rising</span>
+                                </div>
+                                <div class="mb-4 p-2 bg-slate-50 rounded-xl">
+                                    <div class="flex items-start gap-2 text-slate-600"><i class="fas fa-info-circle text-primary mt-0.5"></i><span class="text-xs text-slate-500">Ket: Maksimal pertahanan, war veteran</span></div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2 mt-3 pt-2 border-t border-slate-100">
+                                    <div class="text-center p-2 bg-orange-50 rounded-xl"><i class="fas fa-fire text-orange-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Inferno</span><p class="font-bold text-slate-800 text-lg">Lv 7</p></div>
+                                    <div class="text-center p-2 bg-slate-50 rounded-xl"><i class="fas fa-dove text-slate-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Eagle</span><p class="font-bold text-slate-800 text-lg">Lv 6</p></div>
+                                    <div class="text-center p-2 bg-emerald-50 rounded-xl"><i class="fas fa-crosshairs text-emerald-600 text-lg block mb-1"></i><span class="text-xs text-slate-500">X-Bow</span><p class="font-bold text-slate-800 text-lg">Lv 9</p></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- CARD 2 - LunaStrike -->
+                        <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden card-hover">
+                            <div class="bg-gradient-to-r from-slate-700 to-slate-800 px-5 py-3 flex justify-between items-center">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-sm">LS</div>
+                                    <h4 class="font-bold text-white text-lg">LunaStrike</h4>
+                                </div>
+                                <span class="bg-purple-400/30 text-purple-100 text-xs px-2 py-1 rounded-full font-mono">#LUNA21T9</span>
+                            </div>
+                            <div class="p-5">
+                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+                                    <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-flag-checkered text-primary w-4"></i><span class="text-sm font-medium">TH Level:</span></div>
+                                    <span class="px-2 py-0.5 bg-purple-100 text-purple-800 rounded-full text-sm font-bold">TH15</span>
+                                </div>
+                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+                                    <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-users text-primary w-4"></i><span class="text-sm font-medium">Clan:</span></div>
+                                    <span class="text-sm font-semibold text-slate-700">Dragon Legion</span>
+                                </div>
+                                <div class="mb-4 p-2 bg-slate-50 rounded-xl">
+                                    <div class="flex items-start gap-2 text-slate-600"><i class="fas fa-info-circle text-primary mt-0.5"></i><span class="text-xs text-slate-500">Ket: Spesialis serangan balon & naga</span></div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2 mt-3 pt-2 border-t border-slate-100">
+                                    <div class="text-center p-2 bg-orange-50 rounded-xl"><i class="fas fa-fire text-orange-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Inferno</span><p class="font-bold text-slate-800 text-lg">Lv 6</p></div>
+                                    <div class="text-center p-2 bg-slate-50 rounded-xl"><i class="fas fa-dove text-slate-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Eagle</span><p class="font-bold text-slate-800 text-lg">Lv 5</p></div>
+                                    <div class="text-center p-2 bg-emerald-50 rounded-xl"><i class="fas fa-crosshairs text-emerald-600 text-lg block mb-1"></i><span class="text-xs text-slate-500">X-Bow</span><p class="font-bold text-slate-800 text-lg">Lv 8</p></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- CARD 3 - RajaMawr -->
+                        <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden card-hover">
+                            <div class="bg-gradient-to-r from-rose-600 to-pink-600 px-5 py-3 flex justify-between items-center">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-sm">RM</div>
+                                    <h4 class="font-bold text-white text-lg">RajaMawr</h4>
+                                </div>
+                                <span class="bg-amber-400/30 text-amber-100 text-xs px-2 py-1 rounded-full font-mono">#R4J4M4W</span>
+                            </div>
+                            <div class="p-5">
+                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+                                    <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-flag-checkered text-primary w-4"></i><span class="text-sm font-medium">TH Level:</span></div>
+                                    <span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-sm font-bold">TH16</span>
+                                </div>
+                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+                                    <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-users text-primary w-4"></i><span class="text-sm font-medium">Clan:</span></div>
+                                    <span class="text-sm font-semibold text-slate-700">Garuda Perkasa</span>
+                                </div>
+                                <div class="mb-4 p-2 bg-slate-50 rounded-xl">
+                                    <div class="flex items-start gap-2 text-slate-600"><i class="fas fa-info-circle text-primary mt-0.5"></i><span class="text-xs text-slate-500">Ket: Hero maks, peralatan legendaris</span></div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2 mt-3 pt-2 border-t border-slate-100">
+                                    <div class="text-center p-2 bg-orange-50 rounded-xl"><i class="fas fa-fire text-orange-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Inferno</span><p class="font-bold text-slate-800 text-lg">Lv 8</p></div>
+                                    <div class="text-center p-2 bg-slate-50 rounded-xl"><i class="fas fa-dove text-slate-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Eagle</span><p class="font-bold text-slate-800 text-lg">Lv 7</p></div>
+                                    <div class="text-center p-2 bg-emerald-50 rounded-xl"><i class="fas fa-crosshairs text-emerald-600 text-lg block mb-1"></i><span class="text-xs text-slate-500">X-Bow</span><p class="font-bold text-slate-800 text-lg">Lv 10</p></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- CARD 4 - BansheeBlitz -->
+                        <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden card-hover">
+                            <div class="bg-gradient-to-r from-cyan-600 to-blue-600 px-5 py-3 flex justify-between items-center">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-sm">BB</div>
+                                    <h4 class="font-bold text-white text-lg">BansheeBlitz</h4>
+                                </div>
+                                <span class="bg-indigo-400/30 text-indigo-100 text-xs px-2 py-1 rounded-full font-mono">#B4NSH33</span>
+                            </div>
+                            <div class="p-5">
+                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+                                    <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-flag-checkered text-primary w-4"></i><span class="text-sm font-medium">TH Level:</span></div>
+                                    <span class="px-2 py-0.5 bg-indigo-100 text-indigo-800 rounded-full text-sm font-bold">TH14</span>
+                                </div>
+                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+                                    <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-users text-primary w-4"></i><span class="text-sm font-medium">Clan:</span></div>
+                                    <span class="text-sm font-semibold text-slate-700">Royal Shark</span>
+                                </div>
+                                <div class="mb-4 p-2 bg-slate-50 rounded-xl">
+                                    <div class="flex items-start gap-2 text-slate-600"><i class="fas fa-info-circle text-primary mt-0.5"></i><span class="text-xs text-slate-500">Ket: Donatur aktif, sering war</span></div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2 mt-3 pt-2 border-t border-slate-100">
+                                    <div class="text-center p-2 bg-orange-50 rounded-xl"><i class="fas fa-fire text-orange-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Inferno</span><p class="font-bold text-slate-800 text-lg">Lv 5</p></div>
+                                    <div class="text-center p-2 bg-slate-50 rounded-xl"><i class="fas fa-dove text-slate-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Eagle</span><p class="font-bold text-slate-800 text-lg">Lv 4</p></div>
+                                    <div class="text-center p-2 bg-emerald-50 rounded-xl"><i class="fas fa-crosshairs text-emerald-600 text-lg block mb-1"></i><span class="text-xs text-slate-500">X-Bow</span><p class="font-bold text-slate-800 text-lg">Lv 7</p></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- CARD 5 - GrimXex (Top Global) -->
+                        <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden card-hover md:col-span-2 lg:col-span-1">
+                            <div class="bg-gradient-to-r from-yellow-600 to-amber-600 px-5 py-3 flex justify-between items-center">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-sm">GX</div>
+                                    <h4 class="font-bold text-white text-lg">GrimXex</h4>
+                                    <span class="ml-2 bg-yellow-300 text-yellow-900 text-[10px] px-1.5 py-0.5 rounded-full font-bold">TOP</span>
+                                </div>
+                                <span class="bg-white/30 text-white text-xs px-2 py-1 rounded-full font-mono">#GR1MXXX</span>
+                            </div>
+                            <div class="p-5">
+                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+                                    <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-flag-checkered text-primary w-4"></i><span class="text-sm font-medium">TH Level:</span></div>
+                                    <span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-sm font-bold">TH16</span>
+                                </div>
+                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+                                    <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-users text-primary w-4"></i><span class="text-sm font-medium">Clan:</span></div>
+                                    <span class="text-sm font-semibold text-slate-700">Legion of Doom</span>
+                                </div>
+                                <div class="mb-4 p-2 bg-slate-50 rounded-xl">
+                                    <div class="flex items-start gap-2 text-slate-600"><i class="fas fa-info-circle text-primary mt-0.5"></i><span class="text-xs text-slate-500">Ket: Legend League, pertahanan sempurna</span></div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2 mt-3 pt-2 border-t border-slate-100">
+                                    <div class="text-center p-2 bg-orange-50 rounded-xl"><i class="fas fa-fire text-orange-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Inferno</span><p class="font-bold text-primary text-lg">Lv 9</p></div>
+                                    <div class="text-center p-2 bg-slate-50 rounded-xl"><i class="fas fa-dove text-slate-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Eagle</span><p class="font-bold text-primary text-lg">Lv 8</p></div>
+                                    <div class="text-center p-2 bg-emerald-50 rounded-xl"><i class="fas fa-crosshairs text-emerald-600 text-lg block mb-1"></i><span class="text-xs text-slate-500">X-Bow</span><p class="font-bold text-primary text-lg">Lv 11</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ringkasan statistik kecil -->
+                    <div class="mt-6 flex flex-wrap justify-between items-center gap-3 bg-white/70 backdrop-blur-sm rounded-xl p-3 border border-slate-200">
+                        <div class="flex items-center gap-4 text-xs text-slate-500">
+                            <span><i class="fas fa-chart-simple text-primary mr-1"></i> Rata-rata Inferno: Lv 7.0</span>
+                            <span><i class="fas fa-chart-simple text-primary mr-1"></i> Rata-rata Eagle: Lv 6.0</span>
+                            <span><i class="fas fa-chart-simple text-primary mr-1"></i> Rata-rata X-Bow: Lv 9.0</span>
+                        </div>
+                        <button class="text-primary text-xs font-medium hover:underline"><i class="fas fa-arrow-right"></i> Lihat detail statistik</button>
+                    </div>
+                </div>
+                <!-- END SECTION CARD PEMAIN -->
                 
                 <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 text-center md:text-left">
                     <div class="flex flex-col md:flex-row justify-between items-center gap-4">

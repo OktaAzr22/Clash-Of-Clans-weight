@@ -4,7 +4,6 @@
 
 <div class="space-y-6">
 
-    {{-- Header --}}
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
         <div>
@@ -36,7 +35,6 @@
 
     </div>
 
-    {{-- Table Card --}}
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
 
         <div class="px-6 py-4 border-b border-slate-200">
@@ -125,13 +123,14 @@
 
                             <td class="px-6 py-4 text-center">
 
-                                <a
-                                    href="{{ route('clashers.war-profile', $clasher) }}"
-                                    class="inline-flex items-center px-3 py-2 rounded-lg bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition text-sm font-medium"
+                                <x-button
+                                    class="open-war-profile"
+                                    data-id="{{ $clasher->id }}"
+                                    data-modal-target="warProfileModal"
                                 >
                                     <i class="fa-solid fa-hammer mr-2"></i>
                                     Kelola Bangunan
-                                </a>
+                                </x-button>
 
                             </td>
 
@@ -173,8 +172,7 @@
 </div>
 <x-modal
     id="createClasherModal"
-    title="Tambah Clasher"
->
+    title="Tambah Clasher">
 
     <form
         method="POST"
@@ -225,4 +223,64 @@
     </form>
 
 </x-modal>
+<x-modal
+    id="warProfileModal"
+    title="Kelola Bangunan"
+    size="3xl"
+>
+    <div id="warProfileContent">
+        
+
+        <div class="py-10 text-center text-slate-500">
+            Memuat data...
+        </div>
+
+    </div>
+</x-modal>
 @endsection
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const content = document.getElementById('warProfileContent');
+
+    document.querySelectorAll('.open-war-profile')
+        .forEach(button => {
+
+            button.addEventListener('click', async () => {
+
+                const id = button.dataset.id;
+
+                content.innerHTML = `
+                    <div class="py-10 text-center text-slate-500">
+                        Memuat data...
+                    </div>
+                `;
+
+                try {
+
+                    const response = await fetch(
+                        `/clashers/${id}/war-profile`,
+                        {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        }
+                    );
+
+                    content.innerHTML = await response.text();
+
+                } catch (e) {
+
+                    content.innerHTML = `
+                        <div class="py-10 text-center text-red-500">
+                            Gagal memuat data.
+                        </div>
+                    `;
+                }
+            });
+
+        });
+
+});
+</script>
