@@ -51,16 +51,28 @@
         </a>
 
         <a
-    href="{{ route('clan.index') }}"
-    @class([
-        'flex items-center gap-3 px-4 py-3 rounded-xl transition-smooth',
-        'bg-blue-600/20 text-white font-medium' => request()->routeIs('clan.*'),
-        'text-slate-300 hover:bg-slate-700/50 hover:text-white' => !request()->routeIs('clan.*'),
-    ])
->
-    <i class="fa-solid fa-shield-halved w-5 text-center"></i>
-    <span>Clan</span>
-</a>
+            href="{{ route('clans.index') }}"
+            @class([
+                'flex items-center gap-3 px-4 py-3 rounded-xl transition-smooth',
+                'bg-blue-600/20 text-white font-medium' => request()->routeIs('clan.*'),
+                'text-slate-300 hover:bg-slate-700/50 hover:text-white' => !request()->routeIs('clan.*'),
+            ])
+        >
+            <i class="fa-solid fa-shield-halved w-5 text-center"></i>
+            <span>Clan</span>
+        </a>
+
+        <a
+            href="{{ route('wars.index') }}"
+            @class([
+                'flex items-center gap-3 px-4 py-3 rounded-xl transition-smooth',
+                'bg-blue-600/20 text-white font-medium' => request()->routeIs('wars.*'),
+                'text-slate-300 hover:bg-slate-700/50 hover:text-white' => !request()->routeIs('wars.*'),
+            ])
+        >
+            <i class="fa-solid fa-shield-halved w-5 text-center"></i>
+            <span>war</span>
+        </a>
         
         
 

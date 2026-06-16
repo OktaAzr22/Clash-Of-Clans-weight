@@ -85,18 +85,54 @@ Route::controller(ThBuildingController::class)->group(function () {
 
 
 
-Route::get('/clan', [ClanController::class, 'index'])
-    ->name('clan.index');
+// Route::get('/clan', [ClanController::class, 'index'])
+//     ->name('clan.index');
 
-Route::post('/clan/search', [ClanController::class, 'search'])
-    ->name('clan.search');
+// Route::post('/clan/search', [ClanController::class, 'search'])
+//     ->name('clan.search');
 
-    Route::post(
-    '/clan/store-members',
-    [ClanController::class, 'storeMembers']
-)->name('clan.store-members');
+//     Route::post(
+//     '/clan/store-members',
+//     [ClanController::class, 'storeMembers']
+// )->name('clan.store-members');
 
-Route::post(
-    '/clan/store-member-progress',
-    [ClanController::class, 'storeMemberProgress']
-)->name('clan.store-member-progress');
+// Route::post(
+//     '/clan/store-member-progress',
+//     [ClanController::class, 'storeMemberProgress']
+// )->name('clan.store-member-progress');
+
+Route::prefix('clans')
+    ->name('clans.')
+    ->group(function () {
+
+        Route::get('/', [ClanController::class, 'index'])
+            ->name('index');
+
+        Route::post('/', [ClanController::class, 'store'])
+            ->name('store');
+
+        Route::patch(
+            '/{clan}/toggle',
+            [ClanController::class, 'toggle']
+        )->name('toggle');
+    });
+
+
+
+    
+
+
+
+Route::prefix('wars')
+    ->name('wars.')
+    ->group(function () {
+
+        Route::get('/', [WarController::class, 'index'])
+            ->name('index');
+
+        Route::get('/{war}', [WarController::class, 'show'])
+            ->name('show');
+
+        Route::post('/sync', [WarController::class, 'sync'])
+            ->name('sync');
+    });

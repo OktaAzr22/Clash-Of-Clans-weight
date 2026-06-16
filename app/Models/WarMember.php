@@ -21,8 +21,5 @@ class WarMember extends Model
         return $this->belongsTo(War::class);
     }
 
-    public function clasher()
-    {
-        return $this->belongsTo(Clasher::class);
-    }
+    
 }
