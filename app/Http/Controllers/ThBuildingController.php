@@ -45,7 +45,7 @@ class ThBuildingController extends Controller
             'town_hall' => [
                 'required',
                 'integer',
-                'min:12',
+                'min:1',
                 'max:17',
             ],
 

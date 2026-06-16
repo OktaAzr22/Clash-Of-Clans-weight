@@ -203,33 +203,7 @@ class ClasherController extends Controller
                 ->values();
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Manual Pagination (5 data)
-        |--------------------------------------------------------------------------
-        */
-
-        $perPage = 5;
-
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-
-        $currentItems = $clashers
-            ->slice(
-                ($currentPage - 1) * $perPage,
-                $perPage
-            )
-            ->values();
-
-        $clashers = new LengthAwarePaginator(
-            $currentItems,
-            $clashers->count(),
-            $perPage,
-            $currentPage,
-            [
-                'path' => request()->url(),
-                'query' => request()->query(),
-            ]
-        );
+        
 
         /*
         |--------------------------------------------------------------------------

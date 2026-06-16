@@ -11,17 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('war_details', function (Blueprint $table) {
+        Schema::create('clans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('war_id')
-                ->constrained()
-                ->cascadeOnDelete();
+            $table->string('tag')->unique();
+            $table->string('name');
 
-            $table->unsignedTinyInteger('town_hall');
-
-            $table->unsignedInteger('clan_a_count');
-
-            $table->unsignedInteger('clan_b_count');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
@@ -31,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('war_details');
+        Schema::dropIfExists('clans');
     }
 };

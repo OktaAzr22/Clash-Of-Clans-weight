@@ -217,89 +217,59 @@
     title="Simpan Anggota Clan"
 >
 
-    <div class="space-y-4">
+    {{-- Konfirmasi --}}
+    <div id="confirmSaveSection">
 
-        <div class="rounded-xl bg-amber-50 border border-amber-200 p-4">
+        <p class="text-slate-600">
+            Anda akan menyimpan
+            <span class="font-bold">
+                {{ count($clan['memberList']) }} anggota clan
+            </span>
+            ke database.
+        </p>
 
-            <p class="font-semibold text-amber-800">
-                Konfirmasi Simpan Anggota Clan
-            </p>
+        <p class="text-slate-500 text-sm mt-2">
+            Proses ini mungkin membutuhkan beberapa saat.
+        </p>
 
-            <p class="text-sm text-amber-700 mt-2">
-                Sistem akan mengambil detail seluruh anggota clan dari API Clash of Clans dan menyimpannya ke database.
-            </p>
+    </div>
 
-        </div>
+    {{-- Progress --}}
+    <div
+        id="progressSection"
+        class="hidden text-center py-8"
+    >
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div class="mb-6">
 
-            <div class="rounded-xl bg-slate-50 p-4 border border-slate-200">
-
-                <p class="text-xs text-slate-500">
-                    Clan
-                </p>
-
-                <p class="font-semibold text-slate-800 mt-1">
-                    {{ $clan['name'] }}
-                </p>
-
-            </div>
-
-            <div class="rounded-xl bg-slate-50 p-4 border border-slate-200">
-
-                <p class="text-xs text-slate-500">
-                    Tag Clan
-                </p>
-
-                <p class="font-mono font-semibold text-slate-800 mt-1">
-                    {{ $clan['tag'] }}
-                </p>
-
-            </div>
-
-            <div class="rounded-xl bg-slate-50 p-4 border border-slate-200">
-
-                <p class="text-xs text-slate-500">
-                    Total Anggota
-                </p>
-
-                <p class="font-semibold text-slate-800 mt-1">
-                    {{ $clan['members'] }} Pemain
-                </p>
-
-            </div>
+            <i
+                id="progressIcon"
+                class="fa-solid fa-database text-5xl text-blue-600 animate-pulse"
+            ></i>
 
         </div>
 
-        <div class="rounded-xl bg-blue-50 border border-blue-200 p-4">
-
-            <ul class="text-sm text-blue-800 space-y-2">
-
-                <li>• Pemain baru akan ditambahkan.</li>
-
-                <li>• Pemain yang sudah ada akan diperbarui.</li>
-
-                <li>• Proses berlangsung bertahap dengan progress.</li>
-
-            </ul>
-
-        </div>
-
-        {{-- Progress --}}
-        <div
-            id="saveProgress"
-            class="hidden"
+        <h3
+            id="progressTitle"
+            class="text-lg font-bold text-slate-800"
         >
+            Menyimpan Anggota Clan
+        </h3>
 
-            <p class="text-sm text-slate-600 mb-2">
-                Menyimpan anggota clan...
-            </p>
+        <p
+            id="progressDescription"
+            class="text-slate-500 mt-2"
+        >
+            Mohon tunggu sampai proses selesai.
+        </p>
 
-            <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+        <div class="mt-6">
+
+            <div class="w-full bg-slate-200 rounded-full h-4 overflow-hidden">
 
                 <div
                     id="progressBar"
-                    class="bg-blue-600 h-3 rounded-full transition-all duration-300"
+                    class="bg-blue-600 h-4 transition-all duration-300"
                     style="width: 0%"
                 ></div>
 
@@ -307,7 +277,7 @@
 
             <p
                 id="progressText"
-                class="text-center text-sm font-semibold text-slate-700 mt-2"
+                class="mt-3 font-semibold text-slate-700"
             >
                 0 / {{ count($clan['memberList']) }}
             </p>
@@ -316,13 +286,16 @@
 
     </div>
 
-    <div class="flex justify-end gap-2 mt-6">
+    {{-- Tombol --}}
+    <div
+        id="confirmButtons"
+        class="flex justify-end gap-2 mt-6"
+    >
 
         <x-button
             type="button"
             variant="secondary"
             class="close-modal"
-            id="cancelSaveBtn"
         >
             Batal
         </x-button>
@@ -331,7 +304,6 @@
             type="button"
             id="saveClanMembersBtn"
         >
-            <i class="fa-solid fa-download mr-2"></i>
             Ya, Simpan Semua
         </x-button>
 
@@ -342,25 +314,73 @@
     @endisset
 
 </div>
+
 @if(isset($clan))
 <script>
+
 const members = @json($clan['memberList']);
+
+let savingClanMembers = false;
 
 document
     .getElementById('saveClanMembersBtn')
     ?.addEventListener('click', async function () {
 
-        const progressBox = document.getElementById('saveProgress');
-        const progressBar = document.getElementById('progressBar');
-        const progressText = document.getElementById('progressText');
+        if (savingClanMembers) {
+            return;
+        }
 
-        const saveButton = this;
-        const cancelButton = document.getElementById('cancelSaveBtn');
+        savingClanMembers = true;
 
-        progressBox.classList.remove('hidden');
+        const confirmSection =
+            document.getElementById('confirmSaveSection');
 
-        saveButton.disabled = true;
-        cancelButton.disabled = true;
+        const progressSection =
+            document.getElementById('progressSection');
+
+        const confirmButtons =
+            document.getElementById('confirmButtons');
+
+        const progressBar =
+            document.getElementById('progressBar');
+
+        const progressText =
+            document.getElementById('progressText');
+
+        const progressTitle =
+            document.getElementById('progressTitle');
+
+        const progressDescription =
+            document.getElementById('progressDescription');
+
+        const progressIcon =
+            document.getElementById('progressIcon');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Mode Progress
+        |--------------------------------------------------------------------------
+        */
+
+        confirmSection.classList.add('hidden');
+
+        confirmButtons.classList.add('hidden');
+
+        progressSection.classList.remove('hidden');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Sembunyikan tombol close
+        |--------------------------------------------------------------------------
+        */
+
+        document
+            .querySelectorAll(
+                '#saveClanMembersModal .close-modal'
+            )
+            .forEach(button => {
+                button.classList.add('hidden');
+            });
 
         const total = members.length;
 
@@ -387,12 +407,20 @@ document
 
                 if (!response.ok || !result.success) {
 
-                    alert(
-                        `Gagal menyimpan ${members[i].name}\n` +
-                        (result.message ?? 'Unknown error')
-                    );
+                    progressIcon.className =
+                        'fa-solid fa-circle-xmark text-5xl text-red-600';
 
-                    console.log(result);
+                    progressTitle.textContent =
+                        'Proses Gagal';
+
+                    progressDescription.textContent =
+                        result.message ??
+                        `Gagal menyimpan ${members[i].name}`;
+
+                    progressBar.classList.remove('bg-blue-600');
+                    progressBar.classList.add('bg-red-600');
+
+                    savingClanMembers = false;
 
                     return;
                 }
@@ -409,22 +437,58 @@ document
 
                 console.error(error);
 
-                alert(
-                    'Terjadi kesalahan saat menyimpan data.'
-                );
+                progressIcon.className =
+                    'fa-solid fa-circle-xmark text-5xl text-red-600';
+
+                progressTitle.textContent =
+                    'Terjadi Kesalahan';
+
+                progressDescription.textContent =
+                    'Tidak dapat terhubung ke server.';
+
+                progressBar.classList.remove('bg-blue-600');
+                progressBar.classList.add('bg-red-600');
+
+                savingClanMembers = false;
 
                 return;
             }
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Selesai
+        |--------------------------------------------------------------------------
+        */
+
+        progressBar.style.width = '100%';
+
+        progressBar.classList.remove('bg-blue-600');
+        progressBar.classList.add('bg-green-600');
+
         progressText.textContent =
             `Selesai (${total}/${total})`;
 
-        alert('Semua pemain berhasil disimpan.');
+        progressIcon.className =
+            'fa-solid fa-circle-check text-5xl text-green-600';
 
-        window.location =
-            "{{ route('clashers.index') }}";
+        progressTitle.textContent =
+            'Penyimpanan Berhasil';
+
+        progressDescription.textContent =
+            'Semua anggota berhasil disimpan. Mengalihkan ke daftar clasher...';
+
+        savingClanMembers = false;
+
+        setTimeout(() => {
+
+            window.location =
+                "{{ route('clashers.index') }}";
+
+        }, 2000);
+
     });
+
 </script>
 @endif
 @endsection

@@ -7,15 +7,35 @@ use Illuminate\Database\Eloquent\Model;
 class War extends Model
 {
     protected $fillable = [
-        'source_clan_name',
-        'clan_a_name',
-        'clan_b_name',
-        'war_size',
-        'winner',
+        'clan_tag',
+        'clan_name',
+        'opponent_tag',
+        'opponent_name',
+        'state',
+        'team_size',
+        'attacks_per_member',
+        'clan_stars',
+        'opponent_stars',
+        'clan_destruction',
+        'opponent_destruction',
+        'preparation_start_time',
+        'start_time',
+        'end_time',
     ];
 
-    public function details()
+    protected $casts = [
+        'preparation_start_time' => 'datetime',
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
+    ];
+
+    public function members()
     {
-        return $this->hasMany(WarDetail::class);
+        return $this->hasMany(WarMember::class);
+    }
+
+    public function clan()
+    {
+        return $this->belongsTo(Clan::class);
     }
 }

@@ -261,5 +261,9 @@
     </div>
 
 </div>
+<p>Clan vs Lawan
+Status war (Preparation/In War/Ended)
+Sisa waktu war</p>
 
 @endsection
+

@@ -4,17 +4,25 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class WarDetail extends Model
+class WarMember extends Model
 {
     protected $fillable = [
         'war_id',
+        'clasher_id',
+        'player_tag',
+        'name',
         'town_hall',
-        'clan_a_count',
-        'clan_b_count',
+        'map_position',
+        'attacks_used',
     ];
 
     public function war()
     {
         return $this->belongsTo(War::class);
+    }
+
+    public function clasher()
+    {
+        return $this->belongsTo(Clasher::class);
     }
 }

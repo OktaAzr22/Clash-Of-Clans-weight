@@ -295,66 +295,59 @@
     title="Daftar Building"
     size="3xl">
 
-    <div class="overflow-x-auto ">
+    @if($buildings->isEmpty())
 
-        <table class="w-full text-sm">
+        <div class="py-10 text-center text-slate-500">
+            Data building belum tersedia.
+        </div>
 
-             <thead
-                class="sticky top-0 bg-slate-50 z-10"
-            >
+    @else
 
-                <tr class="border-b bg-slate-50">
+        <div class="overflow-x-auto">
 
-                    <th class="px-4 py-3 text-left">
-                        ID
-                    </th>
+            <table class="w-full text-sm">
 
-                    <th class="px-4 py-3 text-left">
-                        Nama Building
-                    </th>
+                <thead class="sticky top-0 bg-slate-50 z-10">
 
-                </tr>
+                    <tr class="border-b bg-slate-50">
 
-            </thead>
+                        <th class="px-4 py-3 text-left">
+                            ID
+                        </th>
 
-            <tbody>
-
-                @forelse($buildings as $building)
-
-                    <tr
-                        class="border-b hover:bg-slate-50"
-                    >
-
-                        <td class="px-4 py-3">
-                            {{ $building->id }}
-                        </td>
-
-                        <td class="px-4 py-3">
-                            {{ $building->name }}
-                        </td>
+                        <th class="px-4 py-3 text-left">
+                            Nama Building
+                        </th>
 
                     </tr>
 
-                @empty
+                </thead>
 
-                    <tr>
+                <tbody>
 
-                        <td
-                            colspan="2"
-                            class="px-4 py-6 text-center text-slate-500"
-                        >
-                            Data building belum tersedia.
-                        </td>
+                    @foreach($buildings as $building)
 
-                    </tr>
+                        <tr class="border-b hover:bg-slate-50">
 
-                @endforelse
+                            <td class="px-4 py-3">
+                                {{ $building->id }}
+                            </td>
 
-            </tbody>
+                            <td class="px-4 py-3">
+                                {{ $building->name }}
+                            </td>
 
-        </table>
+                        </tr>
 
-    </div>
+                    @endforeach
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    @endif
 
     <div class="flex justify-end mt-6">
 

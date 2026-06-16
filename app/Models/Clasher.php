@@ -38,4 +38,9 @@ class Clasher extends Model
     {
         return $this->hasMany(ClasherBuilding::class);
     }
+
+    public function warMembers()
+    {
+        return $this->hasMany(WarMember::class);
+    }
 }
