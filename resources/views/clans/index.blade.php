@@ -1,9 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 py-6">
+<div class="space-y-6">
 
-    {{-- Header --}}
     <div class="flex items-center justify-between mb-6">
         <div>
             <h1 class="text-2xl font-bold text-slate-800">
@@ -16,25 +15,6 @@
         </div>
     </div>
 
-    {{-- Alert Success --}}
-    @if(session('success'))
-        <div class="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-green-700">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    {{-- Error --}}
-    @if($errors->any())
-        <div class="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-700">
-            <ul class="list-disc list-inside space-y-1">
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    {{-- Form Tambah Clan --}}
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
 
         <h2 class="text-lg font-semibold text-slate-800 mb-4">
@@ -44,8 +24,7 @@
         <form
             action="{{ route('clans.store') }}"
             method="POST"
-            class="flex flex-col md:flex-row gap-4"
-        >
+            class="flex flex-col md:flex-row gap-4">
             @csrf
 
             <div class="flex-1">
@@ -75,7 +54,15 @@
 
     </div>
 
-    {{-- Daftar Clan --}}
+    <div class="flex justify-end">
+
+        <x-button data-modal-target="searchClanModal">
+            <i class="fa-solid fa-magnifying-glass mr-2"></i>
+            Cari Clan
+        </x-button>
+
+    </div>
+
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
 
         <div class="px-6 py-4 border-b border-slate-200">
@@ -183,4 +170,52 @@
     </div>
 
 </div>
+
+    <x-modal
+        id="searchClanModal"
+        title="Cari Clan">
+
+        <form
+            method="POST"
+            action="{{ route('clan.search') }}"
+        >
+            @csrf
+
+            <input
+                type="hidden"
+                name="modal"
+                value="searchClanModal"
+            >
+
+            <x-input
+                name="tag"
+                label="Tag Clan"
+                placeholder="#2ABC123"
+                :value="old('tag')"
+                required
+            />
+
+            <div class="flex justify-end gap-2">
+
+                <x-button
+                    type="button"
+                    variant="secondary"
+                    class="close-modal"
+                >
+                    Batal
+                </x-button>
+
+                <x-button
+                    type="submit"
+                    loading
+                    loading-text="Mencari..."
+                >
+                    Cari
+                </x-button>
+
+            </div>
+
+        </form>
+
+    </x-modal>
 @endsection

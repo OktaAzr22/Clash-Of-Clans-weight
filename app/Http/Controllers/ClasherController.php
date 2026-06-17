@@ -82,27 +82,37 @@ class ClasherController extends Controller
     }
 
     public function warProfile(Clasher $clasher)
-{
-    $buildings = ThBuilding::with('building')
-        ->where('town_hall', '<=', $clasher->town_hall)
-        ->orderBy('town_hall')
-        ->get()
-        ->groupBy('building_id')
-        ->map(fn ($items) => $items->last());
+    {
+        $buildings = ThBuilding::with('building')
+            ->where('town_hall', '<=', $clasher->town_hall)
+            ->orderBy('town_hall')
+            ->get()
+            ->groupBy('building_id')
+            ->map(fn ($items) => $items->last());
 
-    $existingLevels = ClasherBuilding::where(
-            'clasher_id',
-            $clasher->id
-        )
-        ->get()
-        ->keyBy(fn ($item) =>
-            $item->building_id . '_' . $item->slot
-        );
+        $existingLevels = ClasherBuilding::where(
+                'clasher_id',
+                $clasher->id
+            )
+            ->get()
+            ->keyBy(fn ($item) =>
+                $item->building_id . '_' . $item->slot
+            );
 
-    if (request()->ajax()) {
+        if (request()->ajax()) {
+
+            return view(
+                'clashers.partials.war-profile-form',
+                compact(
+                    'clasher',
+                    'buildings',
+                    'existingLevels'
+                )
+            );
+        }
 
         return view(
-            'clashers.partials.war-profile-form',
+            'clashers.war-profile',
             compact(
                 'clasher',
                 'buildings',
@@ -110,16 +120,6 @@ class ClasherController extends Controller
             )
         );
     }
-
-    return view(
-        'clashers.war-profile',
-        compact(
-            'clasher',
-            'buildings',
-            'existingLevels'
-        )
-    );
-}
 
     public function saveWarProfile(Request $request,Clasher $clasher)
     {

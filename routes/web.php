@@ -8,30 +8,12 @@ use App\Http\Controllers\WarController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/a', function () {
-    return view('test');
-});
-
-
-Route::get(
-    '/dashboard',
-    [DashboardController::class, 'index']
-)->name('dashboard');
-/*
-|--------------------------------------------------------------------------
-| Clashers
-|--------------------------------------------------------------------------
-*/
+Route::get('/',[DashboardController::class, 'index'])->name('dashboard');
 
 Route::controller(ClasherController::class)->group(function () {
 
     Route::get('/clashers', 'index')
         ->name('clashers.index');
-
-    
 
     Route::post('/clashers/store', 'store')
         ->name('clashers.store');
@@ -45,28 +27,7 @@ Route::controller(ClasherController::class)->group(function () {
     Route::get('/clashers/overview', 'overview')
         ->name('clashers.overview');
 
-        
-
 });
-
-
-/*
-|--------------------------------------------------------------------------
-| Buildings
-|--------------------------------------------------------------------------
-*/
-
-Route::post(
-    '/buildings',
-    [BuildingController::class, 'store']
-)->name('buildings.store');
-
-
-/*
-|--------------------------------------------------------------------------
-| TH Buildings
-|--------------------------------------------------------------------------
-*/
 
 Route::controller(ThBuildingController::class)->group(function () {
 
@@ -79,27 +40,27 @@ Route::controller(ThBuildingController::class)->group(function () {
     Route::post('/th-buildings', 'store')
         ->name('th-buildings.store');
 
-    
-
 });
+
+Route::post('/buildings',[BuildingController::class, 'store'])->name('buildings.store');
 
 
 
 // Route::get('/clan', [ClanController::class, 'index'])
 //     ->name('clan.index');
 
-// Route::post('/clan/search', [ClanController::class, 'search'])
-//     ->name('clan.search');
+Route::post('/clan/search', [ClanController::class, 'search'])
+    ->name('clan.search');
 
-//     Route::post(
-//     '/clan/store-members',
-//     [ClanController::class, 'storeMembers']
-// )->name('clan.store-members');
+    Route::post(
+    '/clan/store-members',
+    [ClanController::class, 'storeMembers']
+)->name('clan.store-members');
 
-// Route::post(
-//     '/clan/store-member-progress',
-//     [ClanController::class, 'storeMemberProgress']
-// )->name('clan.store-member-progress');
+Route::post(
+    '/clan/store-member-progress',
+    [ClanController::class, 'storeMemberProgress']
+)->name('clan.store-member-progress');
 
 Route::prefix('clans')
     ->name('clans.')
@@ -133,6 +94,5 @@ Route::prefix('wars')
         Route::get('/{war}', [WarController::class, 'show'])
             ->name('show');
 
-        Route::post('/sync', [WarController::class, 'sync'])
-            ->name('sync');
+        
     });

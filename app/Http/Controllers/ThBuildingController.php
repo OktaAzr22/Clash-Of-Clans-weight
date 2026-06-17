@@ -10,23 +10,23 @@ use Illuminate\Http\Request;
 class ThBuildingController extends Controller
 {
     public function index()
-{
-    $thBuildings = ThBuilding::with('building')
-        ->orderBy('town_hall')
-        ->orderBy('building_id')
-        ->get();
+    {
+        $thBuildings = ThBuilding::with('building')
+            ->orderBy('town_hall')
+            ->orderBy('building_id')
+            ->get();
 
-    $buildings = Building::orderBy('name')
-        ->get();
+        $buildings = Building::orderBy('name')
+            ->get();
 
-    return view(
-        'th-buildings.index',
-        compact(
-            'thBuildings',
-            'buildings'
-        )
-    );
-}
+        return view(
+            'th-buildings.index',
+            compact(
+                'thBuildings',
+                'buildings'
+            )
+        );
+    }
 
     public function create()
     {
@@ -84,6 +84,4 @@ class ThBuildingController extends Controller
                 'Konfigurasi TH berhasil disimpan.'
             );
     }
-
-   
 }

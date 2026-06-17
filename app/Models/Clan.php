@@ -16,4 +16,6 @@ class Clan extends Model
     {
         return $this->hasMany(War::class);
     }
+
+    
 }

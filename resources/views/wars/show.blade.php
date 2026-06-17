@@ -1,93 +1,94 @@
+
 @extends('layouts.app')
 
 @section('content')
 
-<div class="max-w-5xl mx-auto px-4 py-6">
+<div class="space-y-6">
 
     {{-- Header --}}
-    <div class="bg-white rounded-2xl shadow border p-6 mb-6">
+    <div>
 
-        <h1 class="text-2xl font-bold">
-            {{ $war->clan->name }}
-            vs
-            {{ $war->opponent_name }}
+        <h1 class="text-2xl font-bold text-slate-800">
+            Detail War
         </h1>
 
-        <div class="mt-4 flex flex-wrap gap-6">
+        <p class="text-sm text-slate-500 mt-1">
+            Monitoring progres serangan anggota selama war berlangsung.
+        </p>
 
-            <div>
-    <div class="text-sm text-slate-500">
-        Status
     </div>
 
-    <div class="font-semibold">
-        @switch($war->state)
-            @case('preparation')
-                Preparation Day
-                @break
+    {{-- Informasi War --}}
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
 
-            @case('inWar')
-                Battle Day
-                @break
-
-            @case('warEnded')
-                War Ended
-                @break
-
-            @default
-                {{ $war->state }}
-        @endswitch
-    </div>
-
-    @if($war->remaining_time)
-        <div class="text-sm text-slate-500 mt-1">
-            Sisa {{ $war->remaining_time }}
-        </div>
-    @endif
-</div>
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 
             <div>
-                <div class="text-sm text-slate-500">
-                    Stars
-                </div>
 
-                <div class="font-semibold text-lg">
-                    {{ $war->clan_stars }}
-                    ⭐
-                    -
-                    {{ $war->opponent_stars }}
-                    ⭐
-                </div>
+                <h2 class="text-2xl font-bold text-slate-800">
+                    {{ $war->clan->name }}
+                </h2>
+
+                <p class="text-slate-500 mt-1">
+                    {{ $war->opponent_name }}
+                </p>
+
             </div>
 
             <div>
-                <div class="text-sm text-slate-500">
-                    Destruction
-                </div>
 
-                <div class="font-semibold">
-                    {{ number_format($war->clan_destruction, 2) }}%
-                    -
-                    {{ number_format($war->opponent_destruction, 2) }}%
-                </div>
+                @php
+                    $statusColor = match($war->state) {
+                        'preparation' => 'bg-amber-100 text-amber-700',
+                        'inWar' => 'bg-green-100 text-green-700',
+                        'warEnded' => 'bg-slate-100 text-slate-700',
+                        default => 'bg-blue-100 text-blue-700'
+                    };
+                @endphp
+
+                <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium {{ $statusColor }}">
+
+                    @switch($war->state)
+                        @case('preparation')
+                            Preparation Day
+                            @break
+
+                        @case('inWar')
+                            Battle Day
+                            @break
+
+                        @case('warEnded')
+                            War Ended
+                            @break
+
+                        @default
+                            {{ $war->state }}
+                    @endswitch
+
+                </span>
+
             </div>
 
         </div>
+
+        
 
     </div>
 
     {{-- Daftar Anggota --}}
-    <div class="bg-white rounded-2xl shadow border overflow-hidden">
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
 
-        <div class="px-6 py-4 border-b">
-            <h2 class="font-semibold text-lg">
+        <div class="px-6 py-4 border-b border-slate-200">
+
+            <h2 class="text-lg font-semibold text-slate-800">
                 Anggota War
             </h2>
+
         </div>
 
         @if($war->members->isEmpty())
 
-            <div class="p-10 text-center text-slate-500">
+            <div class="py-12 text-center text-slate-500">
                 Data anggota belum tersedia.
             </div>
 
@@ -100,68 +101,101 @@
                     <thead class="bg-slate-50">
 
                         <tr>
-                            <th class="px-6 py-3 text-left">
+
+                            <th class="px-6 py-3 text-left font-semibold text-slate-600">
                                 Posisi
                             </th>
 
-                            <th class="px-6 py-3 text-left">
+                            <th class="px-6 py-3 text-left font-semibold text-slate-600">
                                 Nama
                             </th>
 
-                            <th class="px-6 py-3 text-center">
+                            <th class="px-6 py-3 text-center font-semibold text-slate-600">
                                 TH
                             </th>
 
-                            <th class="px-6 py-3 text-center">
+                            <th class="px-6 py-3 text-center font-semibold text-slate-600">
                                 Serangan
                             </th>
 
-                            <th class="px-6 py-3 text-center">
+                            <th class="px-6 py-3 text-center font-semibold text-slate-600">
+                                Progress
+                            </th>
+
+                            <th class="px-6 py-3 text-center font-semibold text-slate-600">
                                 Status
                             </th>
+
                         </tr>
 
                     </thead>
 
-                    <tbody class="divide-y">
+                    <tbody class="divide-y divide-slate-100">
 
                         @foreach($war->members as $member)
 
-                            <tr>
+                            @php
+                                $percentage = $war->attacks_per_member > 0
+                                    ? ($member->attacks_used / $war->attacks_per_member) * 100
+                                    : 0;
+                            @endphp
 
-                                <td class="px-6 py-4 font-medium">
+                            <tr class="hover:bg-slate-50 transition">
+
+                                <td class="px-6 py-4 font-medium text-slate-800">
                                     #{{ $member->map_position }}
                                 </td>
 
                                 <td class="px-6 py-4">
-                                    {{ $member->name }}
+
+                                    <div class="font-medium text-slate-800">
+                                        {{ $member->name }}
+                                    </div>
+
                                 </td>
 
                                 <td class="px-6 py-4 text-center">
                                     TH{{ $member->town_hall }}
                                 </td>
 
-                                <td class="px-6 py-4 text-center">
+                                <td class="px-6 py-4 text-center font-medium">
                                     {{ $member->attacks_used }}/{{ $war->attacks_per_member }}
+                                </td>
+
+                                <td class="px-6 py-4">
+
+                                    <div class="w-full bg-slate-200 rounded-full h-2">
+
+                                        <div
+                                            class="bg-blue-600 h-2 rounded-full transition-all"
+                                            style="width: {{ min($percentage,100) }}%"
+                                        ></div>
+
+                                    </div>
+
+                                    <div class="text-xs text-slate-500 mt-1 text-center">
+                                        {{ number_format($percentage, 0) }}%
+                                    </div>
+
                                 </td>
 
                                 <td class="px-6 py-4 text-center">
 
                                     @if($member->attacks_used == 0)
 
-                                        <span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-medium">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">
                                             ❌ Belum Menyerang
                                         </span>
 
                                     @elseif($member->attacks_used < $war->attacks_per_member)
 
-                                        <span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-medium">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
                                             ⚠️ Belum Selesai
                                         </span>
 
                                     @else
 
-                                        <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
                                             ✅ Selesai
                                         </span>
 

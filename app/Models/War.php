@@ -21,6 +21,7 @@ class War extends Model
         'preparation_start_time',
         'start_time',
         'end_time',
+        'clan_xp_earned',
     ];
 
     protected $casts = [

@@ -18,6 +18,7 @@ class SyncCurrentWars extends Command
     public function handle(
         ClashOfClansService $coc
     ): int {
+
         $clans = Clan::where('is_active', true)->get();
 
         foreach ($clans as $clan) {
@@ -25,51 +26,79 @@ class SyncCurrentWars extends Command
             try {
 
                 $warData = $coc->getCurrentWar($clan->tag);
+                dump($warData['clan']);
+
+                /*
+                |--------------------------------------------------------------------------
+                | Tidak sedang war
+                |--------------------------------------------------------------------------
+                */
 
                 if (! $warData) {
-    $this->info(
-        "{$clan->name}: tidak sedang war."
-    );
 
-    continue;
-}
+                    $this->info(
+                        "{$clan->name}: tidak sedang war."
+                    );
 
-if (
-    !isset($warData['startTime']) ||
-    ($warData['state'] ?? null) === 'notInWar'
-) {
-    $this->info(
-        "{$clan->name}: tidak sedang war."
-    );
+                    continue;
+                }
 
-    continue;
-}
+                if (
+                    ! isset($warData['startTime']) ||
+                    ($warData['state'] ?? null) === 'notInWar'
+                ) {
+
+                    $this->info(
+                        "{$clan->name}: tidak sedang war."
+                    );
+
+                    continue;
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | Simpan War
+                |--------------------------------------------------------------------------
+                */
 
                 $war = War::updateOrCreate(
                     [
                         'clan_id' => $clan->id,
+
                         'start_time' => $this->parseTime(
                             $warData['startTime']
                         ),
                     ],
                     [
-                        'opponent_tag' => $warData['opponent']['tag'],
-                        'opponent_name' => $warData['opponent']['name'],
+                        'opponent_tag' =>
+                            $warData['opponent']['tag'] ?? null,
 
-                        'state' => $warData['state'],
+                        'opponent_name' =>
+                            $warData['opponent']['name'] ?? 'Unknown',
 
-                        'team_size' => $warData['teamSize'],
+                        'state' =>
+                            $warData['state'] ?? null,
 
-                        'attacks_per_member' => $warData['attacksPerMember'],
+                        'team_size' =>
+                            $warData['teamSize'] ?? 0,
 
-                        'clan_stars' => $warData['clan']['stars'] ?? 0,
-                        'opponent_stars' => $warData['opponent']['stars'] ?? 0,
+                        'attacks_per_member' =>
+                            $warData['attacksPerMember'] ?? 0,
+
+                        'clan_stars' =>
+                            $warData['clan']['stars'] ?? 0,
+
+                        'opponent_stars' =>
+                            $warData['opponent']['stars'] ?? 0,
 
                         'clan_destruction' =>
                             $warData['clan']['destructionPercentage'] ?? 0,
 
                         'opponent_destruction' =>
                             $warData['opponent']['destructionPercentage'] ?? 0,
+
+                        'clan_xp_earned' =>
+                            $warData['clan']['expEarned'] ?? 0,
 
                         'preparation_start_time' =>
                             isset($warData['preparationStartTime'])
@@ -87,24 +116,38 @@ if (
                     ]
                 );
 
-                foreach ($warData['clan']['members'] as $member) {
+                /*
+                |--------------------------------------------------------------------------
+                | Simpan Member War
+                |--------------------------------------------------------------------------
+                */
+
+                foreach (
+                    $warData['clan']['members'] ?? []
+                    as $member
+                ) {
 
                     WarMember::updateOrCreate(
                         [
                             'war_id' => $war->id,
-                            'player_tag' => $member['tag'],
+
+                            'player_tag' =>
+                                $member['tag'],
                         ],
                         [
-                            'name' => $member['name'],
+                            'name' =>
+                                $member['name'],
 
                             'town_hall' =>
-                                $member['townhallLevel'],
+                                $member['townhallLevel'] ?? 0,
 
                             'map_position' =>
-                                $member['mapPosition'],
+                                $member['mapPosition'] ?? 0,
 
                             'attacks_used' =>
-                                count($member['attacks'] ?? []),
+                                count(
+                                    $member['attacks'] ?? []
+                                ),
                         ]
                     );
                 }
@@ -127,6 +170,7 @@ if (
     protected function parseTime(
         string $time
     ): Carbon {
+
         return Carbon::createFromFormat(
             'Ymd\THis.v\Z',
             $time,

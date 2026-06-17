@@ -1,135 +1,207 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex justify-between items-center mb-6">
 
-    <h1 class="text-2xl font-bold">
-        Monitoring War
-    </h1>
+<div class="space-y-6">
 
-    <button
-    id="syncButton"
-    type="button"
-    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
->
-    🔄 Sinkronkan
-</button>
+{{-- Header --}}
+<div class="flex items-center justify-between">
 
-</div>
-<div class="max-w-7xl mx-auto px-4 py-6">
+    <div>
 
-    <h1 class="text-2xl font-bold mb-6">
-        Monitoring War
-    </h1>
+        <h1 class="text-2xl font-bold text-slate-800">
+            Monitoring War
+        </h1>
 
-    <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-
-        @foreach($clans as $clan)
-
-            @php
-                $war = $clan->wars->first();
-            @endphp
-
-            <div class="bg-white rounded-2xl shadow border p-6">
-
-                <h2 class="font-bold text-lg">
-                    {{ $clan->name }}
-                </h2>
-
-                @if($war)
-
-                    <p class="text-slate-500 mt-2">
-                        {{ $war->state }}
-                    </p>
-
-                    <p class="mt-2">
-                        Lawan:
-                        {{ $war->opponent_name }}
-                    </p>
-
-                    <div class="mt-4 text-xl font-bold">
-                        {{ $war->clan_stars }}
-                        ⭐
-                        -
-                        {{ $war->opponent_stars }}
-                        ⭐
-                    </div>
-
-                    <div class="mt-2 text-slate-600">
-                        {{ number_format($war->clan_destruction, 2) }}%
-                        -
-                        {{ number_format($war->opponent_destruction, 2) }}%
-                    </div>
-
-                    <a
-                        href="{{ route('wars.show', $war) }}"
-                        class="inline-block mt-4 px-4 py-2 rounded-lg bg-blue-600 text-white"
-                    >
-                        Lihat Detail
-                    </a>
-
-                @else
-
-                    <div class="mt-4 text-slate-500">
-                        No Active War
-                    </div>
-
-                @endif
-
-            </div>
-
-        @endforeach
+        <p class="text-sm text-slate-500 mt-1">
+            Pantau status war seluruh clan yang aktif.
+        </p>
 
     </div>
 
 </div>
-<script>
-document.getElementById('syncButton').addEventListener('click', function () {
 
-    const button = this;
+{{-- Tabel --}}
+<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
 
-    button.disabled = true;
-    button.innerHTML = '⏳ Menyinkronkan...';
+    <div class="px-6 py-4 border-b border-slate-200">
 
-    fetch('{{ route("wars.sync") }}', {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Accept': 'application/json',
-        },
-    })
-    .then(async response => {
-        const data = await response.json();
+        <h2 class="text-lg font-semibold text-slate-800">
+            Daftar War Clan
+        </h2>
 
-        if (!response.ok) {
-            throw new Error(data.message || 'Sinkronisasi gagal.');
-        }
+    </div>
 
-        return data;
-    })
-    .then(data => {
+    @if($clans->isEmpty())
 
-        button.innerHTML = '✅ Berhasil';
+        <div class="py-12 text-center text-slate-500">
+            Belum ada clan yang tersedia.
+        </div>
 
-        // Kalau controller mengembalikan output command
-        if (data.output) {
-            alert(data.output);
-        }
+    @else
 
-        setTimeout(() => {
-            location.reload();
-        }, 1000);
+        <div class="overflow-x-auto">
 
-    })
-    .catch(error => {
+            <table class="w-full text-sm">
 
-        console.error(error);
+                <thead class="bg-slate-50">
 
-        alert(error.message || 'Terjadi kesalahan saat sinkronisasi.');
+                    <tr>
 
-        button.disabled = false;
-        button.innerHTML = '🔄 Sinkronkan';
-    });
-});
-</script>
+                        <th class="px-6 py-3 text-left font-semibold text-slate-600">
+                            Clan
+                        </th>
+
+                        <th class="px-6 py-3 text-left font-semibold text-slate-600">
+                            Tag
+                        </th>
+
+                        <th class="px-6 py-3 text-center font-semibold text-slate-600">
+                            Status
+                        </th>
+
+                        <th class="px-6 py-3 text-left font-semibold text-slate-600">
+                            Lawan
+                        </th>
+
+                        <th class="px-6 py-3 text-center font-semibold text-slate-600">
+                            Sisa Waktu
+                        </th>
+
+                        <th class="px-6 py-3 text-center font-semibold text-slate-600">
+                            Aksi
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody class="divide-y divide-slate-100">
+
+                    @foreach($clans as $clan)
+
+                        @php
+                            $war = $clan->wars->first();
+                        @endphp
+
+                        <tr class="hover:bg-slate-50 transition">
+
+                            <td class="px-6 py-4 font-medium text-slate-800">
+                                {{ $clan->name }}
+                            </td>
+
+                            <td class="px-6 py-4 font-mono text-slate-500">
+                                {{ $clan->tag }}
+                            </td>
+
+                            @if($war)
+
+                                <td class="px-6 py-4 text-center">
+
+                                    @php
+                                        $statusColor = match($war->state) {
+                                            'preparation' => 'bg-amber-100 text-amber-700',
+                                            'inWar' => 'bg-green-100 text-green-700',
+                                            'warEnded' => 'bg-slate-100 text-slate-700',
+                                            default => 'bg-blue-100 text-blue-700',
+                                        };
+                                    @endphp
+
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $statusColor }}">
+
+                                        @switch($war->state)
+
+                                            @case('preparation')
+                                                Preparation Day
+                                                @break
+
+                                            @case('inWar')
+                                                Battle Day
+                                                @break
+
+                                            @case('warEnded')
+                                                War Ended
+                                                @break
+
+                                            @default
+                                                {{ $war->state }}
+
+                                        @endswitch
+
+                                    </span>
+
+                                </td>
+
+                                <td class="px-6 py-4 text-slate-700">
+                                    {{ $war->opponent_name }}
+                                </td>
+
+                                <td class="px-6 py-4 text-center">
+
+                                    @if($war->state === 'warEnded')
+
+                                        <span class="text-slate-500">
+                                            Selesai
+                                        </span>
+
+                                    @else
+
+                                        <span class="font-medium text-slate-700">
+                                            {{ $war->remaining_time ?? '-' }}
+                                        </span>
+
+                                    @endif
+
+                                </td>
+
+                                <td class="px-6 py-4 text-center">
+
+                                    <a
+                                        href="{{ route('wars.show', $war) }}"
+                                        class="inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700 transition"
+                                    >
+                                        Detail
+                                    </a>
+
+                                </td>
+
+                            @else
+
+                                <td class="px-6 py-4 text-center">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">
+                                        No War
+                                    </span>
+                                </td>
+
+                                <td class="px-6 py-4 text-slate-400">
+                                    -
+                                </td>
+
+                                <td class="px-6 py-4 text-center text-slate-400">
+                                    -
+                                </td>
+
+                                <td class="px-6 py-4 text-center text-slate-400">
+                                    -
+                                </td>
+
+                            @endif
+
+                        </tr>
+
+                    @endforeach
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    @endif
+
+</div>
+
+
+</div>
+
 @endsection
