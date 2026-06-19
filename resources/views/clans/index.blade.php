@@ -68,9 +68,7 @@
                                 Status
                             </th>
 
-                            <th class="px-6 py-3 text-center font-semibold text-slate-600">
-                                Aksi
-                            </th>
+                           
                         </tr>
                     </thead>
 
@@ -90,41 +88,54 @@
 
                                 <td class="px-6 py-4 text-center">
 
-                                    @if($clan->is_active)
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                                            Aktif
-                                        </span>
-                                    @else
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">
-                                            Nonaktif
-                                        </span>
-                                    @endif
+    <form
+        action="{{ route('clans.toggle', $clan) }}"
+        method="POST"
+        class="inline-flex"
+    >
+        @csrf
+        @method('PATCH')
 
-                                </td>
+        <label class="relative inline-flex items-center cursor-pointer group">
 
-                                <td class="px-6 py-4 text-center">
+    <input
+        type="checkbox"
+        class="sr-only peer"
+        onchange="this.form.submit()"
+        {{ $clan->is_active ? 'checked' : '' }}
+    >
 
-                                    <form
-                                        action="{{ route('clans.toggle', $clan) }}"
-                                        method="POST"
-                                        class="inline"
-                                    >
-                                        @csrf
-                                        @method('PATCH')
+    <div
+        class="relative w-11 h-6 bg-slate-300 rounded-full
+               peer-checked:bg-emerald-500
+               transition-all duration-300
+               after:content-['']
+               after:absolute
+               after:top-0.5
+               after:left-0.5
+               after:w-5
+               after:h-5
+               after:bg-white
+               after:rounded-full
+               after:shadow
+               after:transition-all
+               peer-checked:after:translate-x-5">
+    </div>
 
-                                        <button
-                                            type="submit"
-                                            class="px-4 py-2 rounded-lg text-white text-sm
-                                            {{ $clan->is_active
-                                                ? 'bg-red-600 hover:bg-red-700'
-                                                : 'bg-green-600 hover:bg-green-700' }}"
-                                        >
-                                            {{ $clan->is_active ? 'Nonaktifkan' : 'Aktifkan' }}
-                                        </button>
+    <div
+        class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2
+               px-2 py-1 text-xs text-white bg-slate-800 rounded
+               opacity-0 group-hover:opacity-100
+               transition pointer-events-none whitespace-nowrap z-50"
+    >
+        {{ $clan->is_active ? 'Nonaktifkan Clan' : 'Aktifkan Clan' }}
+    </div>
 
-                                    </form>
+</label>
 
-                                </td>
+    </form>
+
+</td>
 
                             </tr>
 

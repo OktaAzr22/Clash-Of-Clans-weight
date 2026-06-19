@@ -34,9 +34,7 @@
                 {{-- Select --}}
                 <div class="w-full lg:w-80">
 
-                    <label class="block text-sm font-medium text-slate-700 mb-2">
-                        Pilih Town Hall
-                    </label>
+                   
 
                     <div class="relative">
 
@@ -69,7 +67,7 @@
                     
 
                    <div class="flex items-center gap-2 text-sm">
-    <span class="text-slate-500">Menampilkan data:</span>
+    <span class="text-slate-500">Menampilkan:</span>
 
     <span
         id="selectedThText"
@@ -87,7 +85,7 @@
 
     </div>
 
-    <hr>
+   
 
     {{-- AJAX CONTENT --}}
     <div id="overviewWrapper" class="transition-opacity duration-300">
