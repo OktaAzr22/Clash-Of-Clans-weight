@@ -26,7 +26,7 @@ class SyncCurrentWars extends Command
             try {
 
                 $warData = $coc->getCurrentWar($clan->tag);
-                dump($warData['clan']);
+                
 
                 /*
                 |--------------------------------------------------------------------------

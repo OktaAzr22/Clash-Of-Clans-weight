@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard | Velora</title>
-   
-    <script src="https://cdn.tailwindcss.com"></script>
-   
+
+    <script src="https://cdn.tailwindcss.com">
+    </script>
     <script>
         tailwind.config = {
             theme: {
@@ -24,8 +24,8 @@
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
         body {
             font-family: 'Inter', system-ui, sans-serif;
@@ -41,55 +41,123 @@
             background: #475569;
             border-radius: 10px;
         }
-        .transition-smooth {
-            transition: all 0.2s ease;
-        }
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-        .card-hover:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.15);
-        }
     </style>
 </head>
 <body class="font-inter antialiased">
 
     <div class="flex h-screen overflow-hidden bg-soft-gray">
-        
+
+        <!-- ========== SIDEBAR ========== -->
         <aside class="w-72 bg-gradient-to-b from-secondary to-slate-800 text-white shadow-2xl flex-shrink-0 flex flex-col">
+            <!-- Brand -->
             <div class="px-6 py-7 border-b border-slate-700/60 flex items-center gap-3">
                 <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-lg">
                     <i class="fas fa-chart-line text-xl text-white"></i>
                 </div>
                 <span class="text-xl font-bold tracking-tight">Velora<span class="text-primary">Admin</span></span>
             </div>
-            
-            <nav class="flex-1 px-4 mt-6 space-y-1.5">
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/20 text-white font-medium transition-smooth group">
+
+            <!-- Navigation -->
+            <nav class="flex-1 px-4 mt-6 space-y-1.5 overflow-y-auto">
+
+                <!-- Dashboard (tanpa submenu) -->
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/20 text-white font-medium transition-all duration-200 group">
                     <i class="fas fa-tachometer-alt w-5 text-lg"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-700/50 hover:text-white transition-smooth">
-                    <i class="fas fa-users w-5"></i>
-                    <span>Pengguna</span>
-                </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-700/50 hover:text-white transition-smooth">
-                    <i class="fas fa-chart-pie w-5"></i>
-                    <span>Analitik</span>
-                </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-700/50 hover:text-white transition-smooth">
-                    <i class="fas fa-cog w-5"></i>
-                    <span>Pengaturan</span>
-                </a>
+
+                <!-- ====== Pengguna (dengan submenu) ====== -->
+                <div class="nav-parent transition-all duration-200 rounded-xl text-slate-300 hover:bg-slate-700/50 hover:text-white">
+                    <div class="flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-users w-5"></i>
+                            <span>Pengguna</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-xs text-slate-400 transition-transform duration-200 icon-rotate"></i>
+                    </div>
+                    <!-- submenu -->
+                    <div class="submenu-container overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0">
+                        <div class="pl-2 space-y-1 pt-1 pb-1">
+                            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/30 transition-all duration-200 border-l-2 border-transparent hover:border-primary ml-1">
+                                <i class="fas fa-user-plus w-5 text-xs text-primary"></i>
+                                <span>Daftar Pengguna</span>
+                            </a>
+                            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/30 transition-all duration-200 border-l-2 border-transparent hover:border-primary ml-1">
+                                <i class="fas fa-user-cog w-5 text-xs text-primary"></i>
+                                <span>Kelola Peran</span>
+                            </a>
+                            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/30 transition-all duration-200 border-l-2 border-transparent hover:border-primary ml-1">
+                                <i class="fas fa-user-check w-5 text-xs text-primary"></i>
+                                <span>Verifikasi</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ====== Analitik (dengan submenu) ====== -->
+                <div class="nav-parent transition-all duration-200 rounded-xl text-slate-300 hover:bg-slate-700/50 hover:text-white">
+                    <div class="flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-chart-pie w-5"></i>
+                            <span>Analitik</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-xs text-slate-400 transition-transform duration-200 icon-rotate"></i>
+                    </div>
+                    <div class="submenu-container overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0">
+                        <div class="pl-2 space-y-1 pt-1 pb-1">
+                            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/30 transition-all duration-200 border-l-2 border-transparent hover:border-primary ml-1">
+                                <i class="fas fa-chart-bar w-5 text-xs text-primary"></i>
+                                <span>Laporan Bulanan</span>
+                            </a>
+                            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/30 transition-all duration-200 border-l-2 border-transparent hover:border-primary ml-1">
+                                <i class="fas fa-chart-line w-5 text-xs text-primary"></i>
+                                <span>Trend & Prediksi</span>
+                            </a>
+                            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/30 transition-all duration-200 border-l-2 border-transparent hover:border-primary ml-1">
+                                <i class="fas fa-download w-5 text-xs text-primary"></i>
+                                <span>Ekspor Data</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ====== Pengaturan (dengan submenu) ====== -->
+                <div class="nav-parent transition-all duration-200 rounded-xl text-slate-300 hover:bg-slate-700/50 hover:text-white">
+                    <div class="flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-cog w-5"></i>
+                            <span>Pengaturan</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-xs text-slate-400 transition-transform duration-200 icon-rotate"></i>
+                    </div>
+                    <div class="submenu-container overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0">
+                        <div class="pl-2 space-y-1 pt-1 pb-1">
+                            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/30 transition-all duration-200 border-l-2 border-transparent hover:border-primary ml-1">
+                                <i class="fas fa-sliders-h w-5 text-xs text-primary"></i>
+                                <span>Preferensi</span>
+                            </a>
+                            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/30 transition-all duration-200 border-l-2 border-transparent hover:border-primary ml-1">
+                                <i class="fas fa-shield-alt w-5 text-xs text-primary"></i>
+                                <span>Keamanan</span>
+                            </a>
+                            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/30 transition-all duration-200 border-l-2 border-transparent hover:border-primary ml-1">
+                                <i class="fas fa-palette w-5 text-xs text-primary"></i>
+                                <span>Tampilan</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Garis pemisah + logout -->
                 <div class="pt-6 mt-6 border-t border-slate-700/50">
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-700/50 hover:text-red-300 transition-smooth">
+                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-700/50 hover:text-red-300 transition-all duration-200">
                         <i class="fas fa-sign-out-alt w-5"></i>
                         <span>Keluar</span>
                     </a>
                 </div>
             </nav>
-            
+
+            <!-- Profile card -->
             <div class="p-4 border-t border-slate-700/60 mt-auto">
                 <div class="flex items-center gap-3 bg-slate-800/50 rounded-xl p-3">
                     <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center shadow-md">
@@ -103,9 +171,11 @@
                 </div>
             </div>
         </aside>
-        
+
+        <!-- ========== MAIN CONTENT ========== -->
         <div class="flex-1 flex flex-col overflow-y-auto overflow-x-hidden">
-            
+
+            <!-- Header -->
             <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-10 border-b border-slate-200/70">
                 <div class="px-6 py-4 flex items-center justify-between">
                     <div>
@@ -134,7 +204,8 @@
                     </div>
                 </div>
             </header>
-            
+
+            <!-- Main -->
             <main class="p-6 md:p-8">
                 <div class="mb-8 bg-gradient-to-r from-indigo-50 via-white to-purple-50 rounded-2xl p-5 shadow-sm border border-indigo-100">
                     <div class="flex flex-wrap justify-between items-center">
@@ -147,9 +218,9 @@
                         </div>
                     </div>
                 </div>
-                
+
+                <!-- Stat Cards -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <!-- Card 1 -->
                     <div class="bg-white rounded-2xl shadow-md p-5 border border-slate-100 hover:shadow-lg transition-all duration-300 group">
                         <div class="flex justify-between items-start">
                             <div>
@@ -162,7 +233,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Card 2 -->
                     <div class="bg-white rounded-2xl shadow-md p-5 border border-slate-100 hover:shadow-lg transition-all duration-300 group">
                         <div class="flex justify-between items-start">
                             <div>
@@ -175,7 +245,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Card 3 -->
                     <div class="bg-white rounded-2xl shadow-md p-5 border border-slate-100 hover:shadow-lg transition-all duration-300 group">
                         <div class="flex justify-between items-start">
                             <div>
@@ -188,7 +257,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Card 4 -->
                     <div class="bg-white rounded-2xl shadow-md p-5 border border-slate-100 hover:shadow-lg transition-all duration-300 group">
                         <div class="flex justify-between items-start">
                             <div>
@@ -202,187 +270,8 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- ============================================================ -->
-                <!-- SECTION CARD PEMAIN: NAMA, TAG, TH, CLAN, KET, INFERNO, EAGLE, X-BOW -->
-                <!-- ============================================================ -->
-                <div class="mb-8">
-                    <div class="flex items-center justify-between flex-wrap gap-3 mb-5">
-                        <div>
-                            <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
-                                <i class="fas fa-shield-haltered text-primary text-2xl"></i> 
-                                Data Pertahanan & Pasukan Elite
-                            </h3>
-                            <p class="text-slate-500 text-sm mt-1">Informasi lengkap level Inferno, Eagle, X-Bow dalam tampilan card modern</p>
-                        </div>
-                        <div class="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
-                            <i class="fas fa-sync-alt text-xs"></i>
-                            <span>Live Data · 5 Pemain</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Grid Card - BUKAN TABEL -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        
-                        <!-- CARD 1 - Arjuna X -->
-                        <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden card-hover">
-                            <div class="bg-gradient-to-r from-indigo-600 to-primary px-5 py-3 flex justify-between items-center">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-sm">AX</div>
-                                    <h4 class="font-bold text-white text-lg">Arjuna X</h4>
-                                </div>
-                                <span class="bg-amber-400/30 text-amber-100 text-xs px-2 py-1 rounded-full font-mono">#ARJ88P9L</span>
-                            </div>
-                            <div class="p-5">
-                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
-                                    <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-flag-checkered text-primary w-4"></i><span class="text-sm font-medium">TH Level:</span></div>
-                                    <span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-sm font-bold">TH16</span>
-                                </div>
-                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
-                                    <div class="flex items-center gap-2 text-slate-600"></i><span class="text-sm font-medium">Clan:</span></div>
-                                    <span class="text-sm font-semibold text-slate-700">Phoenix Rising</span>
-                                </div>
-                                <div class="mb-4 p-2 bg-slate-50 rounded-xl">
-                                    <div class="flex items-start gap-2 text-slate-600"><i class="fas fa-info-circle text-primary mt-0.5"></i><span class="text-xs text-slate-500">Ket: Maksimal pertahanan, war veteran</span></div>
-                                </div>
-                                <div class="grid grid-cols-3 gap-2 mt-3 pt-2 border-t border-slate-100">
-                                    <div class="text-center p-2 bg-orange-50 rounded-xl"><i class="fas fa-fire text-orange-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Inferno</span><p class="font-bold text-slate-800 text-lg">Lv 7</p></div>
-                                    <div class="text-center p-2 bg-slate-50 rounded-xl"><i class="fas fa-dove text-slate-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Eagle</span><p class="font-bold text-slate-800 text-lg">Lv 6</p></div>
-                                    <div class="text-center p-2 bg-emerald-50 rounded-xl"><i class="fas fa-crosshairs text-emerald-600 text-lg block mb-1"></i><span class="text-xs text-slate-500">X-Bow</span><p class="font-bold text-slate-800 text-lg">Lv 9</p></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- CARD 2 - LunaStrike -->
-                        <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden card-hover">
-                            <div class="bg-gradient-to-r from-slate-700 to-slate-800 px-5 py-3 flex justify-between items-center">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-sm">LS</div>
-                                    <h4 class="font-bold text-white text-lg">LunaStrike</h4>
-                                </div>
-                                <span class="bg-purple-400/30 text-purple-100 text-xs px-2 py-1 rounded-full font-mono">#LUNA21T9</span>
-                            </div>
-                            <div class="p-5">
-                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
-                                    <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-flag-checkered text-primary w-4"></i><span class="text-sm font-medium">TH Level:</span></div>
-                                    <span class="px-2 py-0.5 bg-purple-100 text-purple-800 rounded-full text-sm font-bold">TH15</span>
-                                </div>
-                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
-                                    <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-users text-primary w-4"></i><span class="text-sm font-medium">Clan:</span></div>
-                                    <span class="text-sm font-semibold text-slate-700">Dragon Legion</span>
-                                </div>
-                                <div class="mb-4 p-2 bg-slate-50 rounded-xl">
-                                    <div class="flex items-start gap-2 text-slate-600"><i class="fas fa-info-circle text-primary mt-0.5"></i><span class="text-xs text-slate-500">Ket: Spesialis serangan balon & naga</span></div>
-                                </div>
-                                <div class="grid grid-cols-3 gap-2 mt-3 pt-2 border-t border-slate-100">
-                                    <div class="text-center p-2 bg-orange-50 rounded-xl"><i class="fas fa-fire text-orange-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Inferno</span><p class="font-bold text-slate-800 text-lg">Lv 6</p></div>
-                                    <div class="text-center p-2 bg-slate-50 rounded-xl"><i class="fas fa-dove text-slate-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Eagle</span><p class="font-bold text-slate-800 text-lg">Lv 5</p></div>
-                                    <div class="text-center p-2 bg-emerald-50 rounded-xl"><i class="fas fa-crosshairs text-emerald-600 text-lg block mb-1"></i><span class="text-xs text-slate-500">X-Bow</span><p class="font-bold text-slate-800 text-lg">Lv 8</p></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- CARD 3 - RajaMawr -->
-                        <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden card-hover">
-                            <div class="bg-gradient-to-r from-rose-600 to-pink-600 px-5 py-3 flex justify-between items-center">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-sm">RM</div>
-                                    <h4 class="font-bold text-white text-lg">RajaMawr</h4>
-                                </div>
-                                <span class="bg-amber-400/30 text-amber-100 text-xs px-2 py-1 rounded-full font-mono">#R4J4M4W</span>
-                            </div>
-                            <div class="p-5">
-                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
-                                    <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-flag-checkered text-primary w-4"></i><span class="text-sm font-medium">TH Level:</span></div>
-                                    <span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-sm font-bold">TH16</span>
-                                </div>
-                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
-                                    <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-users text-primary w-4"></i><span class="text-sm font-medium">Clan:</span></div>
-                                    <span class="text-sm font-semibold text-slate-700">Garuda Perkasa</span>
-                                </div>
-                                <div class="mb-4 p-2 bg-slate-50 rounded-xl">
-                                    <div class="flex items-start gap-2 text-slate-600"><i class="fas fa-info-circle text-primary mt-0.5"></i><span class="text-xs text-slate-500">Ket: Hero maks, peralatan legendaris</span></div>
-                                </div>
-                                <div class="grid grid-cols-3 gap-2 mt-3 pt-2 border-t border-slate-100">
-                                    <div class="text-center p-2 bg-orange-50 rounded-xl"><i class="fas fa-fire text-orange-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Inferno</span><p class="font-bold text-slate-800 text-lg">Lv 8</p></div>
-                                    <div class="text-center p-2 bg-slate-50 rounded-xl"><i class="fas fa-dove text-slate-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Eagle</span><p class="font-bold text-slate-800 text-lg">Lv 7</p></div>
-                                    <div class="text-center p-2 bg-emerald-50 rounded-xl"><i class="fas fa-crosshairs text-emerald-600 text-lg block mb-1"></i><span class="text-xs text-slate-500">X-Bow</span><p class="font-bold text-slate-800 text-lg">Lv 10</p></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- CARD 4 - BansheeBlitz -->
-                        <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden card-hover">
-                            <div class="bg-gradient-to-r from-cyan-600 to-blue-600 px-5 py-3 flex justify-between items-center">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-sm">BB</div>
-                                    <h4 class="font-bold text-white text-lg">BansheeBlitz</h4>
-                                </div>
-                                <span class="bg-indigo-400/30 text-indigo-100 text-xs px-2 py-1 rounded-full font-mono">#B4NSH33</span>
-                            </div>
-                            <div class="p-5">
-                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
-                                    <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-flag-checkered text-primary w-4"></i><span class="text-sm font-medium">TH Level:</span></div>
-                                    <span class="px-2 py-0.5 bg-indigo-100 text-indigo-800 rounded-full text-sm font-bold">TH14</span>
-                                </div>
-                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
-                                    <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-users text-primary w-4"></i><span class="text-sm font-medium">Clan:</span></div>
-                                    <span class="text-sm font-semibold text-slate-700">Royal Shark</span>
-                                </div>
-                                <div class="mb-4 p-2 bg-slate-50 rounded-xl">
-                                    <div class="flex items-start gap-2 text-slate-600"><i class="fas fa-info-circle text-primary mt-0.5"></i><span class="text-xs text-slate-500">Ket: Donatur aktif, sering war</span></div>
-                                </div>
-                                <div class="grid grid-cols-3 gap-2 mt-3 pt-2 border-t border-slate-100">
-                                    <div class="text-center p-2 bg-orange-50 rounded-xl"><i class="fas fa-fire text-orange-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Inferno</span><p class="font-bold text-slate-800 text-lg">Lv 5</p></div>
-                                    <div class="text-center p-2 bg-slate-50 rounded-xl"><i class="fas fa-dove text-slate-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Eagle</span><p class="font-bold text-slate-800 text-lg">Lv 4</p></div>
-                                    <div class="text-center p-2 bg-emerald-50 rounded-xl"><i class="fas fa-crosshairs text-emerald-600 text-lg block mb-1"></i><span class="text-xs text-slate-500">X-Bow</span><p class="font-bold text-slate-800 text-lg">Lv 7</p></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- CARD 5 - GrimXex (Top Global) -->
-                        <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden card-hover md:col-span-2 lg:col-span-1">
-                            <div class="bg-gradient-to-r from-yellow-600 to-amber-600 px-5 py-3 flex justify-between items-center">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-sm">GX</div>
-                                    <h4 class="font-bold text-white text-lg">GrimXex</h4>
-                                    <span class="ml-2 bg-yellow-300 text-yellow-900 text-[10px] px-1.5 py-0.5 rounded-full font-bold">TOP</span>
-                                </div>
-                                <span class="bg-white/30 text-white text-xs px-2 py-1 rounded-full font-mono">#GR1MXXX</span>
-                            </div>
-                            <div class="p-5">
-                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
-                                    <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-flag-checkered text-primary w-4"></i><span class="text-sm font-medium">TH Level:</span></div>
-                                    <span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-sm font-bold">TH16</span>
-                                </div>
-                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
-                                    <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-users text-primary w-4"></i><span class="text-sm font-medium">Clan:</span></div>
-                                    <span class="text-sm font-semibold text-slate-700">Legion of Doom</span>
-                                </div>
-                                <div class="mb-4 p-2 bg-slate-50 rounded-xl">
-                                    <div class="flex items-start gap-2 text-slate-600"><i class="fas fa-info-circle text-primary mt-0.5"></i><span class="text-xs text-slate-500">Ket: Legend League, pertahanan sempurna</span></div>
-                                </div>
-                                <div class="grid grid-cols-3 gap-2 mt-3 pt-2 border-t border-slate-100">
-                                    <div class="text-center p-2 bg-orange-50 rounded-xl"><i class="fas fa-fire text-orange-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Inferno</span><p class="font-bold text-primary text-lg">Lv 9</p></div>
-                                    <div class="text-center p-2 bg-slate-50 rounded-xl"><i class="fas fa-dove text-slate-500 text-lg block mb-1"></i><span class="text-xs text-slate-500">Eagle</span><p class="font-bold text-primary text-lg">Lv 8</p></div>
-                                    <div class="text-center p-2 bg-emerald-50 rounded-xl"><i class="fas fa-crosshairs text-emerald-600 text-lg block mb-1"></i><span class="text-xs text-slate-500">X-Bow</span><p class="font-bold text-primary text-lg">Lv 11</p></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- ringkasan statistik kecil -->
-                    <div class="mt-6 flex flex-wrap justify-between items-center gap-3 bg-white/70 backdrop-blur-sm rounded-xl p-3 border border-slate-200">
-                        <div class="flex items-center gap-4 text-xs text-slate-500">
-                            <span><i class="fas fa-chart-simple text-primary mr-1"></i> Rata-rata Inferno: Lv 7.0</span>
-                            <span><i class="fas fa-chart-simple text-primary mr-1"></i> Rata-rata Eagle: Lv 6.0</span>
-                            <span><i class="fas fa-chart-simple text-primary mr-1"></i> Rata-rata X-Bow: Lv 9.0</span>
-                        </div>
-                        <button class="text-primary text-xs font-medium hover:underline"><i class="fas fa-arrow-right"></i> Lihat detail statistik</button>
-                    </div>
-                </div>
-                <!-- END SECTION CARD PEMAIN -->
-                
+
+                <!-- Bottom action -->
                 <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 text-center md:text-left">
                     <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                         <div>
@@ -396,6 +285,7 @@
         </div>
     </div>
 
+    <!-- ========== MODAL ========== -->
     <div id="modalOverlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 invisible opacity-0 transition-all duration-300">
         <div id="modalContainer" class="bg-white rounded-2xl w-full max-w-md mx-4 shadow-2xl transform scale-95 transition-all duration-300">
             <div class="flex justify-between items-center p-5 border-b border-slate-200">
@@ -405,11 +295,11 @@
             <div class="p-5">
                 <div class="mb-4">
                     <label class="block text-slate-700 text-sm font-medium mb-1">Nama Lengkap</label>
-                    <input type="text" class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition" placeholder="Masukkan nama">
+                    <input type="text" class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition" placeholder="Masukkan nama" />
                 </div>
                 <div class="mb-4">
                     <label class="block text-slate-700 text-sm font-medium mb-1">Kategori / Item</label>
-                    <input type="text" class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition" placeholder="Contoh: Produk, Jasa, Layanan">
+                    <input type="text" class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition" placeholder="Contoh: Produk, Jasa, Layanan" />
                 </div>
                 <div class="mb-5">
                     <label class="block text-slate-700 text-sm font-medium mb-1">Status</label>
@@ -425,44 +315,73 @@
         </div>
     </div>
 
+    <!-- ========== JAVASCRIPT ========== -->
     <script>
+        // ---- SUBMENU TOGGLE (Pure Tailwind) ----
+        document.querySelectorAll('.nav-parent').forEach(parent => {
+            const toggleBtn = parent.querySelector('.cursor-pointer');
+            const submenu = parent.querySelector('.submenu-container');
+            const icon = parent.querySelector('.icon-rotate');
+
+            toggleBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+
+                // Toggle submenu
+                if (submenu.classList.contains('max-h-0')) {
+                    // Buka submenu
+                    submenu.classList.remove('max-h-0', 'opacity-0');
+                    submenu.classList.add('max-h-96', 'opacity-100');
+                    icon.classList.add('rotate-180');
+                    parent.classList.add('bg-slate-700/30');
+                } else {
+                    // Tutup submenu
+                    submenu.classList.add('max-h-0', 'opacity-0');
+                    submenu.classList.remove('max-h-96', 'opacity-100');
+                    icon.classList.remove('rotate-180');
+                    parent.classList.remove('bg-slate-700/30');
+                }
+            });
+        });
+
+        // ---- MODAL ----
         const modalOverlay = document.getElementById('modalOverlay');
         const modalContainer = document.getElementById('modalContainer');
         const openModalBtns = document.querySelectorAll('#openModalBtn, #openModalBtnAlt, #openModalBtnSecond');
         const closeModalBtn = document.getElementById('closeModalBtn');
-        
+
         function openModal() {
             modalOverlay.classList.remove('invisible', 'opacity-0');
             modalOverlay.classList.add('visible', 'opacity-100');
             modalContainer.classList.remove('scale-95');
             modalContainer.classList.add('scale-100');
         }
-        
+
         function closeModal() {
             modalOverlay.classList.add('invisible', 'opacity-0');
             modalOverlay.classList.remove('visible', 'opacity-100');
             modalContainer.classList.add('scale-95');
             modalContainer.classList.remove('scale-100');
         }
-        
+
         openModalBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 openModal();
             });
         });
-        
+
         closeModalBtn.addEventListener('click', closeModal);
-        
+
         modalOverlay.addEventListener('click', (e) => {
-            if(e.target === modalOverlay) closeModal();
+            if (e.target === modalOverlay) closeModal();
         });
-        
+
         document.addEventListener('keydown', (e) => {
-            if(e.key === 'Escape' && modalOverlay.classList.contains('visible')) {
+            if (e.key === 'Escape' && modalOverlay.classList.contains('visible')) {
                 closeModal();
             }
         });
     </script>
+
 </body>
 </html>
