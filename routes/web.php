@@ -96,3 +96,13 @@ Route::prefix('wars')
 
         
     });
+
+
+
+    Route::get('/clashers/compare', [ClasherController::class, 'compareBots'])
+    ->name('clashers.compare');
+
+    Route::delete(
+    '/th-buildings/{thBuilding}',
+    [ThBuildingController::class, 'destroy']
+)->name('th-buildings.destroy');

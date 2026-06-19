@@ -84,4 +84,16 @@ class ThBuildingController extends Controller
                 'Konfigurasi TH berhasil disimpan.'
             );
     }
+
+    public function destroy(ThBuilding $thBuilding)
+{
+    $thBuilding->delete();
+
+    return redirect()
+        ->route('th-buildings.index')
+        ->with(
+            'success',
+            'Konfigurasi TH Building berhasil dihapus.'
+        );
+}
 }

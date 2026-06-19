@@ -14,7 +14,7 @@ class ClasherController extends Controller
     public function index()
     {
         $clashers = Clasher::latest()
-            ->paginate(5);
+            ->paginate(7);
 
         return view(
             'clashers.index',
@@ -197,4 +197,40 @@ class ClasherController extends Controller
             'selectedTh'
         ));
     }
+
+ public function compareBots()
+{
+    $existingNumbers = [];
+    $otherAccounts = [];
+
+    $names = Clasher::pluck('name');
+
+    foreach ($names as $name) {
+
+        if (preg_match('/^gm\s*bot\s*(\d+)$/i', trim($name), $match)) {
+
+            $existingNumbers[] = (int) $match[1];
+
+        } else {
+
+            $otherAccounts[] = $name;
+        }
+    }
+
+    sort($existingNumbers);
+
+    $missing = [];
+
+    for ($i = 1; $i <= 50; $i++) {
+        if (!in_array($i, $existingNumbers)) {
+            $missing[] = $i;
+        }
+    }
+
+    return view('clashers.compare', [
+        'existingNumbers' => $existingNumbers,
+        'missing' => $missing,
+        'otherAccounts' => $otherAccounts,
+    ]);
+}
 }

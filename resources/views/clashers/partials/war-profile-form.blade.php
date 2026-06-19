@@ -21,6 +21,30 @@
 
     @csrf
 
+    @if($buildings->isEmpty())
+
+        <div class="rounded-2xl border border-amber-200 bg-amber-50 p-8 text-center">
+
+            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-amber-100 flex items-center justify-center">
+                <i class="fa-solid fa-triangle-exclamation text-2xl text-amber-600"></i>
+            </div>
+
+            <h3 class="text-xl font-bold text-amber-800 mb-2">
+                Data Bangunan Belum Tersedia
+            </h3>
+
+            <p class="text-amber-700 max-w-md mx-auto">
+                Data bangunan untuk Town Hall
+                <span class="font-semibold">
+                    {{ $clasher->town_hall }}
+                </span>
+                belum tersedia. Silakan tambahkan data bangunan terlebih dahulu agar profil war dapat diisi.
+            </p>
+
+        </div>
+
+    @else
+
     @foreach($buildings as $item)
 
         <div class="rounded-2xl border border-slate-200 overflow-hidden bg-white shadow-sm">
@@ -115,7 +139,7 @@
 
     @endforeach
 
-    {{-- Action --}}
+    {{-- Tombol Simpan --}}
     <div class="pt-6 mt-6 border-t border-slate-200 flex justify-end gap-3">
 
         <x-button
@@ -136,5 +160,11 @@
         </x-button>
 
     </div>
+
+@endif
+
+    
+
+    
 
 </form>
