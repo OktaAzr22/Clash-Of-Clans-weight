@@ -14,7 +14,7 @@ class ClasherController extends Controller
     public function index()
     {
         $clashers = Clasher::latest()
-            ->get();
+            ->paginate(5);
 
         return view(
             'clashers.index',
@@ -157,9 +157,8 @@ class ClasherController extends Controller
     {
         $selectedTh = $request->th ?? 'all';
 
-        $query = Clasher::with([
-            'clasherBuildings.building',
-        ]);
+        $query = Clasher::with(['clasherBuildings.building'])
+            ->has('clasherBuildings');
 
         if ($selectedTh !== 'all') {
             $query->where('town_hall', $selectedTh);
@@ -167,62 +166,35 @@ class ClasherController extends Controller
 
         $clashers = $query->get();
 
-        /*
-        |--------------------------------------------------------------------------
-        | Hitung total level bangunan
-        |--------------------------------------------------------------------------
-        */
-
         $clashers->each(function ($clasher) {
-
-            $clasher->total_level = $clasher
-                ->clasherBuildings
-                ->sum('level');
-
+            $clasher->total_level = $clasher->clasherBuildings->sum('level');
         });
 
-        /*
-        |--------------------------------------------------------------------------
-        | Sorting
-        |--------------------------------------------------------------------------
-        */
-
         if ($selectedTh !== 'all') {
-
-            $clashers = $clashers
-                ->sortBy('total_level')
-                ->values();
-
+            $clashers = $clashers->sortBy('total_level')->values();
         } else {
-
-            $clashers = $clashers
-                ->sortBy([
-                    ['town_hall', 'desc'],
-                    ['total_level', 'asc'],
-                ])
-                ->values();
+            $clashers = $clashers->sortBy([
+                ['town_hall', 'desc'],
+                ['total_level', 'asc'],
+            ])->values();
         }
-
-        
-
-        /*
-        |--------------------------------------------------------------------------
-        | Filter TH
-        |--------------------------------------------------------------------------
-        */
 
         $townHalls = Clasher::select('town_hall')
             ->distinct()
             ->orderByDesc('town_hall')
             ->pluck('town_hall');
+        
+        
 
-        return view(
-            'clashers.overview',
-            compact(
-                'clashers',
-                'townHalls',
-                'selectedTh'
-            )
-        );
+        // ✅ AJAX RESPONSE
+        if ($request->ajax()) {
+            return view('clashers.partials.overview-list', compact('clashers'))->render();
+        }
+
+        return view('clashers.overview', compact(
+            'clashers',
+            'townHalls',
+            'selectedTh'
+        ));
     }
 }

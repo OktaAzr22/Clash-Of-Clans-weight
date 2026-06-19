@@ -164,6 +164,9 @@
                 </tbody>
 
             </table>
+            
+    {{ $clashers->links() }}
+
 
         </div>
 

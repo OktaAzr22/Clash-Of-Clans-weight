@@ -1,9 +1,3 @@
-
-
-
-
-
-
 @extends('layouts.app')
 @section('content')
 
@@ -166,35 +160,27 @@
 
         @csrf
 
-        <input
-            type="hidden"
-            name="modal"
-            value="createBuildingModal"
-        >
+        <input type="hidden" name="modal" value="createBuildingModal">
 
-        <x-input
-            name="name"
-            label="Nama Building"
-            required
-        />
+        <x-input name="name" label="Nama Building" required/>
 
         <div class="flex justify-end gap-2">
 
+            
+
             <x-button
-                type="button"
                 variant="secondary"
+                type="button"
                 class="close-modal"
             >
                 Batal
             </x-button>
 
-            <x-button
-                type="submit"
-                loading-text="Menyimpan..."
-            >
+            <x-button type="submit" loading loading-text="Menyimpan...">
                 Simpan
             </x-button>
 
+           
         </div>
 
     </form>
@@ -208,28 +194,13 @@
         action="{{ route('th-buildings.store') }}">
         @csrf
 
-        <input
-            type="hidden"
-            name="modal"
-            value="createThBuildingModal"
-        >
+        <input type="hidden" name="modal" value="createThBuildingModal">
 
-        <x-input
-            name="town_hall"
-            label="Town Hall"
-            type="number"
-            min="1"
-            max="17"
-            required
-        />
+        <x-input name="town_hall" label="Town Hall" type="number" min="1" max="17" required/>
 
         <div class="mb-4">
 
-            <x-select
-                name="building_id"
-                label="Building"
-                required
-            >
+            <x-select name="building_id" label="Building" required >
 
                 <option value="">
                     -- Pilih Building --
@@ -250,21 +221,9 @@
 
         </div>
 
-        <x-input
-            name="quantity"
-            label="Jumlah Bangunan"
-            type="number"
-            min="1"
-            required
-        />
+        <x-input name="quantity" label="Jumlah Bangunan" type="number" min="1" required />
 
-        <x-input
-            name="max_level"
-            label="Max Level"
-            type="number"
-            min="1"
-            required
-        />
+        <x-input name="max_level" label="Max Level" type="number" min="1" required />
 
         <div class="flex justify-end gap-2 mt-6">
 
@@ -293,7 +252,7 @@
 <x-modal
     id="viewBuildingModal"
     title="Daftar Building"
-    size="3xl">
+    size="xl">
 
     @if($buildings->isEmpty())
 
@@ -303,49 +262,36 @@
 
     @else
 
-        <div class="overflow-x-auto">
+            <div class="overflow-y-auto flex-1 space-y-2">
 
-            <table class="w-full text-sm">
+    @foreach($buildings as $building)
 
-                <thead class="sticky top-0 bg-slate-50 z-10">
+        <div class="flex items-center gap-4 p-3 rounded-xl border border-slate-100 bg-white hover:bg-slate-50 hover:shadow-md transition-all duration-200 hover:border-blue-200 group">
 
-                    <tr class="border-b bg-slate-50">
+            <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center font-bold text-sm flex-shrink-0">
+                {{ $loop->iteration }}
+            </div>
 
-                        <th class="px-4 py-3 text-left">
-                            ID
-                        </th>
+            <div class="flex-1 min-w-0">
+                <p class="font-medium text-slate-800 group-hover:text-blue-600 transition">
+                    {{ $building->name }}
+                </p>
+                <p class="text-xs text-slate-400">
+                    Building ID: #{{ $building->id }}
+                </p>
+            </div>
 
-                        <th class="px-4 py-3 text-left">
-                            Nama Building
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    @foreach($buildings as $building)
-
-                        <tr class="border-b hover:bg-slate-50">
-
-                            <td class="px-4 py-3">
-                                {{ $building->id }}
-                            </td>
-
-                            <td class="px-4 py-3">
-                                {{ $building->name }}
-                            </td>
-
-                        </tr>
-
-                    @endforeach
-
-                </tbody>
-
-            </table>
+            <div class="flex items-center gap-1">
+                <button class="p-2 rounded-lg hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition" title="Detail">
+                    <i class="fas fa-chevron-right text-sm"></i>
+                </button>
+            </div>
 
         </div>
+
+    @endforeach
+
+</div>
 
     @endif
 

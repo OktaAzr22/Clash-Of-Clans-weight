@@ -15,53 +15,24 @@
         </div>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
+    
 
-        <h2 class="text-lg font-semibold text-slate-800 mb-4">
-            Tambah Clan
-        </h2>
+    <div class="flex justify-end gap-3">
 
-        <form
-            action="{{ route('clans.store') }}"
-            method="POST"
-            class="flex flex-col md:flex-row gap-4">
-            @csrf
+    <x-button data-modal-target="addClanModal">
+        <i class="fa-solid fa-plus mr-2"></i>
+        Tambah Clan
+    </x-button>
 
-            <div class="flex-1">
-                <label class="block text-sm font-medium text-slate-700 mb-2">
-                    Tag Clan
-                </label>
+    <x-button
+        variant="secondary"
+        data-modal-target="searchClanModal"
+    >
+        <i class="fa-solid fa-magnifying-glass mr-2"></i>
+        Cari Clan
+    </x-button>
 
-                <input
-                    type="text"
-                    name="tag"
-                    value="{{ old('tag') }}"
-                    placeholder="#2QJY9GULP"
-                    class="w-full rounded-xl border border-slate-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                >
-            </div>
-
-            <div class="flex items-end">
-                <button
-                    type="submit"
-                    class="px-6 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
-                >
-                    Tambah Clan
-                </button>
-            </div>
-        </form>
-
-    </div>
-
-    <div class="flex justify-end">
-
-        <x-button data-modal-target="searchClanModal">
-            <i class="fa-solid fa-magnifying-glass mr-2"></i>
-            Cari Clan
-        </x-button>
-
-    </div>
+</div>
 
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
 
@@ -218,4 +189,51 @@
         </form>
 
     </x-modal>
+    <x-modal
+    id="addClanModal"
+    title="Tambah Clan">
+
+    <form
+        action="{{ route('clans.store') }}"
+        method="POST"
+    >
+        @csrf
+
+        <input
+            type="hidden"
+            name="modal"
+            value="addClanModal"
+        >
+
+        <x-input
+            name="tag"
+            label="Tag Clan"
+            placeholder="#2QJY9GULP"
+            :value="old('tag')"
+            required
+        />
+
+        <div class="flex justify-end gap-2">
+
+            <x-button
+                type="button"
+                variant="secondary"
+                class="close-modal"
+            >
+                Batal
+            </x-button>
+
+            <x-button
+                type="submit"
+                loading
+                loading-text="Menyimpan..."
+            >
+                Tambah Clan
+            </x-button>
+
+        </div>
+
+    </form>
+
+</x-modal>
 @endsection
