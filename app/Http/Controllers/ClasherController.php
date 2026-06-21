@@ -11,15 +11,35 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class ClasherController extends Controller
 {
-    public function index()
+public function index(Request $request)
     {
-        $clashers = Clasher::latest()
-            ->paginate(7);
+        $status = $request->status ?? 'all';
+        $search = $request->search;
 
-        return view(
-            'clashers.index',
-            compact('clashers')
-        );
+        $query = Clasher::withCount('clasherBuildings');
+
+        if ($status === 'filled') {
+            $query->has('clasherBuildings');
+        }
+
+        if ($status === 'empty') {
+            $query->doesntHave('clasherBuildings');
+        }
+
+        if ($search) {
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $clashers = $query
+            ->latest()
+            ->paginate(7)
+            ->withQueryString();
+
+        return view('clashers.index', compact(
+            'clashers',
+            'status',
+            'search'
+        ));
     }
 
     public function store(Request $request,ClashOfClansService $coc) 
@@ -198,39 +218,7 @@ class ClasherController extends Controller
         ));
     }
 
- public function compareBots()
-{
-    $existingNumbers = [];
-    $otherAccounts = [];
+    
 
-    $names = Clasher::pluck('name');
-
-    foreach ($names as $name) {
-
-        if (preg_match('/^gm\s*bot\s*(\d+)$/i', trim($name), $match)) {
-
-            $existingNumbers[] = (int) $match[1];
-
-        } else {
-
-            $otherAccounts[] = $name;
-        }
-    }
-
-    sort($existingNumbers);
-
-    $missing = [];
-
-    for ($i = 1; $i <= 50; $i++) {
-        if (!in_array($i, $existingNumbers)) {
-            $missing[] = $i;
-        }
-    }
-
-    return view('clashers.compare', [
-        'existingNumbers' => $existingNumbers,
-        'missing' => $missing,
-        'otherAccounts' => $otherAccounts,
-    ]);
-}
+   
 }

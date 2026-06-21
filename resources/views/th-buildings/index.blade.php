@@ -125,26 +125,7 @@
                             {{ $item->max_level }}
                         </td>
 
-                        <td class="px-6 py-4 text-center">
-
-    <form
-        action="{{ route('th-buildings.destroy', $item) }}"
-        method="POST"
-        class="inline-block form-delete"
-    >
-        @csrf
-        @method('DELETE')
-
-        <button
-            type="submit"
-            class="inline-flex items-center px-3 py-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition"
-        >
-            <i class="fa-solid fa-trash"></i>
-        </button>
-
-    </form>
-
-</td>
+                        
 
                     </tr>
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BaseGroupController;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\ClasherController;
 use App\Http\Controllers\ClanController;
@@ -106,3 +107,10 @@ Route::prefix('wars')
     '/th-buildings/{thBuilding}',
     [ThBuildingController::class, 'destroy']
 )->name('th-buildings.destroy');
+
+Route::get('/clashers/overview-raw', [ClasherController::class, 'overviewRaw']);
+
+Route::get('/base-groups', [BaseGroupController::class, 'index'])
+    ->name('base-groups.index');
+
+//  saya ingin ada table relasi baru ynag ngambil data clasher lalu isinya bisa tau akun mana yang ada progres gitu semisal yang tadinya akun ini th 12 mau ada progres ke th 14 gitu 
