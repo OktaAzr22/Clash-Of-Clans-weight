@@ -83,42 +83,354 @@
             </div>
         </div>
 
+        <div data-modal-target="labelModal" data-label="stay" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 ">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+
+                    <p class="text-sm text-slate-500">
+                        Stay
+                    </p>
+
+                    <h2 class="text-3xl font-bold text-green-600 mt-2">
+                        {{ number_format($stayCount) }}
+                    </h2>
+
+                </div>
+
+                <div class="w-14 h-14 rounded-2xl bg-green-100 flex items-center justify-center">
+
+                    <i class="fa-solid fa-circle-check text-2xl text-green-600"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div data-modal-target="labelModal" data-label="perlu up" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+
+                    <p class="text-sm text-slate-500">
+                        Perlu Up
+                    </p>
+
+                    <h2 class="text-3xl font-bold text-amber-600 mt-2">
+                        {{ number_format($needUpCount) }}
+                    </h2>
+
+                </div>
+
+                <div class="w-14 h-14 rounded-2xl bg-amber-100 flex items-center justify-center">
+
+                    <i class="fa-solid fa-arrow-trend-up text-2xl text-amber-600"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div data-modal-target="labelModal" data-label="belum ada" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+
+                    <p class="text-sm text-slate-500">
+                        Belum Ada
+                    </p>
+
+                    <h2 class="text-3xl font-bold text-slate-600 mt-2">
+                        {{ number_format($noLabelCount) }}
+                    </h2>
+
+                </div>
+
+                <div class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center">
+
+                    <i class="fa-solid fa-question text-2xl text-slate-600"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
-    {{-- Distribusi TH & Quick Action --}}
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    {{-- aa --}}
+        {{-- Distribusi TH & Quick Action --}}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        {{-- Distribusi TH --}}
-        <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            {{-- Distribusi TH --}}
+            <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
 
-            <h3 class="text-lg font-semibold text-slate-800 mb-6">
-                Distribusi Town Hall
-            </h3>
+                <h3 class="text-lg font-semibold text-slate-800 mb-6">
+                    Distribusi Town Hall
+                </h3>
 
-            <div class="space-y-4">
+                <div class="space-y-4">
 
-                @foreach($townHallDistribution as $item)
+                    @foreach($townHallDistribution as $item)
 
-                    <div>
+                        <div>
 
-                        <div class="flex justify-between text-sm mb-1">
+                            <div class="flex justify-between text-sm mb-1">
 
-                            <span class="font-medium text-slate-700">
-                                TH {{ $item->town_hall }}
-                            </span>
+                                <span class="font-medium text-slate-700">
+                                    TH {{ $item->town_hall }}
+                                </span>
 
-                            <span class="text-slate-500">
-                                {{ $item->total }} pemain
+                                <span class="text-slate-500">
+                                    {{ $item->total }} pemain
+                                </span>
+
+                            </div>
+
+                            <div class="w-full bg-slate-100 rounded-full h-3">
+
+                                <div
+                                    class="bg-blue-600 h-3 rounded-full"
+                                    style="width: {{ ($item->total / max($townHallDistribution->pluck('total')->max(),1)) * 100 }}%"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+                    @endforeach
+
+                </div>
+
+            </div>
+
+            {{-- Quick Action --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+
+                <h3 class="text-lg font-semibold text-slate-800 mb-6">
+                    Quick Action
+                </h3>
+
+                <div class="space-y-3">
+
+                    <a
+                        href="{{ route('clashers.index') }}"
+                        class="flex items-center gap-3 p-4 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 transition"
+                    >
+                        <i class="fa-solid fa-plus"></i>
+                        Kelola Clasher
+                    </a>
+
+                    <a
+                        href="{{ route('clashers.overview') }}"
+                        class="flex items-center gap-3 p-4 rounded-xl bg-amber-50 text-amber-700 hover:bg-amber-100 transition"
+                    >
+                        <i class="fa-solid fa-ranking-star"></i>
+                        Lihat Overview
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {{-- Top Profile & Perlu Update --}}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+            {{-- Top Profile --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+
+                <h3 class="text-lg font-semibold text-slate-800 mb-6">
+                    🏆 Top 5 War Profile
+                </h3>
+
+                <div class="space-y-4">
+
+                    @forelse($topProfiles as $clasher)
+
+                        <div class="flex items-center justify-between">
+
+                            <div>
+                                <p class="font-semibold text-slate-800">
+                                    {{ $clasher->name }}
+                                </p>
+
+                                <p class="text-sm text-slate-500">
+                                    TH {{ $clasher->town_hall }}
+                                </p>
+                            </div>
+
+                            <span class="px-3 py-2 rounded-xl bg-blue-50 text-blue-700 font-semibold">
+                                {{ number_format($clasher->total_level) }}
                             </span>
 
                         </div>
 
-                        <div class="w-full bg-slate-100 rounded-full h-3">
+                    @empty
+
+                        <p class="text-slate-500">
+                            Belum ada data.
+                        </p>
+
+                    @endforelse
+
+                </div>
+
+            </div>
+
+            {{-- Perlu Update --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+
+                <h3 class="text-lg font-semibold text-slate-800 mb-6">
+                    ⏰ Perlu Update
+                </h3>
+
+                <div class="space-y-4">
+
+                    @forelse($needUpdate as $clasher)
+
+                        <div class="flex items-center justify-between">
+
+                            <div>
+
+                                <p class="font-semibold text-slate-800">
+                                    {{ $clasher->name }}
+                                </p>
+
+                                <p class="text-sm text-slate-500">
+                                    TH {{ $clasher->town_hall }}
+                                </p>
+
+                            </div>
+
+                            <span class="text-sm text-slate-500">
+
+                                @if($clasher->last_war_profile_update)
+
+                                    {{ $clasher->last_war_profile_update->diffForHumans() }}
+
+                                @else
+
+                                    Belum pernah
+
+                                @endif
+
+                            </span>
+
+                        </div>
+
+                    @empty
+
+                        <p class="text-slate-500">
+                            Tidak ada data.
+                        </p>
+
+                    @endforelse
+
+                </div>
+
+            </div>
+
+        </div>
+    {{-- aa --}}
+
+</div>
+{{-- distribusi start --}}
+    {{-- Distribusi TH --}}
+    <div class="lg:col-span-2 bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+
+        {{-- Header --}}
+        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+            <div>
+                <h3 class="text-lg font-bold text-slate-800">
+                    Distribusi Town Hall
+                </h3>
+
+                <p class="text-sm text-slate-500 mt-1">
+                    Komposisi akun berdasarkan level Town Hall
+                </p>
+            </div>
+
+            <div class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center">
+                <i class="fa-solid fa-chess-rook text-blue-600 text-xl"></i>
+            </div>
+        </div>
+
+        {{-- Content --}}
+        <div class="p-6">
+
+            @php
+                $maxTotal = max($townHallDistribution->max('total'), 1);
+            @endphp
+
+            <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+
+                @foreach($townHallDistribution as $item)
+
+                    @php
+                        $percentage = round(($item->total / $maxTotal) * 100);
+                    @endphp
+
+                    <div
+                        class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-5 hover:shadow-lg hover:-translate-y-1 transition duration-300"
+                    >
+
+                        {{-- Background Glow --}}
+                        <div
+                            class="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-blue-100 opacity-40 group-hover:scale-125 transition">
+                        </div>
+
+                        {{-- TH --}}
+                        <div class="relative flex items-center justify-between">
+
+                            <div>
+                                <p class="text-xs uppercase tracking-wider text-slate-400">
+                                    Town Hall
+                                </p>
+
+                                <h4 class="text-2xl font-bold text-slate-800 mt-1">
+                                    TH {{ $item->town_hall }}
+                                </h4>
+                            </div>
 
                             <div
-                                class="bg-blue-600 h-3 rounded-full"
-                                style="width: {{ ($item->total / max($townHallDistribution->pluck('total')->max(),1)) * 100 }}%"
-                            ></div>
+                                class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center"
+                            >
+                                <i class="fa-solid fa-fort-awesome text-lg"></i>
+                            </div>
+
+                        </div>
+
+                        {{-- Total --}}
+                        <div class="relative mt-5">
+
+                            <p class="text-3xl font-bold text-slate-800">
+                                {{ $item->total }}
+                            </p>
+
+                            <p class="text-sm text-slate-500">
+                                Akun
+                            </p>
+
+                        </div>
+
+                        {{-- Progress --}}
+                        <div class="relative mt-4">
+
+                            <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+
+                                <div
+                                    class="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-600"
+                                    style="width: {{ $percentage }}%"
+                                ></div>
+
+                            </div>
 
                         </div>
 
@@ -130,468 +442,349 @@
 
         </div>
 
-        {{-- Quick Action --}}
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-
-            <h3 class="text-lg font-semibold text-slate-800 mb-6">
-                Quick Action
-            </h3>
-
-            <div class="space-y-3">
-
-                <a
-                    href="{{ route('clashers.index') }}"
-                    class="flex items-center gap-3 p-4 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 transition"
-                >
-                    <i class="fa-solid fa-plus"></i>
-                    Kelola Clasher
-                </a>
-
-                <a
-                    href="{{ route('clashers.overview') }}"
-                    class="flex items-center gap-3 p-4 rounded-xl bg-amber-50 text-amber-700 hover:bg-amber-100 transition"
-                >
-                    <i class="fa-solid fa-ranking-star"></i>
-                    Lihat Overview
-                </a>
-
-            </div>
-
-        </div>
-
     </div>
 
-    {{-- Top Profile & Perlu Update --}}
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    {{-- Distribusi TH --}}
+    <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
 
-        {{-- Top Profile --}}
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
 
-            <h3 class="text-lg font-semibold text-slate-800 mb-6">
-                🏆 Top 5 War Profile
-            </h3>
+            <div>
+                <h3 class="text-lg font-semibold text-slate-800">
+                    Distribusi Town Hall
+                </h3>
 
-            <div class="space-y-4">
-
-                @forelse($topProfiles as $clasher)
-
-                    <div class="flex items-center justify-between">
-
-                        <div>
-                            <p class="font-semibold text-slate-800">
-                                {{ $clasher->name }}
-                            </p>
-
-                            <p class="text-sm text-slate-500">
-                                TH {{ $clasher->town_hall }}
-                            </p>
-                        </div>
-
-                        <span class="px-3 py-2 rounded-xl bg-blue-50 text-blue-700 font-semibold">
-                            {{ number_format($clasher->total_level) }}
-                        </span>
-
-                    </div>
-
-                @empty
-
-                    <p class="text-slate-500">
-                        Belum ada data.
-                    </p>
-
-                @endforelse
-
+                <p class="text-sm text-slate-500">
+                    Sebaran akun berdasarkan level Town Hall
+                </p>
             </div>
 
-        </div>
-
-        {{-- Perlu Update --}}
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-
-            <h3 class="text-lg font-semibold text-slate-800 mb-6">
-                ⏰ Perlu Update
-            </h3>
-
-            <div class="space-y-4">
-
-                @forelse($needUpdate as $clasher)
-
-                    <div class="flex items-center justify-between">
-
-                        <div>
-
-                            <p class="font-semibold text-slate-800">
-                                {{ $clasher->name }}
-                            </p>
-
-                            <p class="text-sm text-slate-500">
-                                TH {{ $clasher->town_hall }}
-                            </p>
-
-                        </div>
-
-                        <span class="text-sm text-slate-500">
-
-                            @if($clasher->last_war_profile_update)
-
-                                {{ $clasher->last_war_profile_update->diffForHumans() }}
-
-                            @else
-
-                                Belum pernah
-
-                            @endif
-
-                        </span>
-
-                    </div>
-
-                @empty
-
-                    <p class="text-slate-500">
-                        Tidak ada data.
-                    </p>
-
-                @endforelse
-
-            </div>
+            <span class="text-sm text-slate-400">
+                {{ $totalClashers }} Akun
+            </span>
 
         </div>
 
-    </div>
+        <div class="p-6">
 
-</div>
-{{-- Distribusi TH --}}
-<div class="lg:col-span-2 bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
-
-    {{-- Header --}}
-    <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
-        <div>
-            <h3 class="text-lg font-bold text-slate-800">
-                Distribusi Town Hall
-            </h3>
-
-            <p class="text-sm text-slate-500 mt-1">
-                Komposisi akun berdasarkan level Town Hall
-            </p>
-        </div>
-
-        <div class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center">
-            <i class="fa-solid fa-chess-rook text-blue-600 text-xl"></i>
-        </div>
-    </div>
-
-    {{-- Content --}}
-    <div class="p-6">
-
-        @php
-            $maxTotal = max($townHallDistribution->max('total'), 1);
-        @endphp
-
-        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
-
-            @foreach($townHallDistribution as $item)
+            {{-- Bar Distribusi --}}
+            <div class="flex h-10 rounded-xl overflow-hidden bg-slate-100">
 
                 @php
-                    $percentage = round(($item->total / $maxTotal) * 100);
+                    $total = max($townHallDistribution->sum('total'), 1);
+
+                    $colors = [
+                        'bg-red-500',
+                        'bg-orange-500',
+                        'bg-amber-500',
+                        'bg-yellow-500',
+                        'bg-lime-500',
+                        'bg-green-500',
+                        'bg-emerald-500',
+                        'bg-cyan-500',
+                        'bg-sky-500',
+                        'bg-blue-500',
+                        'bg-indigo-500',
+                        'bg-violet-500',
+                        'bg-purple-500',
+                    ];
                 @endphp
 
-                <div
-                    class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-5 hover:shadow-lg hover:-translate-y-1 transition duration-300"
-                >
+                @foreach($townHallDistribution as $index => $item)
 
-                    {{-- Background Glow --}}
                     <div
-                        class="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-blue-100 opacity-40 group-hover:scale-125 transition">
+                        class="{{ $colors[$index % count($colors)] }}
+                            flex items-center justify-center
+                            text-white text-xs font-bold
+                            hover:brightness-110 transition"
+                        style="width: {{ ($item->total / $total) * 100 }}%"
+                        title="TH {{ $item->town_hall }} ({{ $item->total }} akun)"
+                    >
+                        TH {{ $item->town_hall }}
                     </div>
 
-                    {{-- TH --}}
-                    <div class="relative flex items-center justify-between">
+                @endforeach
 
-                        <div>
-                            <p class="text-xs uppercase tracking-wider text-slate-400">
-                                Town Hall
-                            </p>
+            </div>
 
-                            <h4 class="text-2xl font-bold text-slate-800 mt-1">
+            {{-- Legend --}}
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
+
+                @foreach($townHallDistribution as $index => $item)
+
+                    <div class="flex items-center justify-between bg-slate-50 rounded-xl px-4 py-3">
+
+                        <div class="flex items-center gap-2">
+
+                            <span class="w-3 h-3 rounded-full {{ $colors[$index % count($colors)] }}"></span>
+
+                            <span class="font-medium text-slate-700">
                                 TH {{ $item->town_hall }}
-                            </h4>
+                            </span>
+
                         </div>
 
-                        <div
-                            class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center"
-                        >
-                            <i class="fa-solid fa-fort-awesome text-lg"></i>
-                        </div>
-
-                    </div>
-
-                    {{-- Total --}}
-                    <div class="relative mt-5">
-
-                        <p class="text-3xl font-bold text-slate-800">
+                        <span class="font-semibold text-slate-800">
                             {{ $item->total }}
-                        </p>
-
-                        <p class="text-sm text-slate-500">
-                            Akun
-                        </p>
+                        </span>
 
                     </div>
 
-                    {{-- Progress --}}
-                    <div class="relative mt-4">
+                @endforeach
 
-                        <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+            </div>
 
-                            <div
-                                class="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-600"
-                                style="width: {{ $percentage }}%"
-                            ></div>
+        </div>
+
+    </div>
+
+    {{-- Distribusi TH --}}
+    <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+
+        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+
+            <div>
+                <h3 class="text-lg font-semibold text-slate-800">
+                    Komposisi Town Hall
+                </h3>
+
+                <p class="text-sm text-slate-500">
+                    Sebaran kekuatan akun dalam clan
+                </p>
+            </div>
+
+            <div class="px-3 py-1.5 rounded-xl bg-blue-50 text-blue-600 text-sm font-semibold">
+                {{ $totalClashers }} Akun
+            </div>
+
+        </div>
+
+        <div class="p-6">
+
+            @php
+                $maxTotal = max($townHallDistribution->max('total'), 1);
+            @endphp
+
+            <div class="space-y-5">
+
+                @foreach($townHallDistribution->sortByDesc('town_hall') as $item)
+
+                    @php
+                        $percentage = ($item->total / $maxTotal) * 100;
+                    @endphp
+
+                    <div>
+
+                        <div class="flex items-center justify-between mb-2">
+
+                            <div class="flex items-center gap-3">
+
+                                <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
+                                    <i class="fa-solid fa-fort-awesome text-amber-600"></i>
+                                </div>
+
+                                <div>
+
+                                    <h4 class="font-semibold text-slate-800">
+                                        TH {{ $item->town_hall }}
+                                    </h4>
+
+                                    <p class="text-xs text-slate-500">
+                                        Town Hall Level {{ $item->town_hall }}
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="text-right">
+
+                                <span class="text-lg font-bold text-slate-800">
+                                    {{ $item->total }}
+                                </span>
+
+                                <span class="text-sm text-slate-500">
+                                    akun
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="relative">
+
+                            <div class="h-3 bg-slate-100 rounded-full overflow-hidden">
+
+                                <div
+                                    class="h-full rounded-full bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600"
+                                    style="width: {{ $percentage }}%"
+                                ></div>
+
+                            </div>
 
                         </div>
 
                     </div>
+
+                @endforeach
+
+            </div>
+
+            {{-- Ringkasan --}}
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                <div class="bg-slate-50 rounded-xl p-4">
+
+                    <p class="text-xs text-slate-500 uppercase tracking-wide">
+                        TH Dominan
+                    </p>
+
+                    <p class="text-xl font-bold text-blue-600 mt-1">
+                        TH {{ $townHallDistribution->sortByDesc('total')->first()?->town_hall }}
+                    </p>
 
                 </div>
 
-            @endforeach
+                <div class="bg-slate-50 rounded-xl p-4">
+
+                    <p class="text-xs text-slate-500 uppercase tracking-wide">
+                        Total TH Aktif
+                    </p>
+
+                    <p class="text-xl font-bold text-emerald-600 mt-1">
+                        {{ $townHallDistribution->count() }}
+                    </p>
+
+                </div>
+
+                <div class="bg-slate-50 rounded-xl p-4">
+
+                    <p class="text-xs text-slate-500 uppercase tracking-wide">
+                        TH Tertinggi
+                    </p>
+
+                    <p class="text-xl font-bold text-amber-600 mt-1">
+                        TH {{ $highestTownHall }}
+                    </p>
+
+                </div>
+
+            </div>
 
         </div>
 
     </div>
+{{-- distribusi end --}}
 
-</div>
+<x-modal id="labelModal" title="Daftar Akun" size="3xl">
 
-{{-- Distribusi TH --}}
-<div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+    <div class="flex justify-between items-center mb-4">
 
-    <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+        <p id="labelDesc" class="text-sm text-slate-500"></p>
 
-        <div>
-            <h3 class="text-lg font-semibold text-slate-800">
-                Distribusi Town Hall
-            </h3>
-
-            <p class="text-sm text-slate-500">
-                Sebaran akun berdasarkan level Town Hall
-            </p>
-        </div>
-
-        <span class="text-sm text-slate-400">
-            {{ $totalClashers }} Akun
+        <span id="labelCount"
+              class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-sm font-medium">
+            0 akun
         </span>
 
     </div>
 
-    <div class="p-6">
+    <div class="overflow-x-auto">
 
-        {{-- Bar Distribusi --}}
-        <div class="flex h-10 rounded-xl overflow-hidden bg-slate-100">
+        <table class="w-full text-sm">
 
-            @php
-                $total = max($townHallDistribution->sum('total'), 1);
+            <thead class="bg-slate-50">
 
-                $colors = [
-                    'bg-red-500',
-                    'bg-orange-500',
-                    'bg-amber-500',
-                    'bg-yellow-500',
-                    'bg-lime-500',
-                    'bg-green-500',
-                    'bg-emerald-500',
-                    'bg-cyan-500',
-                    'bg-sky-500',
-                    'bg-blue-500',
-                    'bg-indigo-500',
-                    'bg-violet-500',
-                    'bg-purple-500',
-                ];
-            @endphp
+                <tr>
+                    <th class="px-4 py-3 text-left">Nama</th>
+                    <th class="px-4 py-3 text-left">Tag</th>
+                    <th class="px-4 py-3 text-left">TH</th>
+                </tr>
 
-            @foreach($townHallDistribution as $index => $item)
+            </thead>
 
-                <div
-                    class="{{ $colors[$index % count($colors)] }}
-                           flex items-center justify-center
-                           text-white text-xs font-bold
-                           hover:brightness-110 transition"
-                    style="width: {{ ($item->total / $total) * 100 }}%"
-                    title="TH {{ $item->town_hall }} ({{ $item->total }} akun)"
-                >
-                    TH {{ $item->town_hall }}
-                </div>
+            <tbody id="labelAccounts"></tbody>
 
-            @endforeach
-
-        </div>
-
-        {{-- Legend --}}
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
-
-            @foreach($townHallDistribution as $index => $item)
-
-                <div class="flex items-center justify-between bg-slate-50 rounded-xl px-4 py-3">
-
-                    <div class="flex items-center gap-2">
-
-                        <span class="w-3 h-3 rounded-full {{ $colors[$index % count($colors)] }}"></span>
-
-                        <span class="font-medium text-slate-700">
-                            TH {{ $item->town_hall }}
-                        </span>
-
-                    </div>
-
-                    <span class="font-semibold text-slate-800">
-                        {{ $item->total }}
-                    </span>
-
-                </div>
-
-            @endforeach
-
-        </div>
+        </table>
 
     </div>
 
-</div>
+</x-modal>
 
-{{-- Distribusi TH --}}
-<div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
-    <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+    const labels = @json($labels);
 
-        <div>
-            <h3 class="text-lg font-semibold text-slate-800">
-                Komposisi Town Hall
-            </h3>
+    document.querySelectorAll('[data-modal-target="labelModal"]').forEach(card => {
 
-            <p class="text-sm text-slate-500">
-                Sebaran kekuatan akun dalam clan
-            </p>
-        </div>
+        card.addEventListener('click', () => {
 
-        <div class="px-3 py-1.5 rounded-xl bg-blue-50 text-blue-600 text-sm font-semibold">
-            {{ $totalClashers }} Akun
-        </div>
+            const label = card.dataset.label;
 
-    </div>
+            const data = labels[label] ?? [];
 
-    <div class="p-6">
+            // set title text
+            document.querySelector('#labelModal h3').innerText =
+                'Daftar Akun - ' + label.toUpperCase();
 
-        @php
-            $maxTotal = max($townHallDistribution->max('total'), 1);
-        @endphp
+            // set count
+            document.getElementById('labelCount').innerText =
+                data.length + ' akun';
 
-        <div class="space-y-5">
+            // set description
+            document.getElementById('labelDesc').innerText =
+                'Total akun dengan label: ' + label;
 
-            @foreach($townHallDistribution->sortByDesc('town_hall') as $item)
+            // render table
+            const tbody = document.getElementById('labelAccounts');
 
-                @php
-                    $percentage = ($item->total / $maxTotal) * 100;
-                @endphp
+            const wrapper = document.querySelector('#labelModal table').parentElement;
 
-                <div>
+            if (!data || data.length === 0) {
 
-                    <div class="flex items-center justify-between mb-2">
-
-                        <div class="flex items-center gap-3">
-
-                            <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
-                                <i class="fa-solid fa-fort-awesome text-amber-600"></i>
-                            </div>
-
-                            <div>
-
-                                <h4 class="font-semibold text-slate-800">
-                                    TH {{ $item->town_hall }}
-                                </h4>
-
-                                <p class="text-xs text-slate-500">
-                                    Town Hall Level {{ $item->town_hall }}
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                        <div class="text-right">
-
-                            <span class="text-lg font-bold text-slate-800">
-                                {{ $item->total }}
-                            </span>
-
-                            <span class="text-sm text-slate-500">
-                                akun
-                            </span>
-
-                        </div>
-
+                // sembunyikan tabel + header
+                wrapper.innerHTML = `
+                    <div class="text-center py-10 text-slate-500">
+                        Tidak ada data untuk label ini
                     </div>
+                `;
 
-                    <div class="relative">
+            } else {
 
-                        <div class="h-3 bg-slate-100 rounded-full overflow-hidden">
+                // kembalikan struktur tabel kalau ada data
+                wrapper.innerHTML = `
+                    <table class="w-full text-sm">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left">Nama</th>
+                                <th class="px-4 py-3 text-left">Tag</th>
+                                <th class="px-4 py-3 text-left">TH</th>
+                            </tr>
+                        </thead>
+                        <tbody id="labelAccounts"></tbody>
+                    </table>
+                `;
 
-                            <div
-                                class="h-full rounded-full bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600"
-                                style="width: {{ $percentage }}%"
-                            ></div>
+                const newTbody = document.getElementById('labelAccounts');
 
-                        </div>
+                newTbody.innerHTML = data.map(item => `
+                    <tr class="border-b">
+                        <td class="px-4 py-3">${item.name}</td>
+                        <td class="px-4 py-3 font-mono">${item.tag}</td>
+                        <td class="px-4 py-3">TH ${item.town_hall}</td>
+                    </tr>
+                `).join('');
+            }
 
-                    </div>
+            // open modal (punya kamu sudah ada)
+            openModal('labelModal');
+        });
 
-                </div>
+    });
 
-            @endforeach
+});
+</script>
 
-        </div>
-
-        {{-- Ringkasan --}}
-        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-
-            <div class="bg-slate-50 rounded-xl p-4">
-
-                <p class="text-xs text-slate-500 uppercase tracking-wide">
-                    TH Dominan
-                </p>
-
-                <p class="text-xl font-bold text-blue-600 mt-1">
-                    TH {{ $townHallDistribution->sortByDesc('total')->first()?->town_hall }}
-                </p>
-
-            </div>
-
-            <div class="bg-slate-50 rounded-xl p-4">
-
-                <p class="text-xs text-slate-500 uppercase tracking-wide">
-                    Total TH Aktif
-                </p>
-
-                <p class="text-xl font-bold text-emerald-600 mt-1">
-                    {{ $townHallDistribution->count() }}
-                </p>
-
-            </div>
-
-            <div class="bg-slate-50 rounded-xl p-4">
-
-                <p class="text-xs text-slate-500 uppercase tracking-wide">
-                    TH Tertinggi
-                </p>
-
-                <p class="text-xl font-bold text-amber-600 mt-1">
-                    TH {{ $highestTownHall }}
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
 @endsection
 

@@ -67,15 +67,61 @@
         {{-- HEADER GROUP --}}
         <div class="flex justify-between items-center border-b pb-3">
 
-            <h3 class="text-lg font-bold text-gray-800">
-                Group {{ $index + 1 }}
-            </h3>
+    <h3 class="text-lg font-bold text-gray-800">
+        Group {{ $index + 1 }}
+    </h3>
 
-            <span class="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-full">
-                {{ $members->count() }} akun
-            </span>
+    <div class="flex items-center gap-2">
 
-        </div>
+        <span class="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-full">
+            {{ $members->count() }} akun
+        </span>
+
+        <form
+            method="POST"
+            action="{{ route('base-groups.update-label') }}"
+            class="flex gap-1"
+        >
+            @csrf
+
+            @foreach($members as $member)
+                <input
+                    type="hidden"
+                    name="ids[]"
+                    value="{{ $member->id }}"
+                >
+            @endforeach
+
+
+            <button
+                name="label"
+                value="stay"
+                class="px-2 py-1 rounded bg-green-500 text-white text-xs"
+            >
+                Stay
+            </button>
+
+            <button
+                name="label"
+                value="perlu up"
+                class="px-2 py-1 rounded bg-yellow-500 text-white text-xs"
+            >
+                Perlu Up
+            </button>
+
+            <button
+                name="label"
+                value="belum ada"
+                class="px-2 py-1 rounded bg-gray-500 text-white text-xs"
+            >
+                Belum Ada
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
 
 
         {{-- BUILDING INFO --}}
@@ -87,23 +133,23 @@
 
             @foreach($sample->buildings->groupBy('building_name') as $building => $items)
 
-<div class="flex justify-between bg-gray-50 px-3 py-2 rounded">
+            <div class="flex justify-between bg-gray-50 px-3 py-2 rounded">
 
-    <span class="font-medium text-gray-700">
-        {{ $building }}
-    </span>
+                <span class="font-medium text-gray-700">
+                    {{ $building }}
+                </span>
 
-    <span class="text-gray-600">
+                <span class="text-gray-600">
 
-        @foreach($items as $item)
-            {{ $item->level }}
-        @endforeach
+                    @foreach($items as $item)
+                        {{ $item->level }}
+                    @endforeach
 
-    </span>
+                </span>
 
-</div>
+            </div>
 
-@endforeach
+            @endforeach
 
         </div>
 

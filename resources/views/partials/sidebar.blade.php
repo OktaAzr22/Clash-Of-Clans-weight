@@ -24,10 +24,10 @@
         <a
             href="{{ route('dashboard') }}"
             @class([
-    'flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 border-l-2',
-    'bg-slate-700/30 text-white border-blue-500' => request()->routeIs('dashboard'),
-    'border-transparent text-slate-300 hover:bg-slate-700/50 hover:text-white hover:border-blue-500' => !request()->routeIs('dashboard'),
-])
+                'flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 border-l-2',
+                'bg-slate-700/30 text-white border-blue-500' => request()->routeIs('dashboard'),
+                'border-transparent text-slate-300 hover:bg-slate-700/50 hover:text-white hover:border-blue-500' => !request()->routeIs('dashboard'),
+            ])
         >
             <i class="fa-solid fa-gauge-high w-5 text-center"></i>
             <span>Dashboard</span>
@@ -37,10 +37,10 @@
         <a
             href="{{ route('clashers.index') }}"
             @class([
-    'flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 border-l-2',
-    'bg-slate-700/30 text-white border-blue-500' => request()->routeIs('clashers.*'),
-    'border-transparent text-slate-300 hover:bg-slate-700/50 hover:text-white hover:border-blue-500' => !request()->routeIs('clashers.*'),
-])
+                'flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 border-l-2',
+                'bg-slate-700/30 text-white border-blue-500' => request()->routeIs('clashers.*'),
+                'border-transparent text-slate-300 hover:bg-slate-700/50 hover:text-white hover:border-blue-500' => !request()->routeIs('clashers.*'),
+            ])
         >
             <i class="fa-solid fa-users w-5 text-center"></i>
             <span>Clashers</span>
@@ -50,10 +50,10 @@
         <a
             href="{{ route('th-buildings.index') }}"
             @class([
-    'flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 border-l-2',
-    'bg-slate-700/30 text-white border-blue-500' => request()->routeIs('th-buildings.*'),
-    'border-transparent text-slate-300 hover:bg-slate-700/50 hover:text-white hover:border-blue-500' => !request()->routeIs('th-buildings.*'),
-])
+            'flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 border-l-2',
+            'bg-slate-700/30 text-white border-blue-500' => request()->routeIs('th-buildings.*'),
+            'border-transparent text-slate-300 hover:bg-slate-700/50 hover:text-white hover:border-blue-500' => !request()->routeIs('th-buildings.*'),
+            ])
         >
             <i class="fa-solid fa-building w-5 text-center"></i>
             <span>TH Buildings</span>
@@ -105,6 +105,18 @@
                     >
                         <i class="fa-solid fa-shield-halved text-xs text-blue-400 w-5"></i>
                         <span>War</span>
+                    </a>
+
+                    <a
+                        href="{{ route('base-groups.index') }}"
+                        @class([
+                            'flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-200 border-l-2 ml-1',
+                            'bg-slate-700/30 text-white border-blue-500' => request()->routeIs('base-groups.*'),
+                            'text-slate-300 hover:text-white hover:bg-slate-700/30 border-transparent hover:border-blue-500' => !request()->routeIs('base-groups.*'),
+                        ])
+                    >
+                        <i class="fa-solid fa-users text-xs text-blue-400 w-5"></i>
+                        <span>Daftar Grup</span>
                     </a>
 
                 </div>

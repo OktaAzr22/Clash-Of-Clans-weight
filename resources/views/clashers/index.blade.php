@@ -182,8 +182,34 @@
                             </td>
 
                             <td class="px-6 py-4">
-                                {{ $clasher->exp_level }}
-                            </td>
+
+    @switch($clasher->label)
+
+        @case('stay')
+
+            <span class="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
+                Stay
+            </span>
+
+            @break
+
+        @case('perlu up')
+
+            <span class="inline-flex items-center px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-medium">
+                Perlu Up
+            </span>
+
+            @break
+
+        @default
+
+            <span class="inline-flex items-center px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-medium">
+                Belum Ada
+            </span>
+
+    @endswitch
+
+</td>
 
                             <td class="px-6 py-4 text-center">
 
