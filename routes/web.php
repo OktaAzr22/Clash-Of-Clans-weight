@@ -118,8 +118,5 @@ Route::get('/base-groups', [BaseGroupController::class, 'index'])
     [BaseGroupController::class, 'updateLabel']
 )->name('base-groups.update-label');
 
-Route::get(
-    '/clashers/label/{label}',
-    [ClasherController::class, 'label']
-)->name('clashers.label');
+
 //  saya ingin ada table relasi baru ynag ngambil data clasher lalu isinya bisa tau akun mana yang ada progres gitu semisal yang tadinya akun ini th 12 mau ada progres ke th 14 gitu 

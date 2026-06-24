@@ -67,9 +67,33 @@
         {{-- HEADER GROUP --}}
         <div class="flex justify-between items-center border-b pb-3">
 
-    <h3 class="text-lg font-bold text-gray-800">
-        Group {{ $index + 1 }}
-    </h3>
+    <div class="flex items-center gap-3">
+
+        <h3 class="text-lg font-bold text-gray-800">
+            Group {{ $index + 1 }}
+        </h3>
+
+        @php
+            $groupLabel = $members->first()->label ?? 'belum ada';
+        @endphp
+
+        @if($groupLabel === 'stay')
+            <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
+                Stay
+            </span>
+
+        @elseif($groupLabel === 'perlu up')
+            <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700">
+                Perlu Up
+            </span>
+
+        @else
+            <span class="px-2 py-1 text-xs rounded-full bg-slate-100 text-slate-700">
+                Belum Ada
+            </span>
+        @endif
+
+    </div>
 
     <div class="flex items-center gap-2">
 
@@ -77,47 +101,13 @@
             {{ $members->count() }} akun
         </span>
 
-        <form
-            method="POST"
-            action="{{ route('base-groups.update-label') }}"
-            class="flex gap-1"
+        <button
+            type="button"
+            data-modal-target="label-modal-{{ $index }}"
+            class="px-3 py-1.5 rounded-lg bg-slate-800 text-white text-sm hover:bg-slate-700"
         >
-            @csrf
-
-            @foreach($members as $member)
-                <input
-                    type="hidden"
-                    name="ids[]"
-                    value="{{ $member->id }}"
-                >
-            @endforeach
-
-
-            <button
-                name="label"
-                value="stay"
-                class="px-2 py-1 rounded bg-green-500 text-white text-xs"
-            >
-                Stay
-            </button>
-
-            <button
-                name="label"
-                value="perlu up"
-                class="px-2 py-1 rounded bg-yellow-500 text-white text-xs"
-            >
-                Perlu Up
-            </button>
-
-            <button
-                name="label"
-                value="belum ada"
-                class="px-2 py-1 rounded bg-gray-500 text-white text-xs"
-            >
-                Belum Ada
-            </button>
-
-        </form>
+            Update Label
+        </button>
 
     </div>
 
@@ -173,8 +163,60 @@
 
     </div>
 
+    <x-modal
+        id="label-modal-{{ $index }}"
+        title="Update Label Group"
+        size="md">
+        <form
+            method="POST"
+            action="{{ route('base-groups.update-label') }}"
+            class="space-y-4">
+            @csrf
+
+            @foreach($members as $member)
+                <input
+                    type="hidden"
+                    name="ids[]"
+                    value="{{ $member->id }}"
+                >
+            @endforeach
+
+            <div class="space-y-2">
+
+                <button
+                    type="submit"
+                    name="label"
+                    value="stay"
+                    class="w-full py-3 rounded-xl bg-green-500 text-white font-medium hover:bg-green-600 transition"
+                >
+                    Stay
+                </button>
+
+                <button
+                    type="submit"
+                    name="label"
+                    value="perlu up"
+                    class="w-full py-3 rounded-xl bg-yellow-500 text-white font-medium hover:bg-yellow-600 transition"
+                >
+                    Perlu Up
+                </button>
+
+                <button
+                    type="submit"
+                    name="label"
+                    value="belum ada"
+                    class="w-full py-3 rounded-xl bg-slate-500 text-white font-medium hover:bg-slate-600 transition"
+                >
+                    Belum Ada
+                </button>
+
+            </div>
+        </form>
+    </x-modal>
+
     @endforeach
 
 </div>
+
 
 @endsection
