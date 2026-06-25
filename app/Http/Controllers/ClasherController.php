@@ -11,7 +11,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class ClasherController extends Controller
 {
-public function index(Request $request)
+    public function index(Request $request)
     {
         $status = $request->status ?? 'all';
         $search = $request->search;

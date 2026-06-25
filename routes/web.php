@@ -97,4 +97,12 @@ Route::prefix('base-groups')
 
         Route::post('/update-label', 'updateLabel')
             ->name('update-label');
+
+            Route::get('/war-ready', 'warReady')
+            ->name('war-ready');
+
+        
+
+            Route::post('/war-ready/{clasher}', 'updateWarReady')
+    ->name('war-ready.update');
     });

@@ -16,7 +16,6 @@ class BaseGroupController extends Controller
 
         $groups = collect();
 
-        // tambahkan ini
         $totalGroups = 0;
         $totalAccounts = 0;
         $average = 0;
@@ -24,21 +23,19 @@ class BaseGroupController extends Controller
 
         if ($request->filled('th')) {
 
-            $players = Clasher::with('buildings')
+            $players = Clasher::with([
+                    'buildings.building'
+                ])
                 ->where('town_hall', $request->th)
                 ->get();
-
 
             $groups = $players
 
                 ->groupBy(fn ($player) => $this->signature($player))
 
-                // ->filter(fn($g) => $g->count() > 1)
-
-                ->sortByDesc(fn($g) => $g->count())
+                ->sortByDesc(fn ($g) => $g->count())
 
                 ->values();
-
 
             $totalGroups = $groups->count();
 
@@ -68,7 +65,7 @@ class BaseGroupController extends Controller
     {
         return $player->buildings
 
-            ->groupBy('building_name')
+            ->groupBy(fn ($b) => $b->building->name)
 
             ->map(function ($buildings) {
 
@@ -107,4 +104,33 @@ class BaseGroupController extends Controller
             'Label berhasil diperbarui.'
         );
     }
+
+    public function warReady()
+{
+    $clashers = Clasher::where('label', 'stay')
+        ->orderByDesc('town_hall')
+        ->orderBy('name')
+        ->get();
+
+    return view(
+        'base-groups.war-ready',
+        compact('clashers')
+    );
+}
+
+
+public function updateWarReady(Request $request, Clasher $clasher)
+{
+    $request->validate([
+        'status' => 'required|boolean'
+    ]);
+
+    $clasher->update([
+        'is_ready_war' => $request->status
+    ]);
+
+    return response()->json([
+        'success' => true
+    ]);
+}
 }
