@@ -1,5 +1,5 @@
 <div class="bg-white border border-dashed border-slate-300 rounded-2xl
-            min-h-[500px]
+            min-h-[calc(100vh-250px)]
             flex flex-col justify-center items-center text-center">
 
     <div class="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-3xl mb-5">

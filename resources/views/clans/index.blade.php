@@ -35,20 +35,22 @@
 
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
 
-        <div class="px-6 py-4 border-b border-slate-200">
+        
+
+        @if($clans->isEmpty())
+
+            <x-empty-state
+    icon="fa-solid fa-shield-halved text-2xl text-slate-400"
+    title="Belum Ada Clan"
+    message="Data clan belum tersedia. "
+/>
+
+        @else
+<div class="px-6 py-4 border-b border-slate-200">
             <h2 class="text-lg font-semibold text-slate-800">
                 Daftar Clan
             </h2>
         </div>
-
-        @if($clans->isEmpty())
-
-            <div class="py-12 text-center text-slate-500">
-                Belum ada clan yang ditambahkan.
-            </div>
-
-        @else
-
             <div class="overflow-x-auto">
 
                 <table class="w-full text-sm">
