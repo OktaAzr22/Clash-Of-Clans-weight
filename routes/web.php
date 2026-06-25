@@ -1,4 +1,3 @@
-
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -11,20 +10,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ThBuildingController;
 use App\Http\Controllers\WarController;
 
-/*
-|--------------------------------------------------------------------------
-| Dashboard
-|--------------------------------------------------------------------------
-*/
-
 Route::get('/', [DashboardController::class, 'index'])
     ->name('dashboard');
-
-/*
-|--------------------------------------------------------------------------
-| Clashers
-|--------------------------------------------------------------------------
-*/
 
 Route::prefix('clashers')
     ->name('clashers.')
@@ -47,12 +34,6 @@ Route::prefix('clashers')
             ->name('war-profile.save');
     });
 
-/*
-|--------------------------------------------------------------------------
-| TH Buildings
-|--------------------------------------------------------------------------
-*/
-
 Route::resource('th-buildings', ThBuildingController::class)
     ->only([
         'index',
@@ -60,12 +41,6 @@ Route::resource('th-buildings', ThBuildingController::class)
         'store',
         'destroy',
     ]);
-
-/*
-|--------------------------------------------------------------------------
-| Buildings
-|--------------------------------------------------------------------------
-*/
 
 Route::prefix('buildings')
     ->name('buildings.')
@@ -75,12 +50,6 @@ Route::prefix('buildings')
         Route::post('/', 'store')
             ->name('store');
     });
-
-/*
-|--------------------------------------------------------------------------
-| Clans
-|--------------------------------------------------------------------------
-*/
 
 Route::prefix('clans')
     ->name('clans.')
@@ -106,12 +75,6 @@ Route::prefix('clans')
             ->name('toggle');
     });
 
-/*
-|--------------------------------------------------------------------------
-| Wars
-|--------------------------------------------------------------------------
-*/
-
 Route::prefix('wars')
     ->name('wars.')
     ->controller(WarController::class)
@@ -123,12 +86,6 @@ Route::prefix('wars')
         Route::get('/{war}', 'show')
             ->name('show');
     });
-
-/*
-|--------------------------------------------------------------------------
-| Base Groups
-|--------------------------------------------------------------------------
-*/
 
 Route::prefix('base-groups')
     ->name('base-groups.')
