@@ -47,8 +47,7 @@ Route::post('/buildings',[BuildingController::class, 'store'])->name('buildings.
 
 
 
-// Route::get('/clan', [ClanController::class, 'index'])
-//     ->name('clan.index');
+
 
 Route::post('/clan/search', [ClanController::class, 'search'])
     ->name('clan.search');
@@ -100,15 +99,14 @@ Route::prefix('wars')
 
 
 
-    Route::get('/clashers/compare', [ClasherController::class, 'compareBots'])
-    ->name('clashers.compare');
+   
 
     Route::delete(
     '/th-buildings/{thBuilding}',
     [ThBuildingController::class, 'destroy']
 )->name('th-buildings.destroy');
 
-Route::get('/clashers/overview-raw', [ClasherController::class, 'overviewRaw']);
+
 
 Route::get('/base-groups', [BaseGroupController::class, 'index'])
     ->name('base-groups.index');
@@ -119,4 +117,3 @@ Route::get('/base-groups', [BaseGroupController::class, 'index'])
 )->name('base-groups.update-label');
 
 
-//  saya ingin ada table relasi baru ynag ngambil data clasher lalu isinya bisa tau akun mana yang ada progres gitu semisal yang tadinya akun ini th 12 mau ada progres ke th 14 gitu 

@@ -4,7 +4,6 @@
 
 <div class="space-y-6">
 
-    {{-- FILTER --}}
     <form class="bg-white p-4 rounded-lg shadow flex items-center gap-4">
 
         <label class="text-sm font-medium text-gray-600">
@@ -27,16 +26,12 @@
 
     </form>
 
-
-    {{-- EMPTY STATE --}}
     @if($groups->isEmpty())
         <div class="bg-white p-6 rounded-lg shadow text-center text-gray-500">
             Pilih TH terlebih dahulu untuk menampilkan data
         </div>
     @endif
 
-
-    {{-- SUMMARY --}}
     @if(request('th'))
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
@@ -67,51 +62,51 @@
         {{-- HEADER GROUP --}}
         <div class="flex justify-between items-center border-b pb-3">
 
-    <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3">
 
-        <h3 class="text-lg font-bold text-gray-800">
-            Group {{ $index + 1 }}
-        </h3>
+                <h3 class="text-lg font-bold text-gray-800">
+                    Group {{ $index + 1 }}
+                </h3>
 
-        @php
-            $groupLabel = $members->first()->label ?? 'belum ada';
-        @endphp
+                @php
+                    $groupLabel = $members->first()->label ?? 'belum ada';
+                @endphp
 
-        @if($groupLabel === 'stay')
-            <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                Stay
-            </span>
+                @if($groupLabel === 'stay')
+                    <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
+                        Stay
+                    </span>
 
-        @elseif($groupLabel === 'perlu up')
-            <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700">
-                Perlu Up
-            </span>
+                @elseif($groupLabel === 'perlu up')
+                    <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700">
+                        Perlu Up
+                    </span>
 
-        @else
-            <span class="px-2 py-1 text-xs rounded-full bg-slate-100 text-slate-700">
-                Belum Ada
-            </span>
-        @endif
+                @else
+                    <span class="px-2 py-1 text-xs rounded-full bg-slate-100 text-slate-700">
+                        Belum Ada
+                    </span>
+                @endif
 
-    </div>
+            </div>
 
-    <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2">
 
-        <span class="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-full">
-            {{ $members->count() }} akun
-        </span>
+                <span class="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-full">
+                    {{ $members->count() }} akun
+                </span>
 
-        <button
-            type="button"
-            data-modal-target="label-modal-{{ $index }}"
-            class="px-3 py-1.5 rounded-lg bg-slate-800 text-white text-sm hover:bg-slate-700"
-        >
-            Update Label
-        </button>
+                <button
+                    type="button"
+                    data-modal-target="label-modal-{{ $index }}"
+                    class="px-3 py-1.5 rounded-lg bg-slate-800 text-white text-sm hover:bg-slate-700"
+                >
+                    Update Label
+                </button>
 
-    </div>
+            </div>
 
-</div>
+        </div>
 
 
         {{-- BUILDING INFO --}}
@@ -147,11 +142,11 @@
         {{-- MEMBERS --}}
         <div class="border-t pt-4">
 
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+            <div class="flex flex-wrap justify-between gap-2">
 
                 @foreach($members as $member)
 
-                    <div class="bg-slate-100 hover:bg-slate-200 transition rounded-lg px-3 py-2 text-sm">
+                    <div class="w-[48%] bg-slate-100 hover:bg-slate-200 transition rounded-lg px-3 py-2 text-sm text-center">
                         {{ $member->name }}
                     </div>
 
@@ -217,6 +212,4 @@
     @endforeach
 
 </div>
-
-
 @endsection
