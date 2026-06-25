@@ -1,119 +1,143 @@
+
 <?php
+
+use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\BaseGroupController;
 use App\Http\Controllers\BuildingController;
-use App\Http\Controllers\ClasherController;
 use App\Http\Controllers\ClanController;
+use App\Http\Controllers\ClasherController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ThBuildingController;
 use App\Http\Controllers\WarController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DashboardController;
 
-Route::get('/',[DashboardController::class, 'index'])->name('dashboard');
+/*
+|--------------------------------------------------------------------------
+| Dashboard
+|--------------------------------------------------------------------------
+*/
 
-Route::controller(ClasherController::class)->group(function () {
+Route::get('/', [DashboardController::class, 'index'])
+    ->name('dashboard');
 
-    Route::get('/clashers', 'index')
-        ->name('clashers.index');
+/*
+|--------------------------------------------------------------------------
+| Clashers
+|--------------------------------------------------------------------------
+*/
 
-    Route::post('/clashers/store', 'store')
-        ->name('clashers.store');
+Route::prefix('clashers')
+    ->name('clashers.')
+    ->controller(ClasherController::class)
+    ->group(function () {
 
-    Route::get('/clashers/{clasher}/war-profile', 'warProfile')
-        ->name('clashers.war-profile');
+        Route::get('/', 'index')
+            ->name('index');
 
-    Route::post('/clashers/{clasher}/war-profile', 'saveWarProfile')
-        ->name('clashers.war-profile.save');
+        Route::post('/', 'store')
+            ->name('store');
 
-    Route::get('/clashers/overview', 'overview')
-        ->name('clashers.overview');
+        Route::get('/overview', 'overview')
+            ->name('overview');
 
-});
+        Route::get('/{clasher}/war-profile', 'warProfile')
+            ->name('war-profile');
 
-Route::controller(ThBuildingController::class)->group(function () {
+        Route::post('/{clasher}/war-profile', 'saveWarProfile')
+            ->name('war-profile.save');
+    });
 
-    Route::get('/th-buildings', 'index')
-        ->name('th-buildings.index');
+/*
+|--------------------------------------------------------------------------
+| TH Buildings
+|--------------------------------------------------------------------------
+*/
 
-    Route::get('/th-buildings/create', 'create')
-        ->name('th-buildings.create');
+Route::resource('th-buildings', ThBuildingController::class)
+    ->only([
+        'index',
+        'create',
+        'store',
+        'destroy',
+    ]);
 
-    Route::post('/th-buildings', 'store')
-        ->name('th-buildings.store');
+/*
+|--------------------------------------------------------------------------
+| Buildings
+|--------------------------------------------------------------------------
+*/
 
-});
+Route::prefix('buildings')
+    ->name('buildings.')
+    ->controller(BuildingController::class)
+    ->group(function () {
 
-Route::post('/buildings',[BuildingController::class, 'store'])->name('buildings.store');
+        Route::post('/', 'store')
+            ->name('store');
+    });
 
-
-
-
-
-Route::post('/clan/search', [ClanController::class, 'search'])
-    ->name('clan.search');
-
-    Route::post(
-    '/clan/store-members',
-    [ClanController::class, 'storeMembers']
-)->name('clan.store-members');
-
-Route::post(
-    '/clan/store-member-progress',
-    [ClanController::class, 'storeMemberProgress']
-)->name('clan.store-member-progress');
+/*
+|--------------------------------------------------------------------------
+| Clans
+|--------------------------------------------------------------------------
+*/
 
 Route::prefix('clans')
     ->name('clans.')
+    ->controller(ClanController::class)
     ->group(function () {
 
-        Route::get('/', [ClanController::class, 'index'])
+        Route::get('/', 'index')
             ->name('index');
 
-        Route::post('/', [ClanController::class, 'store'])
+        Route::post('/', 'store')
             ->name('store');
 
-        Route::patch(
-            '/{clan}/toggle',
-            [ClanController::class, 'toggle']
-        )->name('toggle');
+        Route::post('/search', 'search')
+            ->name('search');
+
+        Route::post('/members', 'storeMembers')
+            ->name('members.store');
+
+        Route::post('/members/progress', 'storeMemberProgress')
+            ->name('members.progress.store');
+
+        Route::patch('/{clan}/toggle', 'toggle')
+            ->name('toggle');
     });
 
-
-
-    
-
-
+/*
+|--------------------------------------------------------------------------
+| Wars
+|--------------------------------------------------------------------------
+*/
 
 Route::prefix('wars')
     ->name('wars.')
+    ->controller(WarController::class)
     ->group(function () {
 
-        Route::get('/', [WarController::class, 'index'])
+        Route::get('/', 'index')
             ->name('index');
 
-        Route::get('/{war}', [WarController::class, 'show'])
+        Route::get('/{war}', 'show')
             ->name('show');
-
-        
     });
 
+/*
+|--------------------------------------------------------------------------
+| Base Groups
+|--------------------------------------------------------------------------
+*/
 
+Route::prefix('base-groups')
+    ->name('base-groups.')
+    ->controller(BaseGroupController::class)
+    ->group(function () {
 
-   
+        Route::get('/', 'index')
+            ->name('index');
 
-    Route::delete(
-    '/th-buildings/{thBuilding}',
-    [ThBuildingController::class, 'destroy']
-)->name('th-buildings.destroy');
-
-
-
-Route::get('/base-groups', [BaseGroupController::class, 'index'])
-    ->name('base-groups.index');
-
-    Route::post(
-    '/base-groups/update-label',
-    [BaseGroupController::class, 'updateLabel']
-)->name('base-groups.update-label');
-
-
+        Route::post('/update-label', 'updateLabel')
+            ->name('update-label');
+    });

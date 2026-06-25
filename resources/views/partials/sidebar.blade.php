@@ -13,10 +13,6 @@
 
     </div>
 
-    @php
-        $clanMenuActive = request()->routeIs('clans.*') || request()->routeIs('wars.*');
-    @endphp
-
     {{-- Navigation --}}
     <nav class="flex-1 px-4 mt-6 space-y-2 overflow-y-auto">
 
@@ -58,6 +54,13 @@
             <i class="fa-solid fa-building w-5 text-center"></i>
             <span>TH Buildings</span>
         </a>
+
+        @php
+            $clanMenuActive = 
+            request()->routeIs('clans.*') || 
+            request()->routeIs('wars.*') ||
+            request()->routeIs('base-groups.*'); 
+        @endphp
 
         {{-- Clan --}}
         <div class="nav-parent rounded-xl transition-all duration-200

@@ -19,20 +19,19 @@
 
     <div class="flex justify-end gap-3">
 
-    <x-button data-modal-target="addClanModal">
-        <i class="fa-solid fa-plus mr-2"></i>
-        Tambah Clan
-    </x-button>
+        <x-button data-modal-target="addClanModal">
+            <i class="fa-solid fa-plus mr-2"></i>
+            Tambah Clan
+        </x-button>
 
-    <x-button
-        variant="secondary"
-        data-modal-target="searchClanModal"
-    >
-        <i class="fa-solid fa-magnifying-glass mr-2"></i>
-        Cari Clan
-    </x-button>
+        <x-button
+            variant="secondary"
+            data-modal-target="searchClanModal">
+            <i class="fa-solid fa-magnifying-glass mr-2"></i>
+            Cari Clan
+        </x-button>
 
-</div>
+    </div>
 
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
 
@@ -88,54 +87,52 @@
 
                                 <td class="px-6 py-4 text-center">
 
-    <form
-        action="{{ route('clans.toggle', $clan) }}"
-        method="POST"
-        class="inline-flex"
-    >
-        @csrf
-        @method('PATCH')
+                                    <form
+                                        action="{{ route('clans.toggle', $clan) }}"
+                                        method="POST"
+                                        class="inline-flex">
+                                        @csrf
+                                        @method('PATCH')
 
-        <label class="relative inline-flex items-center cursor-pointer group">
+                                        <label class="relative inline-flex items-center cursor-pointer group">
 
-    <input
-        type="checkbox"
-        class="sr-only peer"
-        onchange="this.form.submit()"
-        {{ $clan->is_active ? 'checked' : '' }}
-    >
+                                            <input
+                                                type="checkbox"
+                                                class="sr-only peer"
+                                                onchange="this.form.submit()"
+                                                {{ $clan->is_active ? 'checked' : '' }}
+                                            >
 
-    <div
-        class="relative w-11 h-6 bg-slate-300 rounded-full
-               peer-checked:bg-emerald-500
-               transition-all duration-300
-               after:content-['']
-               after:absolute
-               after:top-0.5
-               after:left-0.5
-               after:w-5
-               after:h-5
-               after:bg-white
-               after:rounded-full
-               after:shadow
-               after:transition-all
-               peer-checked:after:translate-x-5">
-    </div>
+                                            <div
+                                                class="relative w-11 h-6 bg-slate-300 rounded-full
+                                                    peer-checked:bg-emerald-500
+                                                    transition-all duration-300
+                                                    after:content-['']
+                                                    after:absolute
+                                                    after:top-0.5
+                                                    after:left-0.5
+                                                    after:w-5
+                                                    after:h-5
+                                                    after:bg-white
+                                                    after:rounded-full
+                                                    after:shadow
+                                                    after:transition-all
+                                                    peer-checked:after:translate-x-5">
+                                            </div>
 
-    <div
-        class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2
-               px-2 py-1 text-xs text-white bg-slate-800 rounded
-               opacity-0 group-hover:opacity-100
-               transition pointer-events-none whitespace-nowrap z-50"
-    >
-        {{ $clan->is_active ? 'Nonaktifkan Clan' : 'Aktifkan Clan' }}
-    </div>
+                                            <div
+                                                class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2
+                                                    px-2 py-1 text-xs text-white bg-slate-800 rounded
+                                                    opacity-0 group-hover:opacity-100
+                                                    transition pointer-events-none whitespace-nowrap z-50">
+                                                {{ $clan->is_active ? 'Nonaktifkan Clan' : 'Aktifkan Clan' }}
+                                            </div>
 
-</label>
+                                        </label>
 
-    </form>
+                                    </form>
 
-</td>
+                                </td>
 
                             </tr>
 
@@ -159,8 +156,7 @@
 
         <form
             method="POST"
-            action="{{ route('clan.search') }}"
-        >
+            action="{{ route('clans.search') }}">
             @csrf
 
             <input
@@ -200,51 +196,51 @@
         </form>
 
     </x-modal>
+
     <x-modal
     id="addClanModal"
     title="Tambah Clan">
 
-    <form
-        action="{{ route('clans.store') }}"
-        method="POST"
-    >
-        @csrf
+        <form
+            action="{{ route('clans.store') }}"
+            method="POST">
+            @csrf
 
-        <input
-            type="hidden"
-            name="modal"
-            value="addClanModal"
-        >
-
-        <x-input
-            name="tag"
-            label="Tag Clan"
-            placeholder="#2QJY9GULP"
-            :value="old('tag')"
-            required
-        />
-
-        <div class="flex justify-end gap-2">
-
-            <x-button
-                type="button"
-                variant="secondary"
-                class="close-modal"
+            <input
+                type="hidden"
+                name="modal"
+                value="addClanModal"
             >
-                Batal
-            </x-button>
 
-            <x-button
-                type="submit"
-                loading
-                loading-text="Menyimpan..."
-            >
-                Tambah Clan
-            </x-button>
+            <x-input
+                name="tag"
+                label="Tag Clan"
+                placeholder="#2QJY9GULP"
+                :value="old('tag')"
+                required
+            />
 
-        </div>
+            <div class="flex justify-end gap-2">
 
-    </form>
+                <x-button
+                    type="button"
+                    variant="secondary"
+                    class="close-modal"
+                >
+                    Batal
+                </x-button>
 
-</x-modal>
+                <x-button
+                    type="submit"
+                    loading
+                    loading-text="Menyimpan..."
+                >
+                    Tambah Clan
+                </x-button>
+
+            </div>
+
+        </form>
+
+    </x-modal>
 @endsection
