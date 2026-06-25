@@ -118,19 +118,19 @@ class BaseGroupController extends Controller
     );
 }
 
-
 public function updateWarReady(Request $request, Clasher $clasher)
 {
-    $request->validate([
-        'status' => 'required|boolean'
+    $validated = $request->validate([
+        'status' => 'required|in:0,1'
     ]);
 
     $clasher->update([
-        'is_ready_war' => $request->status
+        'is_ready_war' => (int) $validated['status']
     ]);
 
     return response()->json([
-        'success' => true
+        'success' => true,
+        'message' => 'Status berhasil diperbarui'
     ]);
 }
 }

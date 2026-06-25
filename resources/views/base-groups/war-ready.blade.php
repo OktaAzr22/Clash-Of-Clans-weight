@@ -2,90 +2,98 @@
 
 @section('content')
 
-<div class="container">
+<div class="max-w-5xl mx-auto p-6">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="flex justify-between items-center mb-6">
 
-        <h3>
+        <h1 class="text-2xl font-bold">
             Clasher Stay - Ready War
-        </h3>
+        </h1>
 
         <a
             href="{{ route('base-groups.index') }}"
-            class="btn btn-secondary"
+            class="px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700"
         >
             Kembali
         </a>
 
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+    <div class="bg-white rounded-xl shadow overflow-hidden">
 
-    
-        <table class="table table-bordered align-middle">
+        <table class="w-full">
 
-            <thead>
+            <thead class="bg-slate-100">
+
                 <tr>
-                    <th>Nama</th>
-                    <th>TH</th>
-                    <th>Status War</th>
+                    <th class="text-left px-4 py-3">
+                        Nama
+                    </th>
+
+                    <th class="text-left px-4 py-3">
+                        TH
+                    </th>
+
+                    <th class="text-left px-4 py-3">
+                        Status War
+                    </th>
                 </tr>
+
             </thead>
 
             <tbody>
 
                 @foreach($clashers as $clasher)
 
-                    <tr>
+                    <tr class="border-t">
 
-                        <td>
+                        <td class="px-4 py-3">
                             {{ $clasher->name }}
                         </td>
 
-                        <td>
+                        <td class="px-4 py-3">
                             TH {{ $clasher->town_hall }}
                         </td>
 
-                        <td>
+                        <td class="px-4 py-3">
 
-    <div class="d-flex gap-4">
+                            <div class="flex gap-6">
 
-        <label>
+                                <label class="flex items-center gap-2">
 
-            <input
-                type="radio"
-                name="war_status_{{ $clasher->id }}"
-                value="1"
-                data-id="{{ $clasher->id }}"
-                {{ $clasher->is_ready_war ? 'checked' : '' }}
-            >
+                                    <input
+                                        type="radio"
+                                        name="war_status_{{ $clasher->id }}"
+                                        value="1"
+                                        data-id="{{ $clasher->id }}"
+                                        {{ $clasher->is_ready_war ? 'checked' : '' }}
+                                    >
 
-            Siap War
+                                    <span>
+                                        Siap War
+                                    </span>
 
-        </label>
+                                </label>
 
+                                <label class="flex items-center gap-2">
 
-        <label>
+                                    <input
+                                        type="radio"
+                                        name="war_status_{{ $clasher->id }}"
+                                        value="0"
+                                        data-id="{{ $clasher->id }}"
+                                        {{ !$clasher->is_ready_war ? 'checked' : '' }}
+                                    >
 
-            <input
-                type="radio"
-                name="war_status_{{ $clasher->id }}"
-                value="0"
-                data-id="{{ $clasher->id }}"
-                {{ !$clasher->is_ready_war ? 'checked' : '' }}
-            >
+                                    <span>
+                                        Tidak Siap
+                                    </span>
 
-            Tidak Siap
+                                </label>
 
-        </label>
+                            </div>
 
-    </div>
-
-</td>
+                        </td>
 
                     </tr>
 
@@ -95,42 +103,53 @@
 
         </table>
 
-       
-
-   
+    </div>
 
 </div>
+
 <script>
 
-document.querySelectorAll('input[type=radio]')
-.forEach(radio => {
+document.addEventListener('DOMContentLoaded', () => {
 
-    radio.addEventListener('change', function(){
+    document.querySelectorAll('input[type="radio"]')
+        .forEach(radio => {
 
-        fetch(
-            '/base-groups/war-ready/' + this.dataset.id,
-            {
-                method: 'POST',
+            radio.addEventListener('change', function () {
 
-                headers:{
-                    'Content-Type':'application/json',
+                fetch(
+                    "{{ url('base-groups/war-ready') }}/" + this.dataset.id,
+                    {
+                        method: 'POST',
 
-                    'X-CSRF-TOKEN':
-                    '{{ csrf_token() }}'
-                },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
 
-                body: JSON.stringify({
+                        body: JSON.stringify({
+                            status: this.value
+                        })
+                    }
+                )
+                .then(response => response.json())
+                .then(data => {
 
-                    status: this.value
+                    console.log(data);
 
                 })
+                .catch(error => {
 
-            }
-        );
+                    console.error(error);
 
-    });
+                });
+
+            });
+
+        });
 
 });
 
 </script>
+
 @endsection

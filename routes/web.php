@@ -104,5 +104,6 @@ Route::prefix('base-groups')
         
 
             Route::post('/war-ready/{clasher}', 'updateWarReady')
-    ->name('war-ready.update');
+            ->name('war-ready.update');
+
     });

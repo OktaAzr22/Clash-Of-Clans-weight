@@ -23,6 +23,7 @@ class Clasher extends Model
         'champion',
 
         'last_war_profile_update',
+        'is_ready_war',
     ];
 
     protected $casts = [

@@ -51,22 +51,10 @@
 
         @if($groups->isEmpty())
 
-            <div class="bg-white border border-dashed border-slate-300 rounded-2xl p-12 text-center">
-
-                <div class="w-20 h-20 mx-auto rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-3xl mb-5">
-                    <i class="fa-solid fa-layer-group"></i>
-                </div>
-
-                <h3 class="text-lg font-semibold text-slate-700">
-                    Belum Ada Data
-                </h3>
-
-                <p class="text-slate-500 mt-2">
-                    Pilih Town Hall terlebih dahulu untuk menampilkan group base.
-                </p>
-
-            </div>
-
+           <x-empty-state
+                title="Belum Ada Data"
+                message="Pilih Town Hall terlebih dahulu untuk menampilkan group base."
+            />
         @endif
 
         @if(request('th'))
@@ -190,7 +178,9 @@
 
             <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
 
-                <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 border-slate-200">
+                <div
+                    class="sectionHeader flex items-center justify-between px-6 py-4 border-b border-slate-200 cursor-pointer hover:bg-slate-50 transition"
+                    data-target="sectionContent{{ $index }}">
 
                     <div class="flex items-center gap-3">
 
@@ -221,32 +211,27 @@
 
                     </div>
 
-                    <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2">
 
-                        <button
-                            type="button"
-                            data-modal-target="label-modal-{{ $index }}"
-                            class="bg-primary/10 text-primary text-sm font-medium px-4 py-1.5 rounded-lg hover:bg-primary/20 transition flex items-center gap-2">
+                    <button
+                        type="button"
+                        data-modal-target="label-modal-{{ $index }}"
+                        class="openModal bg-primary/10 text-primary text-sm font-medium px-4 py-1.5 rounded-lg hover:bg-primary/20 transition flex items-center gap-2">
 
-                            <i class="fas fa-sync-alt"></i>
+                        <i class="fas fa-sync-alt"></i>
+                        Update Label
 
-                            Update Label
+                    </button>
 
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="toggleSection bg-slate-100 text-slate-600 hover:bg-slate-200 transition w-8 h-8 rounded-lg flex items-center justify-center"
-                            data-target="sectionContent{{ $index }}">
-
-                            <i class="fas fa-chevron-up text-xs toggleIcon"></i>
-
-                        </button>
-
+                    <div
+                        class="bg-slate-100 text-slate-600 w-8 h-8 rounded-lg flex items-center justify-center"
+                    >
+                        <i class="fas fa-chevron-up text-xs toggleIcon"></i>
                     </div>
 
                 </div>
+
+            </div>
 
                 <div
                     id="sectionContent{{ $index }}"
@@ -435,18 +420,22 @@
 
 <script>
 
-document.querySelectorAll('.toggleSection').forEach(btn => {
+document.querySelectorAll('.sectionHeader')
+.forEach(header => {
 
-    btn.addEventListener('click', function(){
+    header.addEventListener('click', function(e) {
 
-        const content = document.getElementById(
-            this.dataset.target
-        );
+        // Jangan collapse jika klik tombol update label
+        if (e.target.closest('.openModal')) {
+            return;
+        }
 
-        const icon = this.querySelector('.toggleIcon');
-
+        const targetId = this.dataset.target;
+        const content = document.getElementById(targetId);
 
         content.classList.toggle('hidden');
+
+        const icon = this.querySelector('.toggleIcon');
 
         icon.classList.toggle('fa-chevron-up');
         icon.classList.toggle('fa-chevron-down');
@@ -454,7 +443,6 @@ document.querySelectorAll('.toggleSection').forEach(btn => {
     });
 
 });
-
 </script>
 
 @endsection
