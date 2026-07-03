@@ -25,6 +25,7 @@ class Clasher extends Model
         'last_war_profile_update',
         'is_ready_war',
         'label',
+        'town_hall_template_id',
     ];
 
     protected $casts = [
@@ -45,4 +46,13 @@ class Clasher extends Model
     {
         return $this->hasMany(WarMember::class);
     }
+
+    public function template()
+    {
+        return $this->belongsTo(
+            TownHallTemplate::class,
+            'town_hall_template_id'
+        );
+    }
+
 }

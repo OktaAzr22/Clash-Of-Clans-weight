@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('town_hall_template_buildings', function (Blueprint $table) {
+
             $table->id();
-            $table->unsignedTinyInteger('town_hall');
+
+            $table->foreignId('town_hall_template_id')
+                ->constrained()
+                ->cascadeOnDelete();
 
             $table->foreignId('building_id')
                 ->constrained()
@@ -25,11 +29,15 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->unique([
-                'town_hall',
-                'building_id',
-                'slot',
-            ]);
+            $table->unique(
+                [
+                    'town_hall_template_id',
+                    'building_id',
+                    'slot',
+                ],
+                'th_template_building_unique'
+            );
+
         });
     }
 
@@ -41,3 +49,4 @@ return new class extends Migration
         Schema::dropIfExists('town_hall_template_buildings');
     }
 };
+

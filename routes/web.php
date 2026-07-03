@@ -116,31 +116,6 @@ Route::prefix('base-groups')
 
 use App\Http\Controllers\TownHallTemplateController;
 
-Route::controller(TownHallTemplateController::class)
-    ->prefix('town-hall-templates')
-    ->name('town-hall-templates.')
-    ->group(function () {
+Route::prefix('town-hall-templates') ->name('town-hall-templates.') ->group(function () { Route::get( '/', [TownHallTemplateController::class, 'index'] )->name('index'); Route::get( '/create', [TownHallTemplateController::class, 'create'] )->name('create'); Route::post( '/', [TownHallTemplateController::class, 'store'] )->name('store'); Route::get( '/{template}/builder', [TownHallTemplateController::class, 'builder'] )->name('builder'); Route::put( '/{template}', [TownHallTemplateController::class, 'update'] )->name('update'); Route::delete( '/{template}', [TownHallTemplateController::class, 'destroy'] )->name('destroy'); });
 
-        Route::get('/', 'index')
-            ->name('index');
-
-        Route::get('/create/{townHall}', 'create')
-            ->name('create');
-
-        Route::post('/', 'store')
-            ->name('store');
-
-        Route::get('/{townHall}/edit', 'edit')
-            ->name('edit');
-
-        Route::put('/{townHall}', 'update')
-            ->name('update');
-    });
-
-    Route::get('/test-label/{clasher}', function (\App\Models\Clasher $clasher) {
-
-    return app(
-        \App\Services\TemplateLabelService::class
-    )->determine($clasher);
-
-});
+    

@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('content')
@@ -6,9 +7,21 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4">
 
-        <h3>
-            Template TH {{ $townHall }}
-        </h3>
+        <div>
+
+            <h3 class="mb-1">
+
+                {{ $template->name }}
+
+            </h3>
+
+            <small class="text-muted">
+
+                TH {{ $template->town_hall }}
+
+            </small>
+
+        </div>
 
         <a
             href="{{ route('town-hall-templates.index') }}"
@@ -20,28 +33,19 @@
     </div>
 
     <form
-    action="{{ $isEdit
-        ? route('town-hall-templates.update', $townHall)
-        : route('town-hall-templates.store') }}"
-    method="POST"
->
-
+        action="{{ route(
+            'town-hall-templates.update',
+            $template
+        ) }}"
+        method="POST"
+    >
 
         @csrf
-
-    @if($isEdit)
         @method('PUT')
-    @endif
-
-    <input
-        type="hidden"
-        name="town_hall"
-        value="{{ $townHall }}"
-    >
 
         @foreach($buildings as $building)
 
-            <div class="card mb-3">
+            <div class="card mb-3 shadow-sm">
 
                 <div class="card-header">
 
@@ -57,7 +61,7 @@
 
                     @for($slot = 1; $slot <= $building->quantity; $slot++)
 
-                        <div class="row mb-2">
+                        <div class="row mb-3 align-items-center">
 
                             <label class="col-md-2 col-form-label">
 
@@ -68,21 +72,21 @@
                             <div class="col-md-3">
 
                                 <input
-    type="number"
-    min="1"
-    max="{{ $building->max_level }}"
-    class="form-control"
-    name="levels[{{ $building->building_id }}][{{ $slot }}]"
-    value="{{ old(
-        "levels.{$building->building_id}.{$slot}",
-        optional(
-            $existingLevels->get(
-                $building->building_id . '_' . $slot
-            )
-        )->level
-    ) }}"
-    required
->
+                                    type="number"
+                                    min="1"
+                                    max="{{ $building->max_level }}"
+                                    class="form-control"
+                                    name="levels[{{ $building->building_id }}][{{ $slot }}]"
+                                    value="{{ old(
+                                        "levels.{$building->building_id}.{$slot}",
+                                        optional(
+                                            $existingLevels->get(
+                                                $building->building_id . '_' . $slot
+                                            )
+                                        )->level
+                                    ) }}"
+                                    required
+                                >
 
                             </div>
 
@@ -90,7 +94,8 @@
 
                                 <small class="text-muted">
 
-                                    Maksimal Level {{ $building->max_level }}
+                                    Maksimal Level:
+                                    {{ $building->max_level }}
 
                                 </small>
 
@@ -106,15 +111,20 @@
 
         @endforeach
 
-        <button
-            class="btn btn-primary"
-            type="submit"
-        >
-            Simpan Template
-        </button>
+        <div class="d-flex justify-content-end">
+
+            <button
+                class="btn btn-primary"
+                type="submit"
+            >
+                Simpan Template
+            </button>
+
+        </div>
 
     </form>
 
 </div>
 
 @endsection
+

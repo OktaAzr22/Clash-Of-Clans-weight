@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('clashers', function (Blueprint $table) {
-           $table->boolean('is_ready_war')
-            ->default(false)
-            ->after('label');
+        Schema::create('town_hall_templates', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedTinyInteger('town_hall'); 
+            $table->string('name'); 
+            $table->text('description')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -23,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('clashers', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('town_hall_templates');
     }
 };

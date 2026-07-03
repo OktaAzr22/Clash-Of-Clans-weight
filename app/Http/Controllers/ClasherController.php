@@ -12,36 +12,47 @@ use App\Services\TemplateLabelService;
 
 class ClasherController extends Controller
 {
-    public function index(Request $request)
-    {
-        $status = $request->status ?? 'all';
-        $search = $request->search;
+    
+public function index(Request $request)
+{
+    $status = $request->status ?? 'all';
+    $search = $request->search;
 
-        $query = Clasher::withCount('clasherBuildings');
+    $query = Clasher::query()
+        ->with([
+            'template',
+        ])
+        ->withCount('clasherBuildings');
 
-        if ($status === 'filled') {
-            $query->has('clasherBuildings');
-        }
-
-        if ($status === 'empty') {
-            $query->doesntHave('clasherBuildings');
-        }
-
-        if ($search) {
-            $query->where('name', 'like', "%{$search}%");
-        }
-
-        $clashers = $query
-            ->latest()
-            ->paginate(7)
-            ->withQueryString();
-
-        return view('clashers.index', compact(
-            'clashers',
-            'status',
-            'search'
-        ));
+    if ($status === 'filled') {
+        $query->has('clasherBuildings');
     }
+
+    if ($status === 'empty') {
+        $query->doesntHave('clasherBuildings');
+    }
+
+    if ($search) {
+        $query->where(
+            'name',
+            'like',
+            "%{$search}%"
+        );
+    }
+
+    $clashers = $query
+        ->latest()
+        ->paginate(7)
+        ->withQueryString();
+
+    return view('clashers.index', compact(
+        'clashers',
+        'status',
+        'search'
+    ));
+}
+
+
 
     public function store(Request $request,ClashOfClansService $coc) 
     {
@@ -142,47 +153,56 @@ class ClasherController extends Controller
         );
     }
 
-    public function saveWarProfile(
+    
+public function saveWarProfile(
     Request $request,
     Clasher $clasher,
     TemplateLabelService $templateLabelService
-)
-    {
-        foreach ($request->levels ?? [] as $buildingId => $slots) {
+) {
 
-            foreach ($slots as $slot => $level) {
+    foreach ($request->levels ?? [] as $buildingId => $slots) {
 
-                ClasherBuilding::updateOrCreate(
-                    [
-                        'clasher_id' => $clasher->id,
-                        'building_id' => $buildingId,
-                        'slot' => $slot,
-                    ],
-                    [
-                        'level' => $level,
-                    ]
-                );
+        foreach ($slots as $slot => $level) {
 
-            }
+            ClasherBuilding::updateOrCreate(
+                [
+                    'clasher_id' => $clasher->id,
+                    'building_id' => $buildingId,
+                    'slot' => $slot,
+                ],
+                [
+                    'level' => $level,
+                ]
+            );
 
         }
 
-        $clasher->last_war_profile_update = now();
-        $clasher->save();
-        $result = $templateLabelService->analyze($clasher);
-
-$clasher->update([
-    'label' => $result['label'],
-]);
-
-        return redirect('/clashers')
-            ->with(
-                'success',
-                'Data bangunan berhasil disimpan.'
-            );
     }
 
-    
+    $result = $templateLabelService->analyze(
+        $clasher->fresh('buildings')
+    );
+
+  
+    $clasher->update([
+        'label' => $result['label'],
+
+        'town_hall_template_id'
+            => $result['template']?->id,
+
+        'last_war_profile_update'
+            => now(),
+    ]);
+
+    return redirect('/clashers')
+        ->with(
+            'success',
+            'Data bangunan berhasil disimpan.'
+        );
+}
+
+
+
     public function overview(Request $request)
     {
         $selectedTh = $request->th ?? 'all';
@@ -228,5 +248,4 @@ $clasher->update([
         ));
     }
 
-   
 }

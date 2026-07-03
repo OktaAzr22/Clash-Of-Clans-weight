@@ -134,7 +134,7 @@
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
-                            War Stars
+                            Template
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
@@ -177,9 +177,9 @@
 
                             </td>
 
-                            <td class="px-6 py-4">
-                                {{ number_format($clasher->war_stars) }}
-                            </td>
+                            <td class="px-6 py-4"> @if($clasher->template) <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium"> {{ $clasher->template->name }} </span> @else <span class="text-slate-400 text-xs"> Belum ada template </span> @endif </td>
+                            
+{{ $clasher->town_hall_template_id }}
 
                             <td class="px-6 py-4">
 

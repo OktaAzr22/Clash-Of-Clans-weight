@@ -106,31 +106,31 @@ class BaseGroupController extends Controller
     }
 
     public function warReady()
-{
-    $clashers = Clasher::where('label', 'stay')
-        ->orderByDesc('town_hall')
-        ->orderBy('name')
-        ->get();
+    {
+        $clashers = Clasher::where('label', 'stay')
+            ->orderByDesc('town_hall')
+            ->orderBy('name')
+            ->get();
 
-    return view(
-        'base-groups.war-ready',
-        compact('clashers')
-    );
-}
+        return view(
+            'base-groups.war-ready',
+            compact('clashers')
+        );
+    }
 
-public function updateWarReady(Request $request, Clasher $clasher)
-{
-    $validated = $request->validate([
-        'status' => 'required|in:0,1'
-    ]);
+    public function updateWarReady(Request $request, Clasher $clasher)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:0,1'
+        ]);
 
-    $clasher->update([
-        'is_ready_war' => (int) $validated['status']
-    ]);
+        $clasher->update([
+            'is_ready_war' => (int) $validated['status']
+        ]);
 
-    return response()->json([
-        'success' => true,
-        'message' => 'Status berhasil diperbarui'
-    ]);
-}
+        return response()->json([
+            'success' => true,
+            'message' => 'Status berhasil diperbarui'
+        ]);
+    }
 }

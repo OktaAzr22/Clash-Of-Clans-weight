@@ -128,6 +128,28 @@
 
         </div>
 
+      
+        <a
+            href="{{ route('town-hall-templates.index') }}"
+            @class([
+                'flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 border-l-2',
+
+                'bg-slate-700/30 text-white border-blue-500'
+                    => request()->routeIs('town-hall-templates.*'),
+
+                'border-transparent text-slate-300 hover:bg-slate-700/50 hover:text-white hover:border-blue-500'
+                    => !request()->routeIs('town-hall-templates.*'),
+            ])
+        >
+            <i class="fa-solid fa-layer-group w-5 text-center"></i>
+
+            <span>
+                Town Hall Templates
+            </span>
+        </a>
+
+
+
     </nav>
 
 </aside>

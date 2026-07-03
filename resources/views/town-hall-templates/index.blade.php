@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('content')
@@ -9,6 +10,13 @@
         <h3>
             Template Town Hall
         </h3>
+
+        <a
+            href="{{ route('town-hall-templates.create') }}"
+            class="btn btn-primary"
+        >
+            Tambah Template
+        </a>
 
     </div>
 
@@ -22,12 +30,12 @@
 
                     <tr>
 
-                        <th width="120">
-                            Town Hall
+                        <th width="100">
+                            TH
                         </th>
 
                         <th>
-                            Status
+                            Nama Template
                         </th>
 
                         <th width="180">
@@ -38,7 +46,7 @@
                             Terakhir Diupdate
                         </th>
 
-                        <th width="180">
+                        <th width="220">
                             Aksi
                         </th>
 
@@ -48,81 +56,71 @@
 
                 <tbody>
 
-                    @forelse($townHalls as $th)
+                    @forelse($templates as $template)
 
                         <tr>
 
                             <td>
 
                                 <strong>
-                                    TH {{ $th['town_hall'] }}
+                                    TH {{ $template->town_hall }}
                                 </strong>
 
                             </td>
 
                             <td>
 
-                                @if($th['has_template'])
-
-                                    <span class="badge bg-success">
-
-                                        Template tersedia
-
-                                    </span>
-
-                                @else
-
-                                    <span class="badge bg-danger">
-
-                                        Belum ada template
-
-                                    </span>
-
-                                @endif
+                                {{ $template->name }}
 
                             </td>
 
                             <td>
 
-                                {{ $th['total_buildings'] ?: '-' }}
+                                {{ $template->buildings_count }}
 
                             </td>
 
                             <td>
 
-                                @if($th['updated_at'])
-
-                                    {{ \Carbon\Carbon::parse($th['updated_at'])->format('d M Y H:i') }}
-
-                                @else
-
-                                    -
-
-                                @endif
+                                {{ $template->updated_at->format('d M Y H:i') }}
 
                             </td>
 
                             <td>
 
-                                @if($th['has_template'])
+                                <a
+                                    href="{{ route(
+                                        'town-hall-templates.builder',
+                                        $template
+                                    ) }}"
+                                    class="btn btn-warning btn-sm"
+                                >
+                                    Edit
+                                </a>
 
-                                    <a
-                                        href="{{ route('town-hall-templates.edit', $th['town_hall']) }}"
-                                        class="btn btn-warning btn-sm"
+                                <form
+                                    action="{{ route(
+                                        'town-hall-templates.destroy',
+                                        $template
+                                    ) }}"
+                                    method="POST"
+                                    class="d-inline"
+                                    onsubmit="return confirm(
+                                        'Hapus template ini?'
+                                    )"
+                                >
+
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button
+                                        class="btn btn-danger btn-sm"
+                                        type="submit"
                                     >
-                                        Edit
-                                    </a>
+                                        Hapus
+                                    </button>
 
-                                @else
-
-                                    <a
-                                        href="{{ route('town-hall-templates.create', $th['town_hall']) }}"
-                                        class="btn btn-primary btn-sm"
-                                    >
-                                        Buat Template
-                                    </a>
-
-                                @endif
+                                </form>
 
                             </td>
 
@@ -137,7 +135,7 @@
                                 class="text-center text-muted py-4"
                             >
 
-                                Belum ada data Town Hall.
+                                Belum ada template.
 
                             </td>
 
@@ -156,3 +154,4 @@
 </div>
 
 @endsection
+

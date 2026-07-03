@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::create('clashers', function (Blueprint $table) {
@@ -27,12 +30,23 @@ return new class extends Migration
             $table->unsignedSmallInteger('warden')->default(0);
             $table->unsignedSmallInteger('champion')->default(0);
 
+            $table->enum('label', [
+                'stay',
+                'perlu up',
+                'over',
+            ])->default('perlu up');
+
+            $table->boolean('is_ready_war')->default(false);
+
             $table->timestamp('last_war_profile_update')->nullable();
 
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('clashers');

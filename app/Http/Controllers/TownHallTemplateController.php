@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Clasher;
 use App\Models\ThBuilding;
+use App\Models\TownHallTemplate;
 use App\Models\TownHallTemplateBuilding;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,60 +13,28 @@ class TownHallTemplateController extends Controller
 {
     public function index()
     {
-        $templates = TownHallTemplateBuilding::query()
-            ->selectRaw('
-                town_hall,
-                COUNT(*) as total_buildings,
-                MAX(updated_at) as updated_at
-            ')
-            ->groupBy('town_hall')
-            ->get()
-            ->keyBy('town_hall');
+        $templates = TownHallTemplate::query()
+            ->withCount('buildings')
+            ->latest()
+            ->get();
 
+        return view(
+            'town-hall-templates.index',
+            compact('templates')
+        );
+    }
+
+    public function create()
+    {
         $townHalls = Clasher::query()
             ->select('town_hall')
             ->distinct()
             ->orderByDesc('town_hall')
-            ->pluck('town_hall')
-            ->map(function ($th) use ($templates) {
-
-                $template = $templates->get($th);
-
-                return [
-                    'town_hall'       => $th,
-                    'has_template'    => $template !== null,
-                    'total_buildings' => $template?->total_buildings,
-                    'updated_at'      => $template?->updated_at,
-                ];
-            });
+            ->pluck('town_hall');
 
         return view(
-            'town-hall-templates.index',
+            'town-hall-templates.create',
             compact('townHalls')
-        );
-    }
-
-    public function create(int $townHall)
-    {
-        $buildings = $this->getBuildingsForTownHall($townHall);
-
-        if ($buildings->isEmpty()) {
-            return redirect()
-                ->route('town-hall-templates.index')
-                ->with(
-                    'error',
-                    'Konfigurasi TH belum tersedia.'
-                );
-        }
-
-        return view(
-            'town-hall-templates.form',
-            [
-                'townHall'       => $townHall,
-                'buildings'      => $buildings,
-                'existingLevels' => collect(),
-                'isEdit'         => false,
-            ]
         );
     }
 
@@ -79,68 +48,54 @@ class TownHallTemplateController extends Controller
                 'max:17',
             ],
 
-            'levels' => [
+            'name' => [
                 'required',
-                'array',
-            ],
-
-            'levels.*' => [
-                'array',
-            ],
-
-            'levels.*.*' => [
-                'required',
-                'integer',
-                'min:1',
+                'string',
+                'max:255',
             ],
         ]);
 
-        $this->saveTemplate(
-            $validated['town_hall'],
-            $validated['levels']
-        );
+        $template = TownHallTemplate::create([
+            'town_hall' => $validated['town_hall'],
+            'name'      => $validated['name'],
+        ]);
 
-        return redirect()
-            ->route('town-hall-templates.index')
-            ->with(
-                'success',
-                'Template berhasil disimpan.'
-            );
+        return redirect()->route(
+            'town-hall-templates.builder',
+            $template
+        );
     }
 
-    public function edit(int $townHall)
+    public function builder(TownHallTemplate $template)
     {
-        $buildings = $this->getBuildingsForTownHall($townHall);
+        $buildings = $this->getBuildingsForTownHall(
+            $template->town_hall
+        );
 
-        if ($buildings->isEmpty()) {
-            return redirect()
-                ->route('town-hall-templates.index')
-                ->with(
-                    'error',
-                    'Konfigurasi TH belum tersedia.'
-                );
-        }
-
-        $existingLevels = TownHallTemplateBuilding::where(
-                'town_hall',
-                $townHall
+        $existingLevels = TownHallTemplateBuilding::query()
+            ->where(
+                'town_hall_template_id',
+                $template->id
             )
             ->get()
-            ->keyBy(fn ($item) => $item->building_id . '_' . $item->slot);
+            ->keyBy(fn ($item) =>
+                $item->building_id . '_' . $item->slot
+            );
 
         return view(
             'town-hall-templates.form',
             [
-                'townHall'       => $townHall,
+                'template'       => $template,
                 'buildings'      => $buildings,
                 'existingLevels' => $existingLevels,
-                'isEdit'         => true,
             ]
         );
     }
 
-    public function update(Request $request, int $townHall)
-    {
+    public function update(
+        Request $request,
+        TownHallTemplate $template
+    ) {
         $validated = $request->validate([
             'levels' => [
                 'required',
@@ -159,7 +114,7 @@ class TownHallTemplateController extends Controller
         ]);
 
         $this->saveTemplate(
-            $townHall,
+            $template,
             $validated['levels']
         );
 
@@ -167,53 +122,74 @@ class TownHallTemplateController extends Controller
             ->route('town-hall-templates.index')
             ->with(
                 'success',
-                'Template berhasil diperbarui.'
+                'Template berhasil disimpan.'
             );
     }
 
-    /**
-     * Mengambil konfigurasi bangunan yang berlaku pada suatu TH.
-     * Jika TH16 tidak memiliki konfigurasi sendiri,
-     * maka akan memakai konfigurasi terakhir dari TH sebelumnya.
-     */
-    private function getBuildingsForTownHall(int $townHall)
-    {
+    public function destroy(
+        TownHallTemplate $template
+    ) {
+        $template->delete();
+
+        return redirect()
+            ->route('town-hall-templates.index')
+            ->with(
+                'success',
+                'Template berhasil dihapus.'
+            );
+    }
+
+    private function getBuildingsForTownHall(
+        int $townHall
+    ) {
         return ThBuilding::with('building')
             ->where('town_hall', '<=', $townHall)
             ->orderBy('town_hall')
             ->get()
             ->groupBy('building_id')
             ->map(fn ($items) => $items->last())
-            ->sortBy(fn ($item) => $item->building->name)
+            ->sortBy(fn ($item) =>
+                $item->building->name
+            )
             ->values();
     }
 
     private function saveTemplate(
-        int $townHall,
+        TownHallTemplate $template,
         array $levels
     ): void {
-        DB::transaction(function () use ($townHall, $levels) {
 
-            TownHallTemplateBuilding::where(
-                'town_hall',
-                $townHall
-            )->delete();
+        DB::transaction(function () use (
+            $template,
+            $levels
+        ) {
+
+            TownHallTemplateBuilding::query()
+                ->where(
+                    'town_hall_template_id',
+                    $template->id
+                )
+                ->delete();
 
             foreach ($levels as $buildingId => $slots) {
 
                 foreach ($slots as $slot => $level) {
 
                     TownHallTemplateBuilding::create([
-                        'town_hall'   => $townHall,
-                        'building_id' => $buildingId,
-                        'slot'        => $slot,
-                        'level'       => $level,
+                        'town_hall_template_id'
+                            => $template->id,
+
+                        'building_id'
+                            => $buildingId,
+
+                        'slot'
+                            => $slot,
+
+                        'level'
+                            => $level,
                     ]);
-
                 }
-
             }
-
         });
     }
 }
