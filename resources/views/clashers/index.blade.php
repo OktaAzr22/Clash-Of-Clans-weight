@@ -183,31 +183,31 @@
 
                             <td class="px-6 py-4">
 
-    @switch($clasher->label)
+   @php
+    $labels = [
+        'stay' => [
+            'text' => 'Stay',
+            'class' => 'bg-green-100 text-green-700',
+        ],
+        'perlu up' => [
+            'text' => 'Perlu Up',
+            'class' => 'bg-yellow-100 text-yellow-700',
+        ],
+        'over' => [
+            'text' => 'Over',
+            'class' => 'bg-red-100 text-red-700',
+        ],
+    ];
 
-        @case('stay')
+    $label = $labels[$clasher->label] ?? [
+        'text' => '-',
+        'class' => 'bg-gray-100 text-gray-700',
+    ];
+@endphp
 
-            <span class="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
-                Stay
-            </span>
-
-            @break
-
-        @case('perlu up')
-
-            <span class="inline-flex items-center px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-medium">
-                Perlu Up
-            </span>
-
-            @break
-
-        @default
-
-            <span class="inline-flex items-center px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-medium">
-                Belum Ada
-            </span>
-
-    @endswitch
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $label['class'] }}">
+    {{ $label['text'] }}
+</span>
 
 </td>
 

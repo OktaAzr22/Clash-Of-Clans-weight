@@ -8,6 +8,7 @@ use App\Models\ThBuilding;
 use App\Services\ClashOfClansService;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Services\TemplateLabelService;
 
 class ClasherController extends Controller
 {
@@ -141,7 +142,11 @@ class ClasherController extends Controller
         );
     }
 
-    public function saveWarProfile(Request $request,Clasher $clasher)
+    public function saveWarProfile(
+    Request $request,
+    Clasher $clasher,
+    TemplateLabelService $templateLabelService
+)
     {
         foreach ($request->levels ?? [] as $buildingId => $slots) {
 
@@ -164,6 +169,11 @@ class ClasherController extends Controller
 
         $clasher->last_war_profile_update = now();
         $clasher->save();
+        $result = $templateLabelService->analyze($clasher);
+
+$clasher->update([
+    'label' => $result['label'],
+]);
 
         return redirect('/clashers')
             ->with(

@@ -7,6 +7,7 @@ use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\ClanController;
 use App\Http\Controllers\ClasherController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\ThBuildingController;
 use App\Http\Controllers\WarController;
 
@@ -107,3 +108,39 @@ Route::prefix('base-groups')
             ->name('war-ready.update');
 
     });
+
+
+
+
+
+
+use App\Http\Controllers\TownHallTemplateController;
+
+Route::controller(TownHallTemplateController::class)
+    ->prefix('town-hall-templates')
+    ->name('town-hall-templates.')
+    ->group(function () {
+
+        Route::get('/', 'index')
+            ->name('index');
+
+        Route::get('/create/{townHall}', 'create')
+            ->name('create');
+
+        Route::post('/', 'store')
+            ->name('store');
+
+        Route::get('/{townHall}/edit', 'edit')
+            ->name('edit');
+
+        Route::put('/{townHall}', 'update')
+            ->name('update');
+    });
+
+    Route::get('/test-label/{clasher}', function (\App\Models\Clasher $clasher) {
+
+    return app(
+        \App\Services\TemplateLabelService::class
+    )->determine($clasher);
+
+});
