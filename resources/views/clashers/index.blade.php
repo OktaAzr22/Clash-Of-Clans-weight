@@ -3,6 +3,24 @@
 @section('content')
 
 <div class="space-y-6">
+<form
+    action="{{ route('clashers.sync-labels') }}"
+    method="POST"
+    class="d-inline"
+>
+    @csrf
+
+```
+<button
+    type="submit"
+    class="btn btn-warning"
+    onclick="return confirm('Sinkronkan semua label clasher?')"
+>
+    Sinkron Label
+</button>
+```
+
+</form>
 
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
@@ -51,10 +69,10 @@
 
             <div class="flex flex-wrap items-center gap-3">
                 <input
-    type="hidden"
-    name="status"
-    value="{{ $status }}"
->
+                    type="hidden"
+                    name="status"
+                    value="{{ $status }}"
+                >
 
                 <div class="flex flex-wrap gap-2 p-1 bg-slate-100 rounded-xl">
 
@@ -177,37 +195,47 @@
 
                             </td>
 
-                            <td class="px-6 py-4"> @if($clasher->template) <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium"> {{ $clasher->template->name }} </span> @else <span class="text-slate-400 text-xs"> Belum ada template </span> @endif </td>
+                            <td class="px-6 py-4"> 
+                                @if($clasher->template) 
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium"> 
+                                        {{ $clasher->template->name }} 
+                                    </span> 
+                                @else 
+                                    <span class="text-slate-400 text-xs"> 
+                                        Belum ada template 
+                                    </span> 
+                                @endif 
+                            </td>
                             
-{{ $clasher->town_hall_template_id }}
+                                
 
                             <td class="px-6 py-4">
 
-   @php
-    $labels = [
-        'stay' => [
-            'text' => 'Stay',
-            'class' => 'bg-green-100 text-green-700',
-        ],
-        'perlu up' => [
-            'text' => 'Perlu Up',
-            'class' => 'bg-yellow-100 text-yellow-700',
-        ],
-        'over' => [
-            'text' => 'Over',
-            'class' => 'bg-red-100 text-red-700',
-        ],
-    ];
+                            @php
+                                $labels = [
+                                    'stay' => [
+                                        'text' => 'Stay',
+                                        'class' => 'bg-green-100 text-green-700',
+                                    ],
+                                    'perlu up' => [
+                                        'text' => 'Perlu Up',
+                                        'class' => 'bg-yellow-100 text-yellow-700',
+                                    ],
+                                    'over' => [
+                                        'text' => 'Over',
+                                        'class' => 'bg-red-100 text-red-700',
+                                    ],
+                                ];
 
-    $label = $labels[$clasher->label] ?? [
-        'text' => '-',
-        'class' => 'bg-gray-100 text-gray-700',
-    ];
-@endphp
+                                $label = $labels[$clasher->label] ?? [
+                                    'text' => '-',
+                                    'class' => 'bg-gray-100 text-gray-700',
+                                ];
+                            @endphp
 
-<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $label['class'] }}">
-    {{ $label['text'] }}
-</span>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $label['class'] }}">
+                                {{ $label['text'] }}
+                            </span>
 
 </td>
 

@@ -86,24 +86,7 @@ class BaseGroupController extends Controller
             ->implode('|');
     }
 
-    public function updateLabel(Request $request)
-    {
-        $request->validate([
-            'label' => 'required|in:stay,perlu up,belum ada',
-            'ids'   => 'required|array',
-            'ids.*' => 'exists:clashers,id',
-        ]);
-
-        Clasher::whereIn('id', $request->ids)
-            ->update([
-                'label' => $request->label
-            ]);
-
-        return back()->with(
-            'success',
-            'Label berhasil diperbarui.'
-        );
-    }
+    
 
     public function warReady()
     {

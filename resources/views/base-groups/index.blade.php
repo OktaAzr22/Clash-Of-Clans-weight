@@ -213,15 +213,7 @@
 
                 <div class="flex items-center gap-2">
 
-                    <button
-                        type="button"
-                        data-modal-target="label-modal-{{ $index }}"
-                        class="openModal bg-primary/10 text-primary text-sm font-medium px-4 py-1.5 rounded-lg hover:bg-primary/20 transition flex items-center gap-2">
-
-                        <i class="fas fa-sync-alt"></i>
-                        Update Label
-
-                    </button>
+                    
 
                     <div
                         class="bg-slate-100 text-slate-600 w-8 h-8 rounded-lg flex items-center justify-center"
@@ -363,58 +355,7 @@
 
             </div>
 
-            <x-modal
-                id="label-modal-{{ $index }}"
-                title="Update Label Group"
-                size="md">
-
-                <form
-                    method="POST"
-                    action="{{ route('base-groups.update-label') }}"
-                    class="space-y-4">
-                    @csrf
-
-                    @foreach($members as $member)
-                        <input
-                            type="hidden"
-                            name="ids[]"
-                            value="{{ $member->id }}"
-                        >
-                    @endforeach
-
-                    <div class="space-y-2">
-
-                        <button
-                            type="submit"
-                            name="label"
-                            value="stay"
-                            class="w-full py-3 rounded-xl bg-green-500 text-white font-medium hover:bg-green-600 transition"
-                        >
-                            Stay
-                        </button>
-
-                        <button
-                            type="submit"
-                            name="label"
-                            value="perlu up"
-                            class="w-full py-3 rounded-xl bg-yellow-500 text-white font-medium hover:bg-yellow-600 transition"
-                        >
-                            Perlu Up
-                        </button>
-
-                        <button
-                            type="submit"
-                            name="label"
-                            value="belum ada"
-                            class="w-full py-3 rounded-xl bg-slate-500 text-white font-medium hover:bg-slate-600 transition"
-                        >
-                            Belum Ada
-                        </button>
-
-                    </div>
-                </form>
-
-            </x-modal>
+            
 
         @endforeach
 

@@ -324,7 +324,7 @@
                     try {
 
                         const response = await fetch(
-                            "{{ route('clan.store-member-progress') }}",
+                            "{{ route('clans.members.progress.store') }}",
                             {
                                 method: "POST",
                                 headers: {

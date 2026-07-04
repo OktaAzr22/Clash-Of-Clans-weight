@@ -3,31 +3,45 @@
 
 @section('content')
 
-<div class="container">
+<div class="max-w-6xl mx-auto">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="flex items-center justify-between mb-6">
 
-        <div>
+        <div class="flex items-center gap-4">
 
-            <h3 class="mb-1">
+            <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-sm">
 
-                {{ $template->name }}
+                <i class="fas fa-layer-group text-lg"></i>
 
-            </h3>
+            </div>
 
-            <small class="text-muted">
+            <div>
 
-                TH {{ $template->town_hall }}
+                <h2 class="text-2xl font-bold text-slate-800">
 
-            </small>
+                    {{ $template->name }}
+
+                </h2>
+
+                <p class="text-sm text-slate-500 mt-1">
+
+                    Template Building Town Hall {{ $template->town_hall }}
+
+                </p>
+
+            </div>
 
         </div>
 
         <a
             href="{{ route('town-hall-templates.index') }}"
-            class="btn btn-secondary"
+            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 transition text-sm font-medium"
         >
+
+            <i class="fas fa-arrow-left"></i>
+
             Kembali
+
         </a>
 
     </div>
@@ -38,6 +52,7 @@
             $template
         ) }}"
         method="POST"
+        class="space-y-5"
     >
 
         @csrf
@@ -45,37 +60,61 @@
 
         @foreach($buildings as $building)
 
-            <div class="card mb-3 shadow-sm">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
 
-                <div class="card-header">
+                <div class="px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
 
-                    <strong>
+                    <div class="flex items-center justify-between">
 
-                        {{ $building->building->name }}
+                        <div>
 
-                    </strong>
+                            <h3 class="font-semibold text-slate-800">
+
+                                {{ $building->building->name }}
+
+                            </h3>
+
+                            <p class="text-xs text-slate-500 mt-1">
+
+                                Maksimal Level:
+                                {{ $building->max_level }}
+
+                            </p>
+
+                        </div>
+
+                        <div class="bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full">
+
+                            {{ $building->quantity }} Slot
+
+                        </div>
+
+                    </div>
 
                 </div>
 
-                <div class="card-body">
+                <div class="p-6 space-y-4">
 
                     @for($slot = 1; $slot <= $building->quantity; $slot++)
 
-                        <div class="row mb-3 align-items-center">
+                        <div class="flex items-center gap-4">
 
-                            <label class="col-md-2 col-form-label">
+                            <div class="w-28 shrink-0">
 
-                                Slot {{ $slot }}
+                                <label class="text-sm font-medium text-slate-700">
 
-                            </label>
+                                    Slot {{ $slot }}
 
-                            <div class="col-md-3">
+                                </label>
+
+                            </div>
+
+                            <div class="flex-1">
 
                                 <input
                                     type="number"
                                     min="1"
                                     max="{{ $building->max_level }}"
-                                    class="form-control"
                                     name="levels[{{ $building->building_id }}][{{ $slot }}]"
                                     value="{{ old(
                                         "levels.{$building->building_id}.{$slot}",
@@ -85,19 +124,20 @@
                                             )
                                         )->level
                                     ) }}"
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     required
                                 >
 
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="w-40 text-right">
 
-                                <small class="text-muted">
+                                <span class="text-xs text-slate-500">
 
-                                    Maksimal Level:
+                                    Max Lv
                                     {{ $building->max_level }}
 
-                                </small>
+                                </span>
 
                             </div>
 
@@ -111,13 +151,17 @@
 
         @endforeach
 
-        <div class="d-flex justify-content-end">
+        <div class="flex justify-end pt-2">
 
             <button
-                class="btn btn-primary"
                 type="submit"
+                class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition text-sm font-medium shadow-sm"
             >
+
+                <i class="fas fa-save"></i>
+
                 Simpan Template
+
             </button>
 
         </div>

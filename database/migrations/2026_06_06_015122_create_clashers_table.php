@@ -34,7 +34,7 @@ return new class extends Migration
                 'stay',
                 'perlu up',
                 'over',
-            ])->default('perlu up');
+            ])->nullable()->default(null);
 
             $table->boolean('is_ready_war')->default(false);
 

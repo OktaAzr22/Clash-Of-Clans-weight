@@ -3,99 +3,136 @@
 
 @section('content')
 
-<div class="container">
+<div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
 
-        <h3>
-            Template Town Hall
-        </h3>
+        <div class="flex items-center gap-3">
+
+            <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+
+                <i class="fas fa-layer-group"></i>
+
+            </div>
+
+            <h3 class="text-base font-bold text-slate-800">
+
+                Daftar Template Building
+
+            </h3>
+
+            <span class="bg-blue-100 text-blue-700 text-xs font-medium px-2.5 py-0.5 rounded-full">
+
+                {{ $templates->count() }} Template
+
+            </span>
+
+        </div>
 
         <a
             href="{{ route('town-hall-templates.create') }}"
-            class="btn btn-primary"
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2 text-sm shadow-sm"
         >
+
+            <i class="fas fa-plus"></i>
+
             Tambah Template
+
         </a>
 
     </div>
 
-    <div class="card shadow-sm">
+    <div class="overflow-x-auto">
 
-        <div class="table-responsive">
+        <table class="w-full text-sm">
 
-            <table class="table table-hover align-middle mb-0">
+            <thead>
 
-                <thead class="table-light">
+                <tr class="bg-slate-50/80 border-b border-slate-200">
 
-                    <tr>
+                    <th class="text-left px-6 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">
 
-                        <th width="100">
-                            TH
-                        </th>
+                        TH
 
-                        <th>
-                            Nama Template
-                        </th>
+                    </th>
 
-                        <th width="180">
-                            Total Building
-                        </th>
+                    <th class="text-left px-6 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">
 
-                        <th width="220">
-                            Terakhir Diupdate
-                        </th>
+                        Nama Template
 
-                        <th width="220">
-                            Aksi
-                        </th>
+                    </th>
 
-                    </tr>
+                    <th class="text-left px-6 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">
 
-                </thead>
+                        Total Building
 
-                <tbody>
+                    </th>
 
-                    @forelse($templates as $template)
+                    <th class="text-left px-6 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">
 
-                        <tr>
+                        Terakhir Diupdate
 
-                            <td>
+                    </th>
 
-                                <strong>
-                                    TH {{ $template->town_hall }}
-                                </strong>
+                    <th class="text-center px-6 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">
 
-                            </td>
+                        Action
 
-                            <td>
+                    </th>
 
-                                {{ $template->name }}
+                </tr>
 
-                            </td>
+            </thead>
 
-                            <td>
+            <tbody class="divide-y divide-slate-100">
 
-                                {{ $template->buildings_count }}
+                @forelse($templates as $template)
 
-                            </td>
+                    <tr class="hover:bg-slate-50/60 transition duration-150">
 
-                            <td>
+                        <td class="px-6 py-4 font-semibold text-slate-700">
 
-                                {{ $template->updated_at->format('d M Y H:i') }}
+                            <span class="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs font-bold border border-indigo-200">
 
-                            </td>
+                                TH{{ $template->town_hall }}
 
-                            <td>
+                            </span>
+
+                        </td>
+
+                        <td class="px-6 py-4 font-medium text-slate-800">
+
+                            {{ $template->name }}
+
+                        </td>
+
+                        <td class="px-6 py-4 text-slate-600">
+
+                            {{ $template->buildings_count }}
+
+                        </td>
+
+                        <td class="px-6 py-4 text-slate-500 text-xs">
+
+                            {{ $template->updated_at->format('d M Y H:i') }}
+
+                        </td>
+
+                        <td class="px-6 py-4">
+
+                            <div class="flex items-center justify-center gap-2">
 
                                 <a
                                     href="{{ route(
                                         'town-hall-templates.builder',
                                         $template
                                     ) }}"
-                                    class="btn btn-warning btn-sm"
+                                    class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition flex items-center justify-center"
+                                    title="Edit"
                                 >
-                                    Edit
+
+                                    <i class="fas fa-edit text-sm"></i>
+
                                 </a>
 
                                 <form
@@ -104,7 +141,6 @@
                                         $template
                                     ) }}"
                                     method="POST"
-                                    class="d-inline"
                                     onsubmit="return confirm(
                                         'Hapus template ini?'
                                     )"
@@ -114,40 +150,43 @@
                                     @method('DELETE')
 
                                     <button
-                                        class="btn btn-danger btn-sm"
                                         type="submit"
+                                        class="w-8 h-8 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition flex items-center justify-center"
+                                        title="Hapus"
                                     >
-                                        Hapus
+
+                                        <i class="fas fa-trash text-sm"></i>
+
                                     </button>
 
                                 </form>
 
-                            </td>
+                            </div>
 
-                        </tr>
+                        </td>
 
-                    @empty
+                    </tr>
 
-                        <tr>
+                @empty
 
-                            <td
-                                colspan="5"
-                                class="text-center text-muted py-4"
-                            >
+                    <tr>
 
-                                Belum ada template.
+                        <td
+                            colspan="5"
+                            class="text-center py-8 text-slate-400"
+                        >
 
-                            </td>
+                            Belum ada template.
 
-                        </tr>
+                        </td>
 
-                    @endforelse
+                    </tr>
 
-                </tbody>
+                @endforelse
 
-            </table>
+            </tbody>
 
-        </div>
+        </table>
 
     </div>
 

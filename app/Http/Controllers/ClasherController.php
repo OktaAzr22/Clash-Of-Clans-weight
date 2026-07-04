@@ -154,52 +154,49 @@ public function index(Request $request)
     }
 
     
-public function saveWarProfile(
-    Request $request,
-    Clasher $clasher,
-    TemplateLabelService $templateLabelService
-) {
+    public function saveWarProfile(Request $request,Clasher $clasher,TemplateLabelService $templateLabelService) 
+    {
 
-    foreach ($request->levels ?? [] as $buildingId => $slots) {
+        foreach ($request->levels ?? [] as $buildingId => $slots) {
 
-        foreach ($slots as $slot => $level) {
+            foreach ($slots as $slot => $level) {
 
-            ClasherBuilding::updateOrCreate(
-                [
-                    'clasher_id' => $clasher->id,
-                    'building_id' => $buildingId,
-                    'slot' => $slot,
-                ],
-                [
-                    'level' => $level,
-                ]
-            );
+                ClasherBuilding::updateOrCreate(
+                    [
+                        'clasher_id' => $clasher->id,
+                        'building_id' => $buildingId,
+                        'slot' => $slot,
+                    ],
+                    [
+                        'level' => $level,
+                    ]
+                );
+
+            }
 
         }
 
-    }
-
-    $result = $templateLabelService->analyze(
-        $clasher->fresh('buildings')
-    );
+        $result = $templateLabelService->analyze(
+            $clasher->fresh('buildings')
+        );
 
   
-    $clasher->update([
-        'label' => $result['label'],
+        $clasher->update([
+            'label' => $result['label'],
 
-        'town_hall_template_id'
-            => $result['template']?->id,
+            'town_hall_template_id'
+                => $result['template']?->id,
 
-        'last_war_profile_update'
-            => now(),
-    ]);
+            'last_war_profile_update'
+                => now(),
+        ]);
 
-    return redirect('/clashers')
-        ->with(
-            'success',
-            'Data bangunan berhasil disimpan.'
-        );
-}
+        return redirect('/clashers')
+            ->with(
+                'success',
+                'Data bangunan berhasil disimpan.'
+            );
+    }
 
 
 
@@ -247,5 +244,41 @@ public function saveWarProfile(
             'selectedTh'
         ));
     }
+
+    public function syncLabels(
+TemplateLabelService $templateLabelService
+) {
+
+$clashers = Clasher::with('buildings')
+    ->has('clasherBuildings')
+    ->get();
+
+$updated = 0;
+
+foreach ($clashers as $clasher) {
+
+    $result = $templateLabelService->analyze($clasher);
+
+    $clasher->update([
+        'label' => $result['label'],
+
+        'town_hall_template_id'
+            => $result['template']?->id,
+
+        'last_war_profile_update'
+            => now(),
+    ]);
+
+    $updated++;
+}
+
+return redirect()
+    ->route('clashers.index')
+    ->with(
+        'success',
+        "{$updated} label clasher berhasil disinkronkan."
+    );
+}
+
 
 }

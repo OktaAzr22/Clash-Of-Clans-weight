@@ -96,8 +96,7 @@ Route::prefix('base-groups')
         Route::get('/', 'index')
             ->name('index');
 
-        Route::post('/update-label', 'updateLabel')
-            ->name('update-label');
+       
 
             Route::get('/war-ready', 'warReady')
             ->name('war-ready');
@@ -111,6 +110,10 @@ Route::prefix('base-groups')
 
 
 
+Route::post(
+'/clashers/sync-labels',
+[ClasherController::class, 'syncLabels']
+)->name('clashers.sync-labels');
 
 
 

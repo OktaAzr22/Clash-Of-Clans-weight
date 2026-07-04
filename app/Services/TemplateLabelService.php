@@ -20,7 +20,7 @@ class TemplateLabelService
         if ($templates->isEmpty()) {
 
             return [
-                'label'    => 'belum ada',
+                'label'    => 'null',
                 'matched'  => 0,
                 'under'    => 0,
                 'over'     => 0,
@@ -100,21 +100,29 @@ class TemplateLabelService
                 'template' => $template,
             ];
 
-            /*
-            |--------------------------------------------------------------------------
-            | Pilih template terbaik
-            |--------------------------------------------------------------------------
-            |
-            | Prioritas:
-            | 1. matched terbesar
-            | 2. under terkecil
-            | 3. over terkecil
-            |
-            */
-
             if (!$bestResult) {
 
                 $bestResult = $result;
+
+                continue;
+            }
+
+            if (
+                $bestResult['over'] > 0
+                &&
+                $result['over'] == 0
+            ) {
+
+                $bestResult = $result;
+
+                continue;
+            }
+
+            if (
+                $bestResult['over'] == 0
+                &&
+                $result['over'] > 0
+            ) {
 
                 continue;
             }
@@ -135,22 +143,6 @@ class TemplateLabelService
                 &&
                 $result['under']
                 < $bestResult['under']
-            ) {
-
-                $bestResult = $result;
-
-                continue;
-            }
-
-            if (
-                $result['matched']
-                == $bestResult['matched']
-                &&
-                $result['under']
-                == $bestResult['under']
-                &&
-                $result['over']
-                < $bestResult['over']
             ) {
 
                 $bestResult = $result;
