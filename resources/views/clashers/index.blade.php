@@ -10,17 +10,16 @@
 >
     @csrf
 
-```
 <button
     type="submit"
     class="btn btn-warning"
-    onclick="return confirm('Sinkronkan semua label clasher?')"
+    onclick="return confirm('Sinkronkan semua label?')"
 >
     Sinkron Label
 </button>
-```
 
 </form>
+
 
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 

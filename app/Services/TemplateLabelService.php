@@ -14,7 +14,7 @@ class TemplateLabelService
                 'town_hall',
                 $clasher->town_hall
             )
-            ->with('buildings')
+            ->with('buildings.building')
             ->get();
 
         if ($templates->isEmpty()) {
@@ -41,6 +41,7 @@ class TemplateLabelService
             $matched = 0;
             $under = 0;
             $over = 0;
+            $needsUpgrade = [];
 
             $templateBuildings = $template
                 ->buildings
@@ -75,6 +76,27 @@ class TemplateLabelService
 
                     $under++;
 
+                    $needsUpgrade[] = [
+                        'building_id'
+                            =>$expected->building_id,
+                        
+                        'building_name' 
+                            => $expected->building->name ?? '-', 
+                            
+                        'slot' 
+                            => $expected->slot, 
+                            
+                        'current_level' 
+                            => $player->level, 
+                            
+                        'expected_level' 
+                            => $expected->level, 
+                            
+                        'difference' 
+                            => $expected->level - $player->level,
+                        
+                    ];
+                    
                     continue;
                 }
 
@@ -98,6 +120,7 @@ class TemplateLabelService
                 'under'    => $under,
                 'over'     => $over,
                 'template' => $template,
+                'needs_upgrade' => $needsUpgrade,
             ];
 
             if (!$bestResult) {

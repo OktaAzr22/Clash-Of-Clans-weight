@@ -26,10 +26,12 @@ class Clasher extends Model
         'is_ready_war',
         'label',
         'town_hall_template_id',
+        'upgrade_notes',
     ];
 
     protected $casts = [
         'last_war_profile_update' => 'datetime',
+        'upgrade_notes' => 'array',
     ];
 
     public function buildings()

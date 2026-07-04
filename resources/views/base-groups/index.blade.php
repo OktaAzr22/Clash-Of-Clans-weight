@@ -314,40 +314,99 @@
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-80 overflow-y-auto pr-2">
 
-                            @foreach($members as $member)
 
-                                <div class="flex items-center justify-between bg-slate-50 rounded-xl px-4 py-3 border border-slate-200">
+@foreach($members as $member)
 
-                                    <div>
+    <div class="flex items-start justify-between bg-slate-50 rounded-xl px-4 py-3 border border-slate-200 gap-3">
 
-                                        <p class="text-sm font-medium">
-                                            {{ $member->name }}
-                                        </p>
+        <div class="flex-1">
 
-                                        @if($member->is_ready_war)
+            <p class="text-sm font-medium">
+                {{ $member->name }}
+            </p>
 
-                                            <p class="text-xs font-semibold text-green-600 mt-1">
-                                                Ready
-                                            </p>
+            @if($member->is_ready_war)
 
-                                        @endif
+                <p class="text-xs font-semibold text-green-600 mt-1">
+                    Ready
+                </p>
 
-                                    </div>
+            @endif
 
 
-                                    @if($member->label === 'stay')
+            @if(
+                $member->label === 'perlu up'
+                &&
+                !empty($member->upgrade_notes)
+            )
 
-                                        <span class="text-xs font-medium text-green-600 bg-green-50 px-3 py-1 rounded-full border border-green-200">
-                                            Stay
-                                        </span>
+                <div class="mt-2 space-y-1">
 
-                                    @endif
+                    @foreach(
+                        collect($member->upgrade_notes)->take(3)
+                        as $upgrade
+                    )
 
-                                </div>
+                        <div class="text-[11px] text-yellow-700 bg-yellow-50 border border-yellow-200 rounded-lg px-2 py-1">
 
-                            @endforeach
+                            {{ $upgrade['building_name'] }}
+
+                            Lv {{ $upgrade['current_level'] }}
+                            → {{ $upgrade['expected_level'] }}
 
                         </div>
+
+                    @endforeach
+
+
+                    @if(count($member->upgrade_notes) > 3)
+
+                        <div class="text-[11px] text-slate-500">
+
+                            +{{ count($member->upgrade_notes) - 3 }}
+                            upgrade lainnya
+
+                        </div>
+
+                    @endif
+
+                </div>
+
+            @endif
+
+        </div>
+
+
+        <div class="flex flex-col items-end gap-2">
+
+            @if($member->label === 'stay')
+
+                <span class="text-xs font-medium text-green-600 bg-green-50 px-3 py-1 rounded-full border border-green-200">
+                    Stay
+                </span>
+
+            @elseif($member->label === 'perlu up')
+
+                <span class="text-xs font-medium text-yellow-700 bg-yellow-50 px-3 py-1 rounded-full border border-yellow-200">
+                    Perlu Up
+                </span>
+
+                <span class="text-[11px] text-slate-500">
+
+                    {{ count($member->upgrade_notes ?? []) }}
+                    upgrade
+
+                </span>
+
+            @endif
+
+        </div>
+
+    </div>
+
+@endforeach
+</div>
+
 
                     </div>
 

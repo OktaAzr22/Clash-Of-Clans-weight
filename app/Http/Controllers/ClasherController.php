@@ -189,7 +189,12 @@ public function index(Request $request)
 
             'last_war_profile_update'
                 => now(),
+
+            'upgrade_notes'
+                => $result['needs_upgrade'],
         ]);
+
+        
 
         return redirect('/clashers')
             ->with(
@@ -249,6 +254,7 @@ public function index(Request $request)
 TemplateLabelService $templateLabelService
 ) {
 
+
 $clashers = Clasher::with('buildings')
     ->has('clasherBuildings')
     ->get();
@@ -257,10 +263,16 @@ $updated = 0;
 
 foreach ($clashers as $clasher) {
 
-    $result = $templateLabelService->analyze($clasher);
+    $result = $templateLabelService
+        ->analyze($clasher);
 
     $clasher->update([
-        'label' => $result['label'],
+
+        'label'
+            => $result['label'],
+
+        'upgrade_notes'
+            => $result['needs_upgrade'],
 
         'town_hall_template_id'
             => $result['template']?->id,
@@ -270,15 +282,17 @@ foreach ($clashers as $clasher) {
     ]);
 
     $updated++;
+    
 }
 
 return redirect()
     ->route('clashers.index')
     ->with(
         'success',
-        "{$updated} label clasher berhasil disinkronkan."
+        "{$updated} clasher berhasil disinkronkan."
     );
 }
+
 
 
 }
