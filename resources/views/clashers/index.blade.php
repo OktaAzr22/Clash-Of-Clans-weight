@@ -21,6 +21,8 @@
 </form>
 
 
+
+
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
         <div>
@@ -210,45 +212,63 @@
 
                             <td class="px-6 py-4">
 
-                            @php
-                                $labels = [
-                                    'stay' => [
-                                        'text' => 'Stay',
-                                        'class' => 'bg-green-100 text-green-700',
-                                    ],
-                                    'perlu up' => [
-                                        'text' => 'Perlu Up',
-                                        'class' => 'bg-yellow-100 text-yellow-700',
-                                    ],
-                                    'over' => [
-                                        'text' => 'Over',
-                                        'class' => 'bg-red-100 text-red-700',
-                                    ],
-                                ];
+                                @php
+                                    $labels = [
+                                        'stay' => [
+                                            'text' => 'Stay',
+                                            'class' => 'bg-green-100 text-green-700',
+                                        ],
+                                        'perlu up' => [
+                                            'text' => 'Perlu Up',
+                                            'class' => 'bg-yellow-100 text-yellow-700',
+                                        ],
+                                        'over' => [
+                                            'text' => 'Over',
+                                            'class' => 'bg-red-100 text-red-700',
+                                        ],
+                                    ];
 
-                                $label = $labels[$clasher->label] ?? [
-                                    'text' => '-',
-                                    'class' => 'bg-gray-100 text-gray-700',
-                                ];
-                            @endphp
+                                    $label = $labels[$clasher->label] ?? [
+                                        'text' => '-',
+                                        'class' => 'bg-gray-100 text-gray-700',
+                                    ];
+                                @endphp
 
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $label['class'] }}">
-                                {{ $label['text'] }}
-                            </span>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $label['class'] }}">
+                                    {{ $label['text'] }}
+                                </span>
 
-</td>
+                            </td>
 
-                            <td class="px-6 py-4 text-center">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center justify-center gap-2">
 
-                                <x-button
-                                    class="open-war-profile"
-                                    data-id="{{ $clasher->id }}"
-                                    data-modal-target="warProfileModal"
-                                >
-                                    <i class="fa-solid fa-hammer mr-2"></i>
-                                    Kelola Bangunan
-                                </x-button>
+                                    <x-button
+                                        class="open-war-profile"
+                                        data-id="{{ $clasher->id }}"
+                                        data-modal-target="warProfileModal"
+                                    >
+                                        <i class="fa-solid fa-hammer mr-2"></i>
+                                        Kelola Bangunan
+                                    </x-button>
 
+                                    <form
+                                        action="{{ route('clashers.sync-townhall', $clasher) }}"
+                                        method="POST"
+                                    >
+                                        @csrf
+
+                                        <button
+                                            type="submit"
+                                            title="Sinkronkan Town Hall"
+                                            onclick="return confirm('Sinkronkan Town Hall {{ $clasher->name }} dari Clash of Clans?')"
+                                            class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-200 transition"
+                                        >
+                                            <i class="fa-solid fa-arrows-rotate"></i>
+                                        </button>
+                                    </form>
+
+                                </div>
                             </td>
 
                         </tr>

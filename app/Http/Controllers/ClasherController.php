@@ -13,46 +13,44 @@ use App\Services\TemplateLabelService;
 class ClasherController extends Controller
 {
     
-public function index(Request $request)
-{
-    $status = $request->status ?? 'all';
-    $search = $request->search;
+    public function index(Request $request)
+    {
+        $status = $request->status ?? 'all';
+        $search = $request->search;
 
-    $query = Clasher::query()
-        ->with([
-            'template',
-        ])
-        ->withCount('clasherBuildings');
+        $query = Clasher::query()
+            ->with([
+                'template',
+            ])
+            ->withCount('clasherBuildings');
 
-    if ($status === 'filled') {
-        $query->has('clasherBuildings');
+        if ($status === 'filled') {
+            $query->has('clasherBuildings');
+        }
+
+        if ($status === 'empty') {
+            $query->doesntHave('clasherBuildings');
+        }
+
+        if ($search) {
+            $query->where(
+                'name',
+                'like',
+                "%{$search}%"
+            );
+        }
+
+        $clashers = $query
+            ->latest()
+            ->paginate(7)
+            ->withQueryString();
+
+        return view('clashers.index', compact(
+            'clashers',
+            'status',
+            'search'
+        ));
     }
-
-    if ($status === 'empty') {
-        $query->doesntHave('clasherBuildings');
-    }
-
-    if ($search) {
-        $query->where(
-            'name',
-            'like',
-            "%{$search}%"
-        );
-    }
-
-    $clashers = $query
-        ->latest()
-        ->paginate(7)
-        ->withQueryString();
-
-    return view('clashers.index', compact(
-        'clashers',
-        'status',
-        'search'
-    ));
-}
-
-
 
     public function store(Request $request,ClashOfClansService $coc) 
     {
@@ -203,8 +201,6 @@ public function index(Request $request)
             );
     }
 
-
-
     public function overview(Request $request)
     {
         $selectedTh = $request->th ?? 'all';
@@ -250,49 +246,83 @@ public function index(Request $request)
         ));
     }
 
-    public function syncLabels(
-TemplateLabelService $templateLabelService
-) {
+    public function syncLabels(TemplateLabelService $templateLabelService) 
+    {
 
+        $clashers = Clasher::with('buildings')
+            ->has('clasherBuildings')
+            ->get();
 
-$clashers = Clasher::with('buildings')
-    ->has('clasherBuildings')
-    ->get();
+        $updated = 0;
 
-$updated = 0;
+        foreach ($clashers as $clasher) {
 
-foreach ($clashers as $clasher) {
+            $result = $templateLabelService
+                ->analyze($clasher);
 
-    $result = $templateLabelService
-        ->analyze($clasher);
+            $clasher->update([
 
-    $clasher->update([
+                'label'
+                    => $result['label'],
 
-        'label'
-            => $result['label'],
+                'upgrade_notes'
+                    => $result['needs_upgrade'],
 
-        'upgrade_notes'
-            => $result['needs_upgrade'],
+                'town_hall_template_id'
+                    => $result['template']?->id,
 
-        'town_hall_template_id'
-            => $result['template']?->id,
+                'last_war_profile_update'
+                    => now(),
+            ]);
 
-        'last_war_profile_update'
-            => now(),
-    ]);
+            $updated++;
+            
+        }
 
-    $updated++;
-    
+        return redirect()
+            ->route('clashers.index')
+            ->with(
+                'success',
+                "{$updated} clasher berhasil disinkronkan."
+            );
+    }
+
+    public function syncTownHall(
+    Clasher $clasher,
+    ClashOfClansService $coc
+)
+{
+    try {
+
+        $player = $coc->getPlayer($clasher->tag);
+
+        $oldTownHall = $clasher->town_hall;
+        $newTownHall = $player['townHallLevel'];
+
+        if ($oldTownHall != $newTownHall) {
+
+            $clasher->update([
+                'town_hall' => $newTownHall,
+            ]);
+
+            return back()->with(
+                'success',
+                "Town Hall {$clasher->name} berhasil diperbarui dari TH {$oldTownHall} menjadi TH {$newTownHall}."
+            );
+        }
+
+        return back()->with(
+            'success',
+            "Town Hall {$clasher->name} sudah sesuai (TH {$newTownHall})."
+        );
+
+    } catch (\Exception $e) {
+
+        return back()->with(
+            'error',
+            'Gagal mengambil data dari Clash of Clans: ' . $e->getMessage()
+        );
+    }
 }
-
-return redirect()
-    ->route('clashers.index')
-    ->with(
-        'success',
-        "{$updated} clasher berhasil disinkronkan."
-    );
-}
-
-
 
 }

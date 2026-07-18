@@ -121,4 +121,7 @@ use App\Http\Controllers\TownHallTemplateController;
 
 Route::prefix('town-hall-templates') ->name('town-hall-templates.') ->group(function () { Route::get( '/', [TownHallTemplateController::class, 'index'] )->name('index'); Route::get( '/create', [TownHallTemplateController::class, 'create'] )->name('create'); Route::post( '/', [TownHallTemplateController::class, 'store'] )->name('store'); Route::get( '/{template}/builder', [TownHallTemplateController::class, 'builder'] )->name('builder'); Route::put( '/{template}', [TownHallTemplateController::class, 'update'] )->name('update'); Route::delete( '/{template}', [TownHallTemplateController::class, 'destroy'] )->name('destroy'); });
 
-    
+    Route::post(
+    '/clashers/{clasher}/sync-townhall',
+    [ClasherController::class, 'syncTownHall']
+)->name('clashers.sync-townhall');
