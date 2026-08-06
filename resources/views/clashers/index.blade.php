@@ -2,36 +2,37 @@
 
 @section('content')
 
+@include('clashers.partials.create-modal')
+@include('clashers.partials.list-upgrade-modal')
+
 <div class="space-y-6">
-<form
-    action="{{ route('clashers.sync-labels') }}"
-    method="POST"
-    class="d-inline"
->
-    @csrf
-
-<button
-    type="submit"
-    class="btn btn-warning"
-    onclick="return confirm('Sinkronkan semua label?')"
->
-    Sinkron Label
-</button>
-
-</form>
-
-<form action="{{ route('clashers.sync-townhall-all') }}" method="POST">
-    @csrf
+    <form
+        action="{{ route('clashers.sync-labels') }}"
+        method="POST"
+        class="d-inline"
+    >
+        @csrf
 
     <button
-        class="btn btn-primary"
-        onclick="return confirm('Sinkronkan seluruh Town Hall?')">
-        <i class="fas fa-sync"></i>
-        Sinkron Semua TH
+        type="submit"
+        class="btn btn-warning"
+        onclick="return confirm('Sinkronkan semua label?')"
+    >
+        Sinkron Label
     </button>
-</form>
 
+    </form>
 
+    <form action="{{ route('clashers.sync-townhall-all') }}" method="POST">
+        @csrf
+
+        <button
+            class="btn btn-primary"
+            onclick="return confirm('Sinkronkan seluruh Town Hall?')">
+            <i class="fas fa-sync"></i>
+            Sinkron Semua TH
+        </button>
+    </form>
 
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
@@ -46,6 +47,12 @@
         </div>
 
         <div class="flex gap-2">
+
+            <x-button data-modal-target="upgrade-modal">
+                <i class="fa-solid fa-arrow-trend-up mr-2"></i>
+                
+                List Akun Prioritas
+            </x-button>
 
             <x-button data-modal-target="createClasherModal">
                 <i class="fa-solid fa-plus mr-2"></i>
@@ -319,59 +326,7 @@
     </div>
 
 </div>
-<x-modal
-    id="createClasherModal"
-    title="Tambah Clasher">
 
-    <form
-        method="POST"
-        action="{{ route('clashers.store') }}"
-    >
-
-        @csrf
-
-        <input
-            type="hidden"
-            name="modal"
-            value="createClasherModal"
-        >
-
-        <x-input
-            name="tag"
-            label="Tag Akun"
-            placeholder="#ABC123XYZ"
-            :value="old('tag')"
-            required
-        />
-
-        <p class="text-sm text-slate-500 mb-6">
-            Masukkan tag pemain Clash of Clans untuk mengambil data dari API.
-        </p>
-
-        <div class="flex justify-end gap-2">
-
-            <x-button
-                type="button"
-                variant="secondary"
-                class="close-modal"
-            >
-                Batal
-            </x-button>
-
-            <x-button
-                type="submit"
-                loading
-                loading-text="Mengambil Data..."
-            >
-                <i class="fa-solid fa-download mr-2"></i>
-                Ambil & Simpan
-            </x-button>
-
-        </div>
-
-    </form>
-
-</x-modal>
 <x-modal
     id="warProfileModal"
     title="Kelola Bangunan"

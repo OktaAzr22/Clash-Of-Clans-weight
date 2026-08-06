@@ -129,3 +129,12 @@ Route::prefix('town-hall-templates') ->name('town-hall-templates.') ->group(func
 
 Route::post('/clashers/sync-townhall-all', [ClasherController::class, 'syncAllTownHall'])
     ->name('clashers.sync-townhall-all');
+
+    use App\Http\Controllers\UpgradeController;
+
+
+
+    Route::get(
+    '/upgrades/export/pdf',
+    [ClasherController::class, 'exportPdf']
+)->name('upgrades.export.pdf');

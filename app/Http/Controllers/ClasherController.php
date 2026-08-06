@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Services\TemplateLabelService;
 use App\Jobs\SyncAllTownHallJob;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ClasherController extends Controller
 {
@@ -46,10 +47,68 @@ class ClasherController extends Controller
             ->paginate(7)
             ->withQueryString();
 
+
+            // 
+            $players = collect();
+
+$upgradeClashers = Clasher::with([
+    'buildings.building',
+    'template.buildings.building'
+])
+->where('label', 'perlu up')
+->orderByDesc('town_hall')
+->orderBy('name')
+->get();
+
+foreach ($upgradeClashers as $clasher) {
+
+    if (!$clasher->template) {
+        continue;
+    }
+
+    $upgrades = collect();
+
+    foreach ($clasher->template->buildings as $templateBuilding) {
+
+        $current = $clasher->buildings->first(function ($building) use ($templateBuilding) {
+
+            return $building->building_id == $templateBuilding->building_id
+                && $building->slot == $templateBuilding->slot;
+
+        });
+
+        if (!$current) {
+            continue;
+        }
+
+        if ($current->level < $templateBuilding->level) {
+
+            $upgrades->push([
+                'building' => $templateBuilding->building->name,
+                'slot' => $templateBuilding->slot,
+                'current' => $current->level,
+                'target' => $templateBuilding->level,
+                'difference' => $templateBuilding->level - $current->level,
+            ]);
+
+        }
+    }
+
+    if ($upgrades->isNotEmpty()) {
+
+        $players->push([
+            'player' => $clasher,
+            'upgrades' => $upgrades,
+        ]);
+
+    }
+}
+
         return view('clashers.index', compact(
             'clashers',
             'status',
-            'search'
+            'search',
+            'players'
         ));
     }
 
@@ -336,4 +395,77 @@ public function syncAllTownHall()
     );
 }
 
+
+public function exportPdf(Request $request)
+    {
+        $query = Clasher::with([
+            'buildings.building',
+            'template.buildings.building'
+        ])
+        ->where('label', 'perlu up');
+
+        if ($request->filled('th')) {
+            $query->where('town_hall', $request->th);
+        }
+
+        $clashers = $query
+            ->orderByDesc('town_hall')
+            ->orderBy('name')
+            ->get();
+
+        $players = collect();
+
+        foreach ($clashers as $clasher) {
+
+            if (!$clasher->template) {
+                continue;
+            }
+
+            $upgrades = collect();
+
+            foreach ($clasher->template->buildings as $templateBuilding) {
+
+                $current = $clasher->buildings->first(function ($building) use ($templateBuilding) {
+
+                    return $building->building_id == $templateBuilding->building_id
+                        && $building->slot == $templateBuilding->slot;
+                });
+
+                if (!$current) {
+                    continue;
+                }
+
+                if ($current->level < $templateBuilding->level) {
+
+                    $upgrades->push([
+                        'building' => $templateBuilding->building->name,
+                        'slot' => $templateBuilding->slot,
+                        'current' => $current->level,
+                        'target' => $templateBuilding->level,
+                        'difference' => $templateBuilding->level - $current->level,
+                    ]);
+                }
+            }
+
+            if ($upgrades->isNotEmpty()) {
+
+                $players->push([
+                    'player' => $clasher,
+                    'upgrades' => $upgrades,
+                ]);
+
+            }
+
+        }
+
+        $pdf = Pdf::loadView('clashers.partials.pdf', [
+
+            'players' => $players,
+
+        ])->setPaper('a4', 'portrait');
+
+        return $pdf->download(
+            'list-upgrade-' . now()->format('Y-m-d') . '.pdf'
+        );
+    }
 }
