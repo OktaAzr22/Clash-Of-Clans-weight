@@ -49,66 +49,69 @@ class ClasherController extends Controller
 
 
             // 
-            $players = collect();
+        $players = collect();
 
-$upgradeClashers = Clasher::with([
-    'buildings.building',
-    'template.buildings.building'
-])
-->where('label', 'perlu up')
-->orderByDesc('town_hall')
-->orderBy('name')
-->get();
+        $upgradeClashers = Clasher::with([
+            'buildings.building',
+            'template.buildings.building'
+        ])
+        ->where('label', 'perlu up')
+        ->orderByDesc('town_hall')
+        ->orderBy('name')
+        ->get();
 
-foreach ($upgradeClashers as $clasher) {
+        foreach ($upgradeClashers as $clasher) {
 
-    if (!$clasher->template) {
-        continue;
-    }
+            if (!$clasher->template) {
+                continue;
+            }
 
-    $upgrades = collect();
+            $upgrades = collect();
 
-    foreach ($clasher->template->buildings as $templateBuilding) {
+            foreach ($clasher->template->buildings as $templateBuilding) {
 
-        $current = $clasher->buildings->first(function ($building) use ($templateBuilding) {
+                $current = $clasher->buildings->first(function ($building) use ($templateBuilding) {
 
-            return $building->building_id == $templateBuilding->building_id
-                && $building->slot == $templateBuilding->slot;
+                    return $building->building_id == $templateBuilding->building_id
+                        && $building->slot == $templateBuilding->slot;
 
-        });
+                });
 
-        if (!$current) {
-            continue;
+                if (!$current) {
+                    continue;
+                }
+
+                if ($current->level < $templateBuilding->level) {
+
+                    $upgrades->push([
+                        'building' => $templateBuilding->building->name,
+                        'slot' => $templateBuilding->slot,
+                        'current' => $current->level,
+                        'target' => $templateBuilding->level,
+                        'difference' => $templateBuilding->level - $current->level,
+                    ]);
+
+                }
+            }
+
+            if ($upgrades->isNotEmpty()) {
+
+                $players->push([
+                    'player' => $clasher,
+                    'upgrades' => $upgrades,
+                ]);
+
+            }
         }
 
-        if ($current->level < $templateBuilding->level) {
-
-            $upgrades->push([
-                'building' => $templateBuilding->building->name,
-                'slot' => $templateBuilding->slot,
-                'current' => $current->level,
-                'target' => $templateBuilding->level,
-                'difference' => $templateBuilding->level - $current->level,
-            ]);
-
-        }
-    }
-
-    if ($upgrades->isNotEmpty()) {
-
-        $players->push([
-            'player' => $clasher,
-            'upgrades' => $upgrades,
-        ]);
-
-    }
-}
+        $totalPlayers = count($players);
 
         return view('clashers.index', compact(
             'clashers',
             'status',
             'search',
-            'players'
+            'players',
+            'totalPlayers'
         ));
     }
 
@@ -339,51 +342,16 @@ foreach ($upgradeClashers as $clasher) {
             
         }
 
-        return redirect()
-            ->route('clashers.index')
-            ->with(
-                'success',
-                "{$updated} clasher berhasil disinkronkan."
-            );
-    }
-
-    public function syncTownHall(
-    Clasher $clasher,
-    ClashOfClansService $coc
-)
-{
-    try {
-
-        $player = $coc->getPlayer($clasher->tag);
-
-        $oldTownHall = $clasher->town_hall;
-        $newTownHall = $player['townHallLevel'];
-
-        if ($oldTownHall != $newTownHall) {
-
-            $clasher->update([
-                'town_hall' => $newTownHall,
-            ]);
+       
 
             return back()->with(
                 'success',
-                "Town Hall {$clasher->name} berhasil diperbarui dari TH {$oldTownHall} menjadi TH {$newTownHall}."
+                "{$updated} clasher berhasil disinkronkan."
+
             );
-        }
-
-        return back()->with(
-            'success',
-            "Town Hall {$clasher->name} sudah sesuai (TH {$newTownHall})."
-        );
-
-    } catch (\Exception $e) {
-
-        return back()->with(
-            'error',
-            'Gagal mengambil data dari Clash of Clans: ' . $e->getMessage()
-        );
     }
-}
+
+    
 
 public function syncAllTownHall()
 {

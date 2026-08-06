@@ -161,6 +161,68 @@
 
         </div>
 
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+
+            <p class="text-sm text-slate-500 mb-4">
+                Sinkronisasi
+            </p>
+
+            <div class="flex justify-around">
+
+                {{-- Sinkron Label --}}
+                <form
+                    action="{{ route('clashers.sync-labels') }}"
+                    method="POST"
+                    onsubmit="return confirm('Sinkronkan semua label?')">
+
+                    @csrf
+
+                    <button
+                        type="submit"
+                        class="flex flex-col items-center gap-2 group"
+                         title="Sinkron Label">
+
+                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center transition group-hover:bg-blue-600 group-hover:text-white">
+
+                            <i class="fa-solid fa-tags"></i>
+
+                        </div>
+
+                       
+
+                    </button>
+
+                </form>
+
+                {{-- Sinkron Town Hall --}}
+                <form
+                    action="{{ route('clashers.sync-townhall-all') }}"
+                    method="POST"
+                    onsubmit="return confirm('Sinkronkan seluruh Town Hall?')">
+
+                    @csrf
+
+                    <button
+                        type="submit"
+                        class="flex flex-col items-center gap-2 group"
+                         title="Sinkron Town  Hall ">
+
+                        <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center transition group-hover:bg-amber-600 group-hover:text-white">
+
+                            <i class="fa-solid fa-tower-observation"></i>
+
+                        </div>
+
+                       
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
     </div>
 
     {{-- Distribusi TH --}}

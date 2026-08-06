@@ -6,33 +6,7 @@
 @include('clashers.partials.list-upgrade-modal')
 
 <div class="space-y-6">
-    <form
-        action="{{ route('clashers.sync-labels') }}"
-        method="POST"
-        class="d-inline"
-    >
-        @csrf
 
-    <button
-        type="submit"
-        class="btn btn-warning"
-        onclick="return confirm('Sinkronkan semua label?')"
-    >
-        Sinkron Label
-    </button>
-
-    </form>
-
-    <form action="{{ route('clashers.sync-townhall-all') }}" method="POST">
-        @csrf
-
-        <button
-            class="btn btn-primary"
-            onclick="return confirm('Sinkronkan seluruh Town Hall?')">
-            <i class="fas fa-sync"></i>
-            Sinkron Semua TH
-        </button>
-    </form>
 
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
@@ -269,21 +243,7 @@
                                         Kelola Bangunan
                                     </x-button>
 
-                                    <form
-                                        action="{{ route('clashers.sync-townhall', $clasher) }}"
-                                        method="POST"
-                                    >
-                                        @csrf
-
-                                        <button
-                                            type="submit"
-                                            title="Sinkronkan Town Hall"
-                                            onclick="return confirm('Sinkronkan Town Hall {{ $clasher->name }} dari Clash of Clans?')"
-                                            class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-200 transition"
-                                        >
-                                            <i class="fa-solid fa-arrows-rotate"></i>
-                                        </button>
-                                    </form>
+                                    
 
                                 </div>
                             </td>
@@ -330,7 +290,7 @@
 <x-modal
     id="warProfileModal"
     title="Kelola Bangunan"
-    size="3xl"
+    size="4xl"
 >
     <div id="warProfileContent">
         

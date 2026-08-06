@@ -85,6 +85,6 @@
             </tbody>
           </table>
         </div>
-        <p class="text-xs text-slate-400 mt-4"><i class="fas fa-info-circle mr-1"></i> Jumlah Level Kurang = selisih antara Lv Target dengan Lv Sekarang.</p>
+        <p class="text-xs text-slate-400 mt-4"><i class="fas fa-info-circle mr-1"></i> Jumlah Akunnya  {{ $totalPlayers }}, Yok Semangat.</p>
       </div>
 </x-modal>
