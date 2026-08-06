@@ -125,3 +125,7 @@ Route::prefix('town-hall-templates') ->name('town-hall-templates.') ->group(func
     '/clashers/{clasher}/sync-townhall',
     [ClasherController::class, 'syncTownHall']
 )->name('clashers.sync-townhall');
+
+
+Route::post('/clashers/sync-townhall-all', [ClasherController::class, 'syncAllTownHall'])
+    ->name('clashers.sync-townhall-all');

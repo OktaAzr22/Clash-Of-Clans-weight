@@ -20,6 +20,16 @@
 
 </form>
 
+<form action="{{ route('clashers.sync-townhall-all') }}" method="POST">
+    @csrf
+
+    <button
+        class="btn btn-primary"
+        onclick="return confirm('Sinkronkan seluruh Town Hall?')">
+        <i class="fas fa-sync"></i>
+        Sinkron Semua TH
+    </button>
+</form>
 
 
 

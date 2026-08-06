@@ -2,6 +2,7 @@
 @extends('layouts.app')
 
 @section('content')
+    {{--  header --}}
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h2 class="text-2xl font-bold text-slate-800">Daftar Clasher</h2>
@@ -18,6 +19,7 @@
         </div>
     </div>
 
+    {{-- filter townhall --}}
     <form class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 text-center md:text-left mt-6">
         <div class="flex flex-col md:flex-row justify-between items-center gap-4">
           <div>

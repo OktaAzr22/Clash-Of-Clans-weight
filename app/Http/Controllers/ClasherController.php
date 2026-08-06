@@ -9,6 +9,7 @@ use App\Services\ClashOfClansService;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Services\TemplateLabelService;
+use App\Jobs\SyncAllTownHallJob;
 
 class ClasherController extends Controller
 {
@@ -323,6 +324,16 @@ class ClasherController extends Controller
             'Gagal mengambil data dari Clash of Clans: ' . $e->getMessage()
         );
     }
+}
+
+public function syncAllTownHall()
+{
+    SyncAllTownHallJob::dispatch();
+
+    return back()->with(
+        'success',
+        'Sinkronisasi Town Hall sedang diproses di background.'
+    );
 }
 
 }
