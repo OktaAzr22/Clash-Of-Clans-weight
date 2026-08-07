@@ -4,12 +4,12 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\BaseGroupController;
 use App\Http\Controllers\BuildingController;
-use App\Http\Controllers\ClanController;
+
 use App\Http\Controllers\ClasherController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ThBuildingController;
 use App\Http\Controllers\TownHallTemplateController;
-use App\Http\Controllers\WarController;
+
 
 Route::get('/', [DashboardController::class, 'index'])
     ->name('dashboard');
@@ -42,42 +42,10 @@ Route::prefix('clashers')
 
     });
 
-Route::prefix('clans')
-    ->name('clans.')
-    ->controller(ClanController::class)
-    ->group(function () {
-
-        Route::get('/', 'index')
-            ->name('index');
-
-        Route::post('/', 'store')
-            ->name('store');
-
-        Route::post('/search', 'search')
-            ->name('search');
-
-        Route::post('/members', 'storeMembers')
-            ->name('members.store');
-
-        Route::post('/members/progress', 'storeMemberProgress')
-            ->name('members.progress.store');
-
-        Route::patch('/{clan}/toggle', 'toggle')
-            ->name('toggle');
-    });
 
 
-Route::prefix('wars')
-    ->name('wars.')
-    ->controller(WarController::class)
-    ->group(function () {
 
-        Route::get('/', 'index')
-            ->name('index');
 
-        Route::get('/{war}', 'show')
-            ->name('show');
-    });
 
 Route::prefix('base-groups')
     ->name('base-groups.')

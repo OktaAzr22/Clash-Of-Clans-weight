@@ -57,8 +57,7 @@
 
         @php
             $clanMenuActive = 
-            request()->routeIs('clans.*') || 
-            request()->routeIs('wars.*') ||
+            
             request()->routeIs('base-groups.*'); 
         @endphp
 
@@ -85,30 +84,7 @@
                 <div class="pl-2 space-y-1 pt-1 pb-1">
 
                     {{-- Daftar Clan --}}
-                    <a
-                        href="{{ route('clans.index') }}"
-                        @class([
-                            'flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-200 border-l-2 ml-1',
-                            'bg-slate-700/30 text-white border-blue-500' => request()->routeIs('clans.*'),
-                            'text-slate-300 hover:text-white hover:bg-slate-700/30 border-transparent hover:border-blue-500' => !request()->routeIs('clans.*'),
-                        ])
-                    >
-                        <i class="fa-solid fa-users text-xs text-blue-400 w-5"></i>
-                        <span>Daftar Clan</span>
-                    </a>
-
-                    {{-- War --}}
-                    <a
-                        href="{{ route('wars.index') }}"
-                        @class([
-                            'flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-200 border-l-2 ml-1',
-                            'bg-slate-700/30 text-white border-blue-500' => request()->routeIs('wars.*'),
-                            'text-slate-300 hover:text-white hover:bg-slate-700/30 border-transparent hover:border-blue-500' => !request()->routeIs('wars.*'),
-                        ])
-                    >
-                        <i class="fa-solid fa-shield-halved text-xs text-blue-400 w-5"></i>
-                        <span>War</span>
-                    </a>
+                    
 
                     <a
                         href="{{ route('base-groups.index') }}"
