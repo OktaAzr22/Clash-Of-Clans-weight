@@ -9,6 +9,8 @@ use App\Services\ClashOfClansService;
 use Illuminate\Http\Request;
 use App\Services\TemplateLabelService;
 use App\Services\UpgradeAnalyzerService;
+use App\Services\ClasherSyncService;
+use App\Http\Requests\StoreClasherRequest;
 use App\Jobs\SyncAllTownHallJob;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -73,15 +75,13 @@ class ClasherController extends Controller
         );
     }
 
-    public function store(Request $request,ClashOfClansService $coc) 
+    public function store( StoreClasherRequest $request,ClashOfClansService $coc, ClasherSyncService $clasherSync) 
     {
-        $request->validate([
-            'tag' => ['required', 'string'],
-        ]);
-
         try {
 
-            $data = $coc->getPlayer($request->tag);
+            $data = $coc->getPlayer(
+                $request->validated('tag')
+            );
 
         } catch (\Exception $e) {
 
@@ -90,46 +90,13 @@ class ClasherController extends Controller
                     'tag' => $e->getMessage(),
                 ])
                 ->withInput();
-
         }
 
-        $heroes = collect($data['heroes'] ?? []);
-
-        Clasher::updateOrCreate(
-            [
-                'tag' => $data['tag'],
-            ],
-            [
-                'name' => $data['name'],
-
-                'clan_name' => $data['clan']['name'] ?? null,
-                'clan_tag' => $data['clan']['tag'] ?? null,
-
-                'town_hall' => $data['townHallLevel'],
-
-                'war_stars' => $data['warStars'] ?? 0,
-                'exp_level' => $data['expLevel'] ?? 0,
-
-                'king' => $heroes
-                    ->firstWhere('name', 'Barbarian King')['level'] ?? 0,
-
-                'queen' => $heroes
-                    ->firstWhere('name', 'Archer Queen')['level'] ?? 0,
-
-                'warden' => $heroes
-                    ->firstWhere('name', 'Grand Warden')['level'] ?? 0,
-
-                'champion' => $heroes
-                    ->firstWhere('name', 'Royal Champion')['level'] ?? 0,
-            ]
-        );
+        $clasherSync->sync($data);
 
         return redirect()
             ->route('clashers.index')
-            ->with(
-                'success',
-                'Clasher berhasil disimpan.'
-            );
+            ->with('success', 'Clasher berhasil disimpan.');
     }
 
     public function warProfile(Clasher $clasher)
