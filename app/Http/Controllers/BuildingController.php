@@ -3,28 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Building;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreBuildingRequest;
 
 class BuildingController extends Controller
 {
-    public function store(Request $request)
+    public function store(StoreBuildingRequest $request)
     {
-        $request->validate([
-            'name' => [
-                'required',
-                'string',
-                'max:100',
-                'min:3',
-                'unique:buildings,name',
-            ],
-        ]);
+        Building::create($request->validated());
 
-        Building::create([
-            'name' => trim($request->name),
-        ]);
-
-        return redirect()
-            ->back()
-            ->with('success', 'Bangunan berhasil ditambahkan.');
+        return back()->with(
+            'success',
+            'Bangunan berhasil ditambahkan.'
+        );
     }
 }
