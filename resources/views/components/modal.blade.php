@@ -20,7 +20,7 @@
     ];
 
     $width = $sizes[$size] ?? 'max-w-md';
-@endphp
+@endphp 
 
 <div
     id="{{ $id }}"
@@ -47,10 +47,14 @@
         </div>
 
         @isset($footer)
-            <div class="border-t p-5 bg-slate-50 rounded-b-2xl">
-                {{ $footer }}
-            </div>
-        @endisset
+    <div class="sticky bottom-0 z-20
+                border-t border-slate-200
+                bg-white/90 backdrop-blur-md
+                p-5
+                rounded-b-2xl">
+        {{ $footer }}
+    </div>
+@endisset
 
     </div>
 

@@ -7,8 +7,8 @@ use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\ClanController;
 use App\Http\Controllers\ClasherController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\ThBuildingController;
+use App\Http\Controllers\TownHallTemplateController;
 use App\Http\Controllers\WarController;
 
 Route::get('/', [DashboardController::class, 'index'])
@@ -33,23 +33,13 @@ Route::prefix('clashers')
 
         Route::post('/{clasher}/war-profile', 'saveWarProfile')
             ->name('war-profile.save');
-    });
 
-Route::resource('th-buildings', ThBuildingController::class)
-    ->only([
-        'index',
-        'create',
-        'store',
-        'destroy',
-    ]);
+        Route::post('/sync-labels', 'syncLabels')
+            ->name('sync-labels');
 
-Route::prefix('buildings')
-    ->name('buildings.')
-    ->controller(BuildingController::class)
-    ->group(function () {
+        Route::post('/sync-townhall-all', 'syncAllTownHall')
+            ->name('sync-townhall-all');
 
-        Route::post('/', 'store')
-            ->name('store');
     });
 
 Route::prefix('clans')
@@ -76,6 +66,7 @@ Route::prefix('clans')
             ->name('toggle');
     });
 
+
 Route::prefix('wars')
     ->name('wars.')
     ->controller(WarController::class)
@@ -96,45 +87,55 @@ Route::prefix('base-groups')
         Route::get('/', 'index')
             ->name('index');
 
-       
-
-            Route::get('/war-ready', 'warReady')
+        Route::get('/war-ready', 'warReady')
             ->name('war-ready');
 
-        
-
-            Route::post('/war-ready/{clasher}', 'updateWarReady')
+        Route::post('/war-ready/{clasher}', 'updateWarReady')
             ->name('war-ready.update');
-
     });
 
+Route::prefix('buildings')
+    ->name('buildings.')
+    ->controller(BuildingController::class)
+    ->group(function () {
 
+        Route::post('/', 'store')
+            ->name('store');
+    });
 
-Route::post(
-'/clashers/sync-labels',
-[ClasherController::class, 'syncLabels']
-)->name('clashers.sync-labels');
+Route::resource('th-buildings', ThBuildingController::class)
+    ->only([
+        'index',
+        'create',
+        'store',
+        'destroy',
+    ]);
 
+Route::prefix('town-hall-templates')
+    ->name('town-hall-templates.')
+    ->controller(TownHallTemplateController::class)
+    ->group(function () {
 
+        Route::get('/', 'index')
+            ->name('index');
 
-use App\Http\Controllers\TownHallTemplateController;
+        Route::get('/create', 'create')
+            ->name('create');
 
-Route::prefix('town-hall-templates') ->name('town-hall-templates.') ->group(function () { Route::get( '/', [TownHallTemplateController::class, 'index'] )->name('index'); Route::get( '/create', [TownHallTemplateController::class, 'create'] )->name('create'); Route::post( '/', [TownHallTemplateController::class, 'store'] )->name('store'); Route::get( '/{template}/builder', [TownHallTemplateController::class, 'builder'] )->name('builder'); Route::put( '/{template}', [TownHallTemplateController::class, 'update'] )->name('update'); Route::delete( '/{template}', [TownHallTemplateController::class, 'destroy'] )->name('destroy'); });
+        Route::post('/', 'store')
+            ->name('store');
 
-    Route::post(
-    '/clashers/{clasher}/sync-townhall',
-    [ClasherController::class, 'syncTownHall']
-)->name('clashers.sync-townhall');
+        Route::get('/{template}/builder', 'builder')
+            ->name('builder');
 
+        Route::put('/{template}', 'update')
+            ->name('update');
 
-Route::post('/clashers/sync-townhall-all', [ClasherController::class, 'syncAllTownHall'])
-    ->name('clashers.sync-townhall-all');
+        Route::delete('/{template}', 'destroy')
+            ->name('destroy');
+    });
 
-
-
-
-
-    Route::get(
+Route::get(
     '/upgrades/export/pdf',
     [ClasherController::class, 'exportPdf']
 )->name('upgrades.export.pdf');
