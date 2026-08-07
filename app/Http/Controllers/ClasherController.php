@@ -7,112 +7,70 @@ use App\Models\ClasherBuilding;
 use App\Models\ThBuilding;
 use App\Services\ClashOfClansService;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use App\Services\TemplateLabelService;
+use App\Services\UpgradeAnalyzerService;
 use App\Jobs\SyncAllTownHallJob;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class ClasherController extends Controller
 {
     
-    public function index(Request $request)
+    public function index( Request $request,UpgradeAnalyzerService $upgradeAnalyzer) 
     {
         $status = $request->status ?? 'all';
         $search = $request->search;
 
-        $query = Clasher::query()
-            ->with([
-                'template',
-            ])
-            ->withCount('clasherBuildings');
+        $query = Clasher::withTemplate();
 
-        if ($status === 'filled') {
-            $query->has('clasherBuildings');
-        }
+        $query
 
-        if ($status === 'empty') {
-            $query->doesntHave('clasherBuildings');
-        }
+            ->when(
+                $status === 'filled',
+                fn ($query) => $query->filledProfile()
+            )
 
-        if ($search) {
-            $query->where(
-                'name',
-                'like',
-                "%{$search}%"
+            ->when(
+                $status === 'empty',
+                fn ($query) => $query->emptyProfile()
+            )
+
+            ->when(
+                $search,
+                fn ($query) => $query->where(
+                    'name',
+                    'like',
+                    "%{$search}%"
+                )
             );
-        }
 
         $clashers = $query
             ->latest()
             ->paginate(7)
             ->withQueryString();
 
+        $upgradeClashers = Clasher::needUpgrade()
+            ->with([
+                'buildings.building',
+                'template.buildings.building',
+            ])
+            ->orderByDesc('town_hall')
+            ->orderBy('name')
+            ->get();
 
-            // 
-        $players = collect();
+        $players = $upgradeAnalyzer->analyze($upgradeClashers);
 
-        $upgradeClashers = Clasher::with([
-            'buildings.building',
-            'template.buildings.building'
-        ])
-        ->where('label', 'perlu up')
-        ->orderByDesc('town_hall')
-        ->orderBy('name')
-        ->get();
+        $totalPlayers = $players->count();
 
-        foreach ($upgradeClashers as $clasher) {
-
-            if (!$clasher->template) {
-                continue;
-            }
-
-            $upgrades = collect();
-
-            foreach ($clasher->template->buildings as $templateBuilding) {
-
-                $current = $clasher->buildings->first(function ($building) use ($templateBuilding) {
-
-                    return $building->building_id == $templateBuilding->building_id
-                        && $building->slot == $templateBuilding->slot;
-
-                });
-
-                if (!$current) {
-                    continue;
-                }
-
-                if ($current->level < $templateBuilding->level) {
-
-                    $upgrades->push([
-                        'building' => $templateBuilding->building->name,
-                        'slot' => $templateBuilding->slot,
-                        'current' => $current->level,
-                        'target' => $templateBuilding->level,
-                        'difference' => $templateBuilding->level - $current->level,
-                    ]);
-
-                }
-            }
-
-            if ($upgrades->isNotEmpty()) {
-
-                $players->push([
-                    'player' => $clasher,
-                    'upgrades' => $upgrades,
-                ]);
-
-            }
-        }
-
-        $totalPlayers = count($players);
-
-        return view('clashers.index', compact(
-            'clashers',
-            'status',
-            'search',
-            'players',
-            'totalPlayers'
-        ));
+        return view(
+            'clashers.index',
+            compact(
+                'clashers',
+                'status',
+                'search',
+                'players',
+                'totalPlayers'
+            )
+        );
     }
 
     public function store(Request $request,ClashOfClansService $coc) 
