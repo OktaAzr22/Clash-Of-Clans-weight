@@ -123,161 +123,234 @@
 
             <table class="w-full text-sm">
 
-                <thead class="bg-slate-50">
+    <thead class="bg-slate-50">
 
-                    <tr class="text-slate-600">
+        <tr class="text-slate-600">
 
-                        <th class="px-6 py-4 text-left font-semibold">
-                            Nama
-                        </th>
+            <th class="px-6 py-4 text-left font-semibold">
+                Nama
+            </th>
 
-                        <th class="px-6 py-4 text-left font-semibold">
-                            Tag
-                        </th>
+            <th class="px-6 py-4 text-left font-semibold">
+                Tag
+            </th>
 
-                        <th class="px-6 py-4 text-left font-semibold">
-                            Clan
-                        </th>
+            <th class="px-6 py-4 text-left font-semibold">
+                Clan
+            </th>
 
-                        <th class="px-6 py-4 text-left font-semibold">
-                            TH
-                        </th>
+            <th class="px-6 py-4 text-left font-semibold">
+                TH
+            </th>
 
-                        <th class="px-6 py-4 text-left font-semibold">
-                            Template
-                        </th>
+            <th class="px-6 py-4 text-left font-semibold">
+                Template
+            </th>
 
-                        <th class="px-6 py-4 text-left font-semibold">
-                            Level
-                        </th>
+            <th class="px-6 py-4 text-left font-semibold">
+                Status
+            </th>
 
-                        <th class="px-6 py-4 text-center font-semibold">
-                            Aksi
-                        </th>
+            <th class="px-6 py-4 text-center font-semibold">
+                War
+            </th>
 
-                    </tr>
+            <th class="px-6 py-4 text-center font-semibold">
+                Aksi
+            </th>
 
-                </thead>
+        </tr>
 
-                <tbody class="divide-y divide-slate-100">
+    </thead>
 
-                    @forelse($clashers as $clasher)
 
-                        <tr class="hover:bg-slate-50 transition">
+    <tbody class="divide-y divide-slate-100">
 
-                            <td class="px-6 py-4 font-medium text-slate-800">
-                                {{ $clasher->name }}
-                            </td>
+        @forelse($clashers as $clasher)
 
-                            <td class="px-6 py-4">
-                                <span class="font-mono text-slate-600">
-                                    {{ $clasher->tag }}
-                                </span>
-                            </td>
+            <tr class="hover:bg-slate-50 transition">
 
-                            <td class="px-6 py-4">
-                                {{ $clasher->clan_name }}
-                            </td>
+                {{-- Nama --}}
+                <td class="px-6 py-4 font-medium text-slate-800">
+                    {{ $clasher->name }}
+                </td>
 
-                            <td class="px-6 py-4">
 
-                                <span class="inline-flex items-center px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-medium">
-                                    TH {{ $clasher->town_hall }}
-                                </span>
+                {{-- Tag --}}
+                <td class="px-6 py-4">
 
-                            </td>
+                    <span class="font-mono text-slate-600">
+                        {{ $clasher->tag }}
+                    </span>
 
-                            <td class="px-6 py-4"> 
-                                @if($clasher->template) 
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium"> 
-                                        {{ $clasher->template->name }} 
-                                    </span> 
-                                @else 
-                                    <span class="text-slate-400 text-xs"> 
-                                        Belum ada template 
-                                    </span> 
-                                @endif 
-                            </td>
-                            
-                                
+                </td>
 
-                            <td class="px-6 py-4">
 
-                                @php
-                                    $labels = [
-                                        'stay' => [
-                                            'text' => 'Stay',
-                                            'class' => 'bg-green-100 text-green-700',
-                                        ],
-                                        'perlu up' => [
-                                            'text' => 'Perlu Up',
-                                            'class' => 'bg-yellow-100 text-yellow-700',
-                                        ],
-                                        'over' => [
-                                            'text' => 'Over',
-                                            'class' => 'bg-red-100 text-red-700',
-                                        ],
-                                    ];
+                {{-- Clan --}}
+                <td class="px-6 py-4">
+                    {{ $clasher->clan_name }}
+                </td>
 
-                                    $label = $labels[$clasher->label] ?? [
-                                        'text' => '-',
-                                        'class' => 'bg-gray-100 text-gray-700',
-                                    ];
-                                @endphp
 
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $label['class'] }}">
-                                    {{ $label['text'] }}
-                                </span>
+                {{-- TH --}}
+                <td class="px-6 py-4">
 
-                            </td>
+                    <span
+                        class="inline-flex items-center px-3 py-1 rounded-full
+                               bg-amber-100 text-amber-700
+                               text-xs font-medium"
+                    >
+                        TH {{ $clasher->town_hall }}
+                    </span>
 
-                            <td class="px-6 py-4">
-                                <div class="flex items-center justify-center gap-2">
+                </td>
 
-                                    <x-button
-                                        class="open-war-profile"
-                                        data-id="{{ $clasher->id }}"
-                                        data-modal-target="warProfileModal"
-                                    >
-                                        <i class="fa-solid fa-hammer mr-2"></i>
-                                        Kelola Bangunan
-                                    </x-button>
 
-                                    
+                {{-- Template --}}
+                <td class="px-6 py-4">
 
-                                </div>
-                            </td>
+                    @if ($clasher->template)
 
-                        </tr>
+                        <span
+                            class="inline-flex items-center px-3 py-1 rounded-full
+                                   bg-blue-100 text-blue-700
+                                   text-xs font-medium"
+                        >
+                            {{ $clasher->template->name }}
+                        </span>
 
-                    @empty
+                    @else
 
-                        <tr>
+                        <span class="text-slate-400 text-xs">
+                            Belum ada template
+                        </span>
 
-                            <td
-                                colspan="7"
-                                class="px-6 py-12 text-center"
-                            >
+                    @endif
 
-                                <div class="flex flex-col items-center">
+                </td>
 
-                                    <i class="fa-regular fa-user text-4xl text-slate-300 mb-3"></i>
 
-                                    <p class="text-slate-500">
-                                        Belum ada data clasher.
-                                    </p>
+                {{-- STATUS --}}
+                <td class="px-6 py-4">
 
-                                </div>
+                    @php
+                        $labels = [
+                            'stay' => [
+                                'text' => 'Stay',
+                                'class' => 'bg-green-100 text-green-700',
+                            ],
 
-                            </td>
+                            'perlu up' => [
+                                'text' => 'Perlu Up',
+                                'class' => 'bg-yellow-100 text-yellow-700',
+                            ],
 
-                        </tr>
+                            'over' => [
+                                'text' => 'Over',
+                                'class' => 'bg-red-100 text-red-700',
+                            ],
+                        ];
 
-                    @endforelse
+                        $label = $labels[$clasher->label] ?? [
+                            'text' => '-',
+                            'class' => 'bg-slate-100 text-slate-500',
+                        ];
+                    @endphp
 
-                </tbody>
+                    <span
+                        class="inline-flex items-center px-3 py-1 rounded-full
+                               text-xs font-medium
+                               {{ $label['class'] }}"
+                    >
+                        {{ $label['text'] }}
+                    </span>
 
-            </table>
+                </td>
+
+
+                {{-- READY WAR --}}
+                <td class="px-6 py-4 text-center">
+
+                    @if ($clasher->is_ready_war)
+
+                        <span
+                            class="inline-flex items-center gap-1
+                                   px-3 py-1 rounded-full
+                                   text-xs font-semibold
+                                   bg-green-100 text-green-700"
+                        >
+                            <i class="fa-solid fa-circle-check"></i>
+                            READY
+                        </span>
+
+                    @else
+
+                        <span
+                            class="inline-flex items-center gap-1
+                                   px-3 py-1 rounded-full
+                                   text-xs font-semibold
+                                   bg-red-100 text-red-700"
+                        >
+                            <i class="fa-solid fa-circle-xmark"></i>
+                            BELUM READY
+                        </span>
+
+                    @endif
+
+                </td>
+
+
+                {{-- AKSI --}}
+                <td class="px-6 py-4">
+
+                    <div class="flex items-center justify-center gap-2">
+
+                        <x-button
+                            class="open-war-profile"
+                            data-id="{{ $clasher->id }}"
+                            data-modal-target="warProfileModal"
+                        >
+                            <i class="fa-solid fa-hammer mr-2"></i>
+                            Kelola Bangunan
+                        </x-button>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        @empty
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    class="px-6 py-12 text-center"
+                >
+
+                    <div class="flex flex-col items-center">
+
+                        <i
+                            class="fa-regular fa-user text-4xl
+                                   text-slate-300 mb-3"
+                        ></i>
+
+                        <p class="text-slate-500">
+                            Belum ada data clasher.
+                        </p>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        @endforelse
+
+    </tbody>
+
+</table>
             
             {{ $clashers->links() }}
 

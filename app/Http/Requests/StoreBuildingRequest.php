@@ -12,7 +12,7 @@ class StoreBuildingRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -29,6 +29,11 @@ class StoreBuildingRequest extends FormRequest
                 'min:3',
                 'max:100',
                 'unique:buildings,name',
+            ],
+
+            'is_priority' => [
+                'required',
+                'boolean',
             ],
         ];
     }

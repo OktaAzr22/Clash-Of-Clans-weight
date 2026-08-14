@@ -8,8 +8,13 @@ class Building extends Model
 {
     protected $fillable = [
         'name',
+        'is_priority',
     ];
 
+    protected $casts = [
+        'is_priority' => 'boolean',
+    ];
+    
     public function townHalls()
     {
         return $this->hasMany(ThBuilding::class);

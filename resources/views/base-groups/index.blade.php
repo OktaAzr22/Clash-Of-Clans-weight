@@ -172,10 +172,11 @@
         @foreach($groups as $index => $members)
 
             @php
-                $groupLabel = $members->first()->label ?? 'belum ada';
+    $sample = $members->first();
 
-                $sample = $members->first();
-            @endphp
+    $readyCount = $members->where('is_ready_war', true)->count();
+    $notReadyCount = $members->count() - $readyCount;
+@endphp
 
 
             <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
@@ -191,25 +192,25 @@
                             Grup: {{ $index + 1 }}
                         </span>
 
-                        @if($groupLabel === 'stay')
+                        @if($readyCount === $members->count())
 
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                                Stay
-                            </span>
+    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+        Semua Ready
+    </span>
 
-                        @elseif($groupLabel === 'perlu up')
+@elseif($readyCount > 0)
 
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
-                                Perlu Up
-                            </span>
+    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
+        {{ $readyCount }}/{{ $members->count() }} Ready
+    </span>
 
-                        @else
+@else
 
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-200 text-slate-700">
-                                Belum Ada
-                            </span>
+    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+        Belum Ready
+    </span>
 
-                        @endif
+@endif
 
                     </div>
 

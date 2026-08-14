@@ -12,6 +12,12 @@ class TownHallTemplate extends Model
         'description',
     ];
 
-    public function buildings() { return $this->hasMany( TownHallTemplateBuilding::class, 'town_hall_template_id' ); }
+    public function buildings()
+{
+    return $this->hasMany(
+        TownHallTemplateBuilding::class,
+        'town_hall_template_id'
+    );
+}
 }
 

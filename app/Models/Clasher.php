@@ -28,6 +28,7 @@ class Clasher extends Model
     protected $casts = [
         'last_war_profile_update' => 'datetime',
         'upgrade_notes' => 'array',
+        'is_ready_war' => 'boolean',
     ];
 
     public function buildings()

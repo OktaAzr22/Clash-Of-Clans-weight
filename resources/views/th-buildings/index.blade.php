@@ -154,6 +154,26 @@
 
         <x-input name="name" label="Nama Building" required/>
 
+        <div class="mt-4">
+    <label class="block text-sm font-medium text-slate-700 mb-2">
+        Status Priority
+    </label>
+
+    <select
+        name="is_priority"
+        class="w-full rounded-lg border-slate-300"
+        required
+    >
+        <option value="1">
+            Priority
+        </option>
+
+        <option value="0">
+            Non Priority
+        </option>
+    </select>
+</div>
+
         <div class="flex justify-end gap-2">
 
             

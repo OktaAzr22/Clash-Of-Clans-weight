@@ -20,102 +20,95 @@ class BaseGroupController extends Controller
         $totalAccounts = 0;
         $average = 0;
 
-
         if ($request->filled('th')) {
 
-            $players = Clasher::with([
-                    'buildings.building'
-                ])
-                ->where('town_hall', $request->th)
+            $players = Clasher::query()
+                ->with('buildings.building')
+                ->where('town_hall', $request->input('th'))
                 ->get();
 
             $groups = $players
-
                 ->groupBy(fn ($player) => $this->signature($player))
-
-                ->sortByDesc(fn ($g) => $g->count())
-
+                ->sortByDesc(fn ($group) => $group->count())
                 ->values();
 
             $totalGroups = $groups->count();
 
-            $totalAccounts = $groups->sum(function ($group) {
-                return $group->count();
-            });
+            $totalAccounts = $groups->sum->count();
 
-            $average = $totalGroups
+            $average = $totalGroups > 0
                 ? round($totalAccounts / $totalGroups, 2)
                 : 0;
         }
 
-
-        return view(
-            'base-groups.index',
-            compact(
-                'ths',
-                'groups',
-                'totalGroups',
-                'totalAccounts',
-                'average'
-            )
-        );
+        return view('base-groups.index', [
+            'ths' => $ths,
+            'groups' => $groups,
+            'totalGroups' => $totalGroups,
+            'totalAccounts' => $totalAccounts,
+            'average' => $average,
+        ]);
     }
 
-    private function signature($player)
-    {
-        return $player->buildings
-
-            ->groupBy(fn ($b) => $b->building->name)
-
-            ->map(function ($buildings) {
-
-                return $buildings
-
-                    ->pluck('level')
-
-                    ->sort()
-
-                    ->implode(',');
-
-            })
-
-            ->sortKeys()
-
-            ->map(fn ($levels, $name) => "$name:$levels")
-
-            ->implode('|');
-    }
-
-    
+    /**
+     * Membuat signature Group berdasarkan
+     * building PRIORITY saja.
+     */
+   private function signature(Clasher $player): string
+{
+    return $player->buildings
+        ->filter(function ($building) {
+            return $building->building
+                && $building->building->is_priority;
+        })
+        ->groupBy(
+            fn ($building) => $building->building_id
+        )
+        ->map(
+            fn ($buildings) => $buildings
+                ->sortBy('slot')
+                ->map(
+                    fn ($building) =>
+                        $building->slot . ':' . $building->level
+                )
+                ->implode(',')
+        )
+        ->sortKeys()
+        ->map(
+            fn ($levels, $buildingId) =>
+                "{$buildingId}:{$levels}"
+        )
+        ->implode('|');
+}
 
     public function warReady()
     {
-        $clashers = Clasher::where('label', 'stay')
+        $clashers = Clasher::query()
+            ->where('label', 'stay')
             ->orderByDesc('town_hall')
             ->orderBy('name')
             ->get();
 
-        return view(
-            'base-groups.war-ready',
-            compact('clashers')
-        );
+        return view('base-groups.war-ready', [
+            'clashers' => $clashers,
+        ]);
     }
 
-    public function updateWarReady(Request $request, Clasher $clasher)
-    {
+    public function updateWarReady(
+        Request $request,
+        Clasher $clasher
+    ) {
         $validated = $request->validate([
-            'status' => 'required|in:0,1'
+            'status' => ['required', 'in:0,1'],
         ]);
 
         $clasher->update([
-            'is_ready_war' => (int) $validated['status']
+            'is_ready_war' => (int) $validated['status'],
         ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'Status berhasil diperbarui'
+            'message' => 'Status berhasil diperbarui',
         ]);
     }
-
-    
-}
+}   

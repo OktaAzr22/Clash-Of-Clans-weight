@@ -16,16 +16,19 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class ClasherController extends Controller
 {
-    
-    public function index( Request $request,UpgradeAnalyzerService $upgradeAnalyzer) 
-    {
+    /**
+     * Daftar clasher.
+     */
+    public function index(
+        Request $request,
+        UpgradeAnalyzerService $upgradeAnalyzer
+    ) {
         $status = $request->status ?? 'all';
         $search = $request->search;
 
         $query = Clasher::withTemplate();
 
         $query
-
             ->when(
                 $status === 'filled',
                 fn ($query) => $query->filledProfile()
@@ -50,6 +53,9 @@ class ClasherController extends Controller
             ->paginate(7)
             ->withQueryString();
 
+        /*
+         * Daftar akun yang membutuhkan upgrade.
+         */
         $upgradeClashers = Clasher::needUpgrade()
             ->with([
                 'buildings.building',
@@ -75,8 +81,15 @@ class ClasherController extends Controller
         );
     }
 
-    public function store( StoreClasherRequest $request,ClashOfClansService $coc, ClasherSyncService $clasherSync) 
-    {
+
+    /**
+     * Tambah / sync clasher dari API Clash of Clans.
+     */
+    public function store(
+        StoreClasherRequest $request,
+        ClashOfClansService $coc,
+        ClasherSyncService $clasherSync
+    ) {
         try {
 
             $data = $coc->getPlayer(
@@ -96,27 +109,52 @@ class ClasherController extends Controller
 
         return redirect()
             ->route('clashers.index')
-            ->with('success', 'Clasher berhasil disimpan.');
+            ->with(
+                'success',
+                'Clasher berhasil disimpan.'
+            );
     }
 
+
+    /**
+     * Form data war profile.
+     */
     public function warProfile(Clasher $clasher)
     {
+        /*
+         * Ambil konfigurasi building terakhir
+         * yang tersedia untuk TH clasher.
+         */
         $buildings = ThBuilding::with('building')
-            ->where('town_hall', '<=', $clasher->town_hall)
+            ->where(
+                'town_hall',
+                '<=',
+                $clasher->town_hall
+            )
             ->orderBy('town_hall')
             ->get()
             ->groupBy('building_id')
-            ->map(fn ($items) => $items->last());
+            ->map(
+                fn ($items) => $items->last()
+            );
 
+        /*
+         * Level building yang sudah dimiliki clasher.
+         */
         $existingLevels = ClasherBuilding::where(
                 'clasher_id',
                 $clasher->id
             )
             ->get()
-            ->keyBy(fn ($item) =>
-                $item->building_id . '_' . $item->slot
+            ->keyBy(
+                fn ($item) =>
+                    $item->building_id . '_' . $item->slot
             );
 
+        /*
+         * Jika request AJAX,
+         * kembalikan partial form saja.
+         */
         if (request()->ajax()) {
 
             return view(
@@ -139,10 +177,27 @@ class ClasherController extends Controller
         );
     }
 
-    
-    public function saveWarProfile(Request $request,Clasher $clasher,TemplateLabelService $templateLabelService) 
-    {
 
+    /**
+     * Simpan data war profile.
+     *
+     * Setelah data building disimpan,
+     * TemplateLabelService langsung menghitung:
+     *
+     * - label
+     * - ready
+     * - template
+     * - needs_upgrade
+     */
+    public function saveWarProfile(
+        Request $request,
+        Clasher $clasher,
+        TemplateLabelService $templateLabelService
+    ) {
+
+        /*
+         * Simpan semua level building.
+         */
         foreach ($request->levels ?? [] as $buildingId => $slots) {
 
             foreach ($slots as $slot => $level) {
@@ -157,30 +212,54 @@ class ClasherController extends Controller
                         'level' => $level,
                     ]
                 );
-
             }
-
         }
 
-        $result = $templateLabelService->analyze(
-            $clasher->fresh('buildings')
-        );
+        /*
+         * Refresh data clasher beserta building.
+         *
+         * Penting:
+         * Kita harus menggunakan data terbaru setelah
+         * updateOrCreate di atas.
+         */
+        $clasher->load('buildings');
 
-  
+        /*
+         * Analisa template.
+         */
+        $result = $templateLabelService->analyze($clasher);
+
+        /*
+         * Simpan hasil analisa.
+         */
         $clasher->update([
             'label' => $result['label'],
 
-            'town_hall_template_id'
-                => $result['template']?->id,
+            /*
+             * READY ditentukan sepenuhnya oleh service.
+             *
+             * TRUE hanya jika seluruh building template
+             * sama persis dengan building clasher.
+             */
+            'is_ready_war' => $result['ready'],
 
-            'last_war_profile_update'
-                => now(),
+            /*
+             * Template terbaik yang digunakan.
+             */
+            'town_hall_template_id' =>
+                $result['template']?->id,
 
-            'upgrade_notes'
-                => $result['needs_upgrade'],
+            /*
+             * Waktu terakhir profile diperbarui.
+             */
+            'last_war_profile_update' => now(),
+
+            /*
+             * Daftar building yang masih kurang level.
+             */
+            'upgrade_notes' =>
+                $result['needs_upgrade'],
         ]);
-
-        
 
         return redirect('/clashers')
             ->with(
@@ -189,54 +268,101 @@ class ClasherController extends Controller
             );
     }
 
+
+    /**
+     * Overview kekuatan building clasher.
+     */
     public function overview(Request $request)
     {
         $selectedTh = $request->th ?? 'all';
 
-        $query = Clasher::with(['clasherBuildings.building'])
+        $query = Clasher::with([
+                'clasherBuildings.building'
+            ])
             ->has('clasherBuildings');
 
         if ($selectedTh !== 'all') {
-            $query->where('town_hall', $selectedTh);
+            $query->where(
+                'town_hall',
+                $selectedTh
+            );
         }
 
         $clashers = $query->get();
 
+        /*
+         * Hitung total level building.
+         */
         $clashers->each(function ($clasher) {
-            $clasher->total_level = $clasher->clasherBuildings->sum('level');
+
+            $clasher->total_level =
+                $clasher->clasherBuildings->sum('level');
         });
 
+        /*
+         * Jika memilih TH tertentu:
+         * urutkan berdasarkan total level.
+         */
         if ($selectedTh !== 'all') {
-            $clashers = $clashers->sortBy('total_level')->values();
+
+            $clashers = $clashers
+                ->sortBy('total_level')
+                ->values();
+
         } else {
-            $clashers = $clashers->sortBy([
-                ['town_hall', 'desc'],
-                ['total_level', 'asc'],
-            ])->values();
+
+            /*
+             * Jika semua TH:
+             *
+             * TH terbesar dahulu,
+             * kemudian total level terkecil.
+             */
+            $clashers = $clashers
+                ->sortBy([
+                    ['town_hall', 'desc'],
+                    ['total_level', 'asc'],
+                ])
+                ->values();
         }
 
         $townHalls = Clasher::select('town_hall')
             ->distinct()
             ->orderByDesc('town_hall')
             ->pluck('town_hall');
-        
-        
 
-        // ✅ AJAX RESPONSE
+        /*
+         * Response AJAX.
+         */
         if ($request->ajax()) {
-            return view('clashers.partials.overview-list', compact('clashers'))->render();
+
+            return view(
+                'clashers.partials.overview-list',
+                compact('clashers')
+            )->render();
         }
 
-        return view('clashers.overview', compact(
-            'clashers',
-            'townHalls',
-            'selectedTh'
-        ));
+        return view(
+            'clashers.overview',
+            compact(
+                'clashers',
+                'townHalls',
+                'selectedTh'
+            )
+        );
     }
 
-    public function syncLabels(TemplateLabelService $templateLabelService) 
-    {
 
+    /**
+     * Sinkronisasi label + status ready semua clasher.
+     */
+    public function syncLabels(
+        TemplateLabelService $templateLabelService
+    ) {
+
+        /*
+         * Ambil semua clasher yang memiliki
+         * data building.
+         */
         $clashers = Clasher::with('buildings')
             ->has('clasherBuildings')
             ->get();
@@ -245,60 +371,76 @@ class ClasherController extends Controller
 
         foreach ($clashers as $clasher) {
 
+            /*
+             * Analisa ulang berdasarkan template.
+             */
             $result = $templateLabelService
                 ->analyze($clasher);
 
+            /*
+             * Simpan seluruh hasil analisa.
+             */
             $clasher->update([
+                'label' =>
+                    $result['label'],
 
-                'label'
-                    => $result['label'],
+                'is_ready_war' =>
+                    $result['ready'],
 
-                'upgrade_notes'
-                    => $result['needs_upgrade'],
+                'upgrade_notes' =>
+                    $result['needs_upgrade'],
 
-                'town_hall_template_id'
-                    => $result['template']?->id,
+                'town_hall_template_id' =>
+                    $result['template']?->id,
 
-                'last_war_profile_update'
-                    => now(),
+                'last_war_profile_update' =>
+                    now(),
             ]);
 
             $updated++;
-            
         }
 
-       
-
-            return back()->with(
-                'success',
-                "{$updated} clasher berhasil disinkronkan."
-
-            );
+        return back()->with(
+            'success',
+            "{$updated} clasher berhasil disinkronkan."
+        );
     }
 
-    
 
-public function syncAllTownHall()
-{
-    SyncAllTownHallJob::dispatch();
+    /**
+     * Sinkronisasi seluruh Town Hall.
+     */
+    public function syncAllTownHall()
+    {
+        SyncAllTownHallJob::dispatch();
 
-    return back()->with(
-        'success',
-        'Sinkronisasi Town Hall sedang diproses di background.'
-    );
-}
+        return back()->with(
+            'success',
+            'Sinkronisasi Town Hall sedang diproses di background.'
+        );
+    }
 
 
-public function exportPdf(Request $request)
+    /**
+     * Export daftar upgrade ke PDF.
+     */
+    public function exportPdf(Request $request)
     {
         $query = Clasher::with([
             'buildings.building',
-            'template.buildings.building'
+            'template.buildings.building',
         ])
-        ->where('label', 'perlu up');
+            ->where('label', 'perlu up');
 
+        /*
+         * Filter TH jika diberikan.
+         */
         if ($request->filled('th')) {
-            $query->where('town_hall', $request->th);
+
+            $query->where(
+                'town_hall',
+                $request->th
+            );
         }
 
         $clashers = $query
@@ -310,55 +452,111 @@ public function exportPdf(Request $request)
 
         foreach ($clashers as $clasher) {
 
+            /*
+             * Tidak ada template.
+             */
             if (!$clasher->template) {
                 continue;
             }
 
             $upgrades = collect();
 
-            foreach ($clasher->template->buildings as $templateBuilding) {
+            foreach (
+                $clasher->template->buildings
+                as $templateBuilding
+            ) {
 
-                $current = $clasher->buildings->first(function ($building) use ($templateBuilding) {
+                /*
+                 * Cari building clasher berdasarkan:
+                 *
+                 * building_id
+                 * slot
+                 */
+                $current = $clasher->buildings->first(
+                    function ($building) use ($templateBuilding) {
 
-                    return $building->building_id == $templateBuilding->building_id
-                        && $building->slot == $templateBuilding->slot;
-                });
+                        return
+                            $building->building_id
+                            ==
+                            $templateBuilding->building_id
 
+                            &&
+
+                            $building->slot
+                            ==
+                            $templateBuilding->slot;
+                    }
+                );
+
+                /*
+                 * Building tidak ditemukan.
+                 */
                 if (!$current) {
                     continue;
                 }
 
-                if ($current->level < $templateBuilding->level) {
+                /*
+                 * Level clasher masih di bawah template.
+                 */
+                if (
+                    $current->level
+                    <
+                    $templateBuilding->level
+                ) {
 
                     $upgrades->push([
-                        'building' => $templateBuilding->building->name,
-                        'slot' => $templateBuilding->slot,
-                        'current' => $current->level,
-                        'target' => $templateBuilding->level,
-                        'difference' => $templateBuilding->level - $current->level,
+                        'building' =>
+                            $templateBuilding
+                                ->building
+                                ->name,
+
+                        'slot' =>
+                            $templateBuilding->slot,
+
+                        'current' =>
+                            $current->level,
+
+                        'target' =>
+                            $templateBuilding->level,
+
+                        'difference' =>
+                            $templateBuilding->level
+                            -
+                            $current->level,
                     ]);
                 }
             }
 
+            /*
+             * Hanya masukkan player yang memang
+             * mempunyai daftar upgrade.
+             */
             if ($upgrades->isNotEmpty()) {
 
                 $players->push([
-                    'player' => $clasher,
-                    'upgrades' => $upgrades,
+                    'player' =>
+                        $clasher,
+
+                    'upgrades' =>
+                        $upgrades,
                 ]);
-
             }
-
         }
 
-        $pdf = Pdf::loadView('clashers.partials.pdf', [
-
-            'players' => $players,
-
-        ])->setPaper('a4', 'portrait');
+        $pdf = Pdf::loadView(
+            'clashers.partials.pdf',
+            [
+                'players' => $players,
+            ]
+        )->setPaper(
+            'a4',
+            'portrait'
+        );
 
         return $pdf->download(
-            'list-upgrade-' . now()->format('Y-m-d') . '.pdf'
+            'list-upgrade-'
+            . now()->format('Y-m-d')
+            . '.pdf'
         );
     }
 }
