@@ -2,6 +2,9 @@
 @extends('layouts.app')
 
 @section('content')
+
+
+
     {{--  header --}}
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -171,13 +174,12 @@
 
         @foreach($groups as $index => $members)
 
-            @php
-    $sample = $members->first();
+        @php
+            $sample = $members->first();
 
-    $readyCount = $members->where('is_ready_war', true)->count();
-    $notReadyCount = $members->count() - $readyCount;
-@endphp
-
+            $readyCount = $members->where('is_ready_war', true)->count();
+            $notReadyCount = $members->count() - $readyCount;
+        @endphp
 
             <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
 
@@ -185,32 +187,32 @@
                     class="sectionHeader flex items-center justify-between px-6 py-4 border-b border-slate-200 cursor-pointer hover:bg-slate-50 transition"
                     data-target="sectionContent{{ $index }}">
 
-                    <div class="flex items-center gap-3">
+                    @php
+                        $stayCount = $members->where('label', 'stay')->count();
+                        $needUpgradeCount = $members->where('label', 'perlu up')->count();
+                    @endphp
 
+                    <div class="flex items-center gap-3 flex-wrap">
+
+                        {{-- GRUP --}}
                         <span class="text-sm font-semibold text-slate-700">
                             <i class="fas fa-tag mr-2 text-primary"></i>
                             Grup: {{ $index + 1 }}
                         </span>
 
-                        @if($readyCount === $members->count())
+                        {{-- STAY --}}
+                        @if($stayCount > 0)
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                                Stay
+                            </span>
+                        @endif
 
-    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-        Semua Ready
-    </span>
-
-@elseif($readyCount > 0)
-
-    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
-        {{ $readyCount }}/{{ $members->count() }} Ready
-    </span>
-
-@else
-
-    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
-        Belum Ready
-    </span>
-
-@endif
+                        {{-- PERLU UP --}}
+                        @if($needUpgradeCount > 0)
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
+                                Perlu Up
+                            </span>
+                        @endif
 
                     </div>
 
@@ -258,7 +260,12 @@
 
                             </li>
 
-                            @foreach($sample->buildings->groupBy(fn($b)=>$b->building->name) as $building => $items)
+                            @foreach(
+                                $sample->buildings
+                                    ->filter(fn($b) => $b->building && $b->building->is_priority)
+                                    ->groupBy(fn($b) => $b->building->name)
+                                    as $building => $items
+                                )
 
                                 @php
 
