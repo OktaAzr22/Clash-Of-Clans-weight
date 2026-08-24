@@ -2,22 +2,108 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+use App\Http\Controllers\BaseGroupController;
+use App\Http\Controllers\BuildingController;
+
+use App\Http\Controllers\ClasherController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ThBuildingController;
+use App\Http\Controllers\TownHallTemplateController;
 
 
-use Illuminate\Support\Facades\Http;
+Route::get('/', [DashboardController::class, 'index'])
+    ->name('dashboard');
 
-Route::get('/test-coc', function () {
+Route::prefix('clashers')
+    ->name('clashers.')
+    ->controller(ClasherController::class)
+    ->group(function () {
 
-    $tag = 'g2rlopo9u'; // ganti dengan tag akun Anda TANPA #
+        Route::get('/', 'index')
+            ->name('index');
 
-    $response = Http::withHeaders([
-        'Authorization' => 'Bearer '.config('services.coc.token'),
-    ])->get(
-        "https://api.clashofclans.com/v1/players/%23{$tag}"
-    );
+        Route::post('/', 'store')
+            ->name('store');
 
-    return $response->json();
-});
+        Route::get('/overview', 'overview')
+            ->name('overview');
+
+        Route::get('/{clasher}/war-profile', 'warProfile')
+            ->name('war-profile');
+
+        Route::post('/{clasher}/war-profile', 'saveWarProfile')
+            ->name('war-profile.save');
+
+        Route::post('/sync-labels', 'syncLabels')
+            ->name('sync-labels');
+
+        Route::post('/sync-townhall-all', 'syncAllTownHall')
+            ->name('sync-townhall-all');
+
+    });
+
+
+
+
+
+
+Route::prefix('base-groups')
+    ->name('base-groups.')
+    ->controller(BaseGroupController::class)
+    ->group(function () {
+
+        Route::get('/', 'index')
+            ->name('index');
+
+        Route::get('/war-ready', 'warReady')
+            ->name('war-ready');
+
+        Route::post('/war-ready/{clasher}', 'updateWarReady')
+            ->name('war-ready.update');
+    });
+
+Route::prefix('buildings')
+    ->name('buildings.')
+    ->controller(BuildingController::class)
+    ->group(function () {
+
+        Route::post('/', 'store')
+            ->name('store');
+    });
+
+Route::resource('th-buildings', ThBuildingController::class)
+    ->only([
+        'index',
+        'create',
+        'store',
+        'destroy',
+    ]);
+
+Route::prefix('town-hall-templates')
+    ->name('town-hall-templates.')
+    ->controller(TownHallTemplateController::class)
+    ->group(function () {
+
+        Route::get('/', 'index')
+            ->name('index');
+
+        Route::get('/create', 'create')
+            ->name('create');
+
+        Route::post('/', 'store')
+            ->name('store');
+
+        Route::get('/{template}/builder', 'builder')
+            ->name('builder');
+
+        Route::put('/{template}', 'update')
+            ->name('update');
+
+        Route::delete('/{template}', 'destroy')
+            ->name('destroy');
+    });
+
+Route::get(
+    '/upgrades/export/pdf',
+    [ClasherController::class, 'exportPdf']
+)->name('upgrades.export.pdf');
