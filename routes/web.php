@@ -107,3 +107,22 @@ Route::get(
     '/upgrades/export/pdf',
     [ClasherController::class, 'exportPdf']
 )->name('upgrades.export.pdf');
+
+
+
+
+Route::post('/clashers/sync-labels', [ClasherController::class, 'syncLabels'])
+    ->name('clashers.sync-labels');
+
+// 
+use App\Http\Controllers\ClasherConfigurationController;
+
+Route::get(
+    '/configuration',
+    [ClasherConfigurationController::class, 'index']
+)->name('configuration');
+
+Route::patch(
+    '/configuration/{clasher}/toggle-active',
+    [ClasherConfigurationController::class, 'toggleActive']
+)->name('configuration.toggle-active');

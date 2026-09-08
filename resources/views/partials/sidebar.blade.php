@@ -126,8 +126,58 @@
 
        
 
+@php
+    $configurationMenuActive = request()->routeIs('configuration');
+@endphp
 
+{{-- Konfigurasi --}}
+<div class="nav-parent rounded-xl transition-all duration-200
+    {{ $configurationMenuActive
+        ? 'bg-slate-700/30'
+        : 'text-slate-300 hover:bg-slate-700/50 hover:text-white' }}">
 
+    <div class="flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer">
+
+        <div class="flex items-center gap-3">
+            <i class="fa-solid fa-gear w-5 text-center"></i>
+            <span>Konfigurasi</span>
+        </div>
+
+        <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 icon-rotate
+            {{ $configurationMenuActive ? 'rotate-180' : '' }}">
+        </i>
+
+    </div>
+
+    <div class="submenu-container overflow-hidden transition-all duration-300 ease-in-out
+        {{ $configurationMenuActive
+            ? 'max-h-96 opacity-100'
+            : 'max-h-0 opacity-0' }}">
+
+        <div class="pl-2 space-y-1 pt-1 pb-1">
+
+            {{-- Pengaturan Akun --}}
+            <a
+                href="{{ route('configuration') }}"
+                @class([
+                    'flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-200 border-l-2 ml-1',
+
+                    'bg-slate-700/30 text-white border-blue-500'
+                        => request()->routeIs('configuration'),
+
+                    'text-slate-300 hover:text-white hover:bg-slate-700/30 border-transparent hover:border-blue-500'
+                        => !request()->routeIs('configuration'),
+                ])
+            >
+                <i class="fa-solid fa-user-gear text-xs text-blue-400 w-5"></i>
+
+                <span>Pengaturan Akun</span>
+            </a>
+
+        </div>
+    </div>
+
+</div>
     </nav>
 
 </aside>

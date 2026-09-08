@@ -163,65 +163,81 @@
 
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
 
-            <p class="text-sm text-slate-500 mb-4">
-                Sinkronisasi
-            </p>
+    <p class="text-sm text-slate-500 mb-4">
+        Sinkronisasi
+    </p>
 
-            <div class="flex justify-around">
+    <div class="flex items-center justify-around gap-6">
 
-                {{-- Sinkron Label --}}
-                <form
-                    action="{{ route('clashers.sync-labels') }}"
-                    method="POST"
-                    onsubmit="return confirm('Sinkronkan semua label?')">
+        {{-- Sinkron Label --}}
+        <form
+            action="{{ route('clashers.sync-labels') }}"
+            method="POST"
+            onsubmit="return confirm('Sinkronkan label dan status READY semua akun?')"
+        >
+            @csrf
 
-                    @csrf
+            <button
+                type="submit"
+                class="flex flex-col items-center gap-2 group"
+                title="Sinkron Label Semua Akun"
+            >
+                <div
+                    class="w-12 h-12 rounded-xl
+                           bg-indigo-100 text-indigo-600
+                           flex items-center justify-center
+                           transition
+                           group-hover:bg-indigo-600
+                           group-hover:text-white"
+                >
+                    <i class="fa-solid fa-tags"></i>
+                </div>
 
-                    <button
-                        type="submit"
-                        class="flex flex-col items-center gap-2 group"
-                         title="Sinkron Label">
+                <span
+                    class="text-sm font-medium text-slate-600
+                           group-hover:text-indigo-600 transition"
+                >
+                    Label
+                </span>
+            </button>
+        </form>
 
-                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center transition group-hover:bg-blue-600 group-hover:text-white">
 
-                            <i class="fa-solid fa-tags"></i>
+        {{-- Sinkron Town Hall --}}
+        <form
+            action="{{ route('clashers.sync-townhall-all') }}"
+            method="POST"
+            onsubmit="return confirm('Sinkronkan seluruh Town Hall?')"
+        >
+            @csrf
 
-                        </div>
+            <button
+                type="submit"
+                class="flex flex-col items-center gap-2 group"
+                title="Sinkron Town Hall"
+            >
+                <div
+                    class="w-12 h-12 rounded-xl
+                           bg-amber-100 text-amber-600
+                           flex items-center justify-center
+                           transition
+                           group-hover:bg-amber-600
+                           group-hover:text-white"
+                >
+                    <i class="fa-solid fa-tower-observation"></i>
+                </div>
 
-                       
+                <span
+                    class="text-sm font-medium text-slate-600
+                           group-hover:text-amber-600 transition"
+                >
+                    Town Hall
+                </span>
+            </button>
+        </form>
 
-                    </button>
-
-                </form>
-
-                {{-- Sinkron Town Hall --}}
-                <form
-                    action="{{ route('clashers.sync-townhall-all') }}"
-                    method="POST"
-                    onsubmit="return confirm('Sinkronkan seluruh Town Hall?')">
-
-                    @csrf
-
-                    <button
-                        type="submit"
-                        class="flex flex-col items-center gap-2 group"
-                         title="Sinkron Town  Hall ">
-
-                        <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center transition group-hover:bg-amber-600 group-hover:text-white">
-
-                            <i class="fa-solid fa-tower-observation"></i>
-
-                        </div>
-
-                       
-
-                    </button>
-
-                </form>
-
-            </div>
-
-        </div>
+    </div>
+</div>
 
     </div>
 

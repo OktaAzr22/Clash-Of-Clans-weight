@@ -69,6 +69,8 @@ class ClasherController extends Controller
 
         $totalPlayers = $players->count();
 
+        
+
         return view(
             'clashers.index',
             compact(
@@ -559,4 +561,7 @@ class ClasherController extends Controller
             . '.pdf'
         );
     }
+
+
+   
 }

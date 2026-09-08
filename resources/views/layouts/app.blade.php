@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @vite([
         'resources/css/app.css',
@@ -40,21 +40,23 @@
     data-old-modal="{{ old('modal') }}"
 >
 
+    {{-- Global Alert --}}
+<div
+    id="global-alert-container"
+    class="fixed top-4 right-4 z-50 space-y-3"
+>
     @if(session('success'))
-        <div class="fixed top-4 right-4 z-50">
-            <x-alert type="success">
-                {{ session('success') }}
-            </x-alert>
-        </div>
+        <x-alert type="success">
+            {{ session('success') }}
+        </x-alert>
     @endif
 
     @if(session('error'))
-        <div class="fixed top-4 right-4 z-50">
-            <x-alert type="danger">
-                {{ session('error') }}
-            </x-alert>
-        </div>
+        <x-alert type="danger">
+            {{ session('error') }}
+        </x-alert>
     @endif
+</div>
 
     <div class="flex h-screen overflow-hidden">
 
