@@ -40,6 +40,15 @@ Route::prefix('clashers')
         Route::post('/sync-townhall-all', 'syncAllTownHall')
             ->name('sync-townhall-all');
 
+            Route::get('/search-clan', 'searchClan')
+            ->name('search-clan');
+
+        Route::post('/search-clan', 'fetchClan')
+            ->name('fetch-clan');
+
+            Route::post('/check-members', 'checkMembers')->name('check-members');
+        Route::post('/store-members', 'storeClanMembers')->name('store-members');
+
     });
 
 
@@ -76,6 +85,8 @@ Route::resource('th-buildings', ThBuildingController::class)
         'index',
         'create',
         'store',
+        'edit',
+        'update',
         'destroy',
     ]);
 

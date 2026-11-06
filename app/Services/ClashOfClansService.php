@@ -55,4 +55,19 @@ class ClashOfClansService
         );
     }
 
+    public function getClan(string $tag)
+{
+    // CoC API memerlukan urlencoded tag (# menjadi %23)
+    $formattedTag = urlencode($tag);
+
+    $response = Http::withToken(config('services.coc.token'))
+        ->get("https://api.clashofclans.com/v1/clans/{$formattedTag}");
+
+    if ($response->failed()) {
+        throw new \Exception('Clan tidak ditemukan atau terjadi kesalahan server.');
+    }
+
+    return $response->json();
+}
+
 }

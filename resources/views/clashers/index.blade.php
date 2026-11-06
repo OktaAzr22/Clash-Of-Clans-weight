@@ -304,20 +304,36 @@
                             {{-- AKSI --}}
                             <td class="px-6 py-4">
 
-                                <div class="flex items-center justify-center gap-2">
+    <div class="flex items-center justify-center gap-2">
 
-                                    <x-button
-                                        class="open-war-profile"
-                                        data-id="{{ $clasher->id }}"
-                                        data-modal-target="warProfileModal"
-                                    >
-                                        <i class="fa-solid fa-hammer mr-2"></i>
-                                        Kelola Bangunan
-                                    </x-button>
+        @if ($clasher->is_active)
 
-                                </div>
+            <x-button
+                class="open-war-profile"
+                data-id="{{ $clasher->id }}"
+                data-modal-target="warProfileModal"
+            >
+                <i class="fa-solid fa-hammer mr-2"></i>
+                Kelola Bangunan
+            </x-button>
 
-                            </td>
+        @else
+
+            <button
+                type="button"
+                disabled
+                class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium bg-slate-200 text-slate-400 cursor-not-allowed"
+                title="Akun nonaktif tidak dapat mengubah data"
+            >
+                <i class="fa-solid fa-lock"></i>
+                Kelola Bangunan
+            </button>
+
+        @endif
+
+    </div>
+
+</td>
 
                         </tr>
 

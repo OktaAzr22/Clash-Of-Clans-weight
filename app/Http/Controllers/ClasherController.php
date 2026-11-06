@@ -13,6 +13,7 @@ use App\Services\ClasherSyncService;
 use App\Http\Requests\StoreClasherRequest;
 use App\Jobs\SyncAllTownHallJob;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Http\Requests\SearchClanRequest;
 
 class ClasherController extends Controller
 {
@@ -57,6 +58,7 @@ class ClasherController extends Controller
          * Daftar akun yang membutuhkan upgrade.
          */
         $upgradeClashers = Clasher::needUpgrade()
+            ->where('is_active', true)
             ->with([
                 'buildings.building',
                 'template.buildings.building',
@@ -123,10 +125,11 @@ class ClasherController extends Controller
      */
     public function warProfile(Clasher $clasher)
     {
-        /*
-         * Ambil konfigurasi building terakhir
-         * yang tersedia untuk TH clasher.
-         */
+        if (! $clasher->is_active) {
+        return redirect()
+            ->route('clashers.index')
+            ->with('error', 'Akun nonaktif tidak dapat mengubah data war profile.');
+    }
         $buildings = ThBuilding::with('building')
             ->where(
                 'town_hall',
@@ -197,9 +200,14 @@ class ClasherController extends Controller
         TemplateLabelService $templateLabelService
     ) {
 
-        /*
-         * Simpan semua level building.
-         */
+        if (! $clasher->is_active) {
+        return redirect()
+            ->route('clashers.index')
+            ->with(
+                'error',
+                'Akun nonaktif tidak dapat mengubah data war profile.'
+            );
+    }
         foreach ($request->levels ?? [] as $buildingId => $slots) {
 
             foreach ($slots as $slot => $level) {
@@ -429,10 +437,11 @@ class ClasherController extends Controller
     public function exportPdf(Request $request)
     {
         $query = Clasher::with([
-            'buildings.building',
-            'template.buildings.building',
-        ])
-            ->where('label', 'perlu up');
+    'buildings.building',
+    'template.buildings.building',
+])
+    ->where('is_active', true)
+    ->where('label', 'perlu up');
 
         /*
          * Filter TH jika diberikan.
@@ -560,6 +569,114 @@ class ClasherController extends Controller
             . now()->format('Y-m-d')
             . '.pdf'
         );
+    }
+
+    public function searchClan()
+    {
+        return view('clashers.search-clan');
+    }
+
+    public function fetchClan(
+        SearchClanRequest $request,
+        ClashOfClansService $coc
+    ) {
+        try {
+            $clan = $coc->getClan($request->validated('tag'));
+
+            return view('clashers.search-clan', compact('clan'));
+        } catch (\Exception $e) {
+            return back()
+                ->withErrors(['tag' => $e->getMessage()])
+                ->withInput();
+        }
+    }
+
+
+    public function storeClanMembers(
+        Request $request,
+        ClashOfClansService $coc,
+        ClasherSyncService $clasherSync
+    ) {
+        $tagsInput = $request->input('tags', []);
+
+        if (empty($tagsInput)) {
+            return back()->with('error', 'Tidak ada tag clasher untuk disimpan.');
+        }
+
+        // 1. Ambil tag yang SUDAH terdaftar di DB
+        $existingTags = Clasher::whereIn('tag', $tagsInput)
+            ->pluck('tag')
+            ->toArray();
+
+        // 2. Filter HANYA tag yang BELUM terdaftar
+        $unregisteredTags = array_diff($tagsInput, $existingTags);
+
+        if (empty($unregisteredTags)) {
+            return back()->with('info', 'Semua anggota dari daftar ini sudah terdaftar di database.');
+        }
+
+        $savedCount = 0;
+        $failedCount = 0;
+
+        // 3. Loop dan simpan HANYA tag yang belum terdaftar
+        foreach ($unregisteredTags as $tag) {
+            try {
+                // Fetch detail player dari API CoC
+                $playerData = $coc->getPlayer($tag);
+
+                // Sync / simpan ke database
+                $clasherSync->sync($playerData);
+
+                $savedCount++;
+            } catch (\Exception $e) {
+                $failedCount++;
+            }
+        }
+
+        return redirect()->route('clashers.index')->with(
+            'success',
+            "Berhasil menyimpan {$savedCount} clasher baru." . ($failedCount > 0 ? " ({$failedCount} gagal diproses)" : "")
+        );
+    }
+
+    public function checkMembers(Request $request, ClashOfClansService $coc)
+    {
+        $tag = $request->input('clan_tag');
+
+        if (!$tag) {
+            return back()->with('error', 'Tag Clan tidak ditemukan.');
+        }
+
+        try {
+            $clan = $coc->getClan($tag);
+            $memberList = collect($clan['memberList'] ?? []);
+
+            // Ambil semua tag anggota dari API CoC
+            $apiTags = $memberList->pluck('tag')->toArray();
+
+            // Cari tag yang sudah terdaftar di database
+            $registeredTags = Clasher::whereIn('tag', $apiTags)->pluck('tag')->toArray();
+
+            // Pisahkan anggota terdaftar dan belum terdaftar
+            $registeredMembers = $memberList->whereIn('tag', $registeredTags)->values();
+            $unregisteredMembers = $memberList->whereNotIn('tag', $registeredTags)->values();
+
+            // Simpan hasil pemeriksaan dan data anggota belum terdaftar di session
+            $info = [
+                'clan_name' => $clan['name'],
+                'clan_tag' => $clan['tag'],
+                'total_members' => $memberList->count(),
+                'registered_count' => $registeredMembers->count(),
+                'unregistered_count' => $unregisteredMembers->count(),
+                'unregistered_tags' => $unregisteredMembers->pluck('tag')->toArray(),
+            ];
+
+            return view('clashers.search-clan', compact('clan'))
+                ->with('info', $info);
+
+        } catch (\Exception $e) {
+            return back()->withErrors(['tag' => $e->getMessage()]);
+        }
     }
 
 

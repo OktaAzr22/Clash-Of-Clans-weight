@@ -10,6 +10,7 @@ class BaseGroupController extends Controller
     public function index(Request $request)
     {
         $ths = Clasher::query()
+            ->where('is_active', true)
             ->distinct()
             ->orderByDesc('town_hall')
             ->pluck('town_hall');
@@ -24,6 +25,7 @@ class BaseGroupController extends Controller
 
             $players = Clasher::query()
                 ->with('buildings.building')
+                ->where('is_active', true)
                 ->where('town_hall', $request->input('th'))
                 ->get();
 
