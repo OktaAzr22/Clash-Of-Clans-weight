@@ -85,5 +85,37 @@ class ThBuildingController extends Controller
             );
     }
 
+    public function edit(ThBuilding $thBuilding)
+    {
+        $buildings = Building::orderBy('name')->get();
+
+        if (request()->ajax()) {
+            return response()->json([
+                'thBuilding' => $thBuilding,
+                'buildings' => $buildings,
+            ]);
+        }
+
+        return view('th-buildings.edit', compact('thBuilding', 'buildings'));
+    }
+
+    public function update(Request $request, ThBuilding $thBuilding)
+{
+    $request->validate([
+        'town_hall' => ['required', 'integer'],
+        'building_id' => ['required', 'exists:buildings,id'],
+        'quantity' => ['required', 'integer', 'min:1'],
+        'max_level' => ['required', 'integer', 'min:1'],
+    ]);
+
+    $thBuilding->update([
+        'quantity' => $request->quantity,
+        'max_level' => $request->max_level,
+    ]);
+
+    return redirect('/th-buildings')
+        ->with('success', "Level {$thBuilding->building->name} untuk TH {$thBuilding->town_hall} berhasil diperbarui.");
+}
+
     
 }
