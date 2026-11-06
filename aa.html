@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | Velora</title>
+
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4f46e5',
+                        'primary-dark': '#4338ca',
+                        secondary: '#0f172a',
+                        'soft-gray': '#f8fafc',
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="font-inter antialiased">
+
+    <div class="flex h-screen overflow-hidden bg-soft-gray">
+
+        <!-- ========== SIDEBAR ========== -->
+        <aside class="w-72 bg-gradient-to-b from-secondary to-slate-800 text-white shadow-2xl flex-shrink-0 flex flex-col">
+            <!-- Brand -->
+            <div class="px-6 py-7 border-b border-slate-700/60 flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-lg">
+                    <i class="fas fa-chart-line text-xl text-white"></i>
+                </div>
+                <span class="text-xl font-bold tracking-tight">Velora<span class="text-primary">Admin</span></span>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 px-4 mt-6 space-y-1.5 overflow-y-auto">
+
+                <!-- Dashboard -->
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/20 text-white font-medium transition-all duration-200 group">
+                    <i class="fas fa-tachometer-alt w-5 text-lg"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <!-- Pengguna dengan submenu -->
+                <div class="nav-parent transition-all duration-200 rounded-xl text-slate-300 hover:bg-slate-700/50 hover:text-white">
+                    <div class="flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-users w-5"></i>
+                            <span>Pengguna</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-xs text-slate-400 transition-transform duration-200 icon-rotate"></i>
+                    </div>
+                    <div class="submenu-container overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0">
+                        <div class="pl-2 space-y-1 pt-1 pb-1">
+                            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/30 transition-all duration-200 border-l-2 border-transparent hover:border-primary ml-1">
+                                <i class="fas fa-user-plus w-5 text-xs text-primary"></i>
+                                <span>Daftar Pengguna</span>
+                            </a>
+                            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/30 transition-all duration-200 border-l-2 border-transparent hover:border-primary ml-1">
+                                <i class="fas fa-user-cog w-5 text-xs text-primary"></i>
+                                <span>Kelola Peran</span>
+                            </a>
+                            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/30 transition-all duration-200 border-l-2 border-transparent hover:border-primary ml-1">
+                                <i class="fas fa-user-check w-5 text-xs text-primary"></i>
+                                <span>Verifikasi</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analitik dengan submenu -->
+                <div class="nav-parent transition-all duration-200 rounded-xl text-slate-300 hover:bg-slate-700/50 hover:text-white">
+                    <div class="flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-chart-pie w-5"></i>
+                            <span>Analitik</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-xs text-slate-400 transition-transform duration-200 icon-rotate"></i>
+                    </div>
+                    <div class="submenu-container overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0">
+                        <div class="pl-2 space-y-1 pt-1 pb-1">
+                            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/30 transition-all duration-200 border-l-2 border-transparent hover:border-primary ml-1">
+                                <i class="fas fa-chart-bar w-5 text-xs text-primary"></i>
+                                <span>Laporan Bulanan</span>
+                            </a>
+                            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/30 transition-all duration-200 border-l-2 border-transparent hover:border-primary ml-1">
+                                <i class="fas fa-chart-line w-5 text-xs text-primary"></i>
+                                <span>Trend & Prediksi</span>
+                            </a>
+                            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/30 transition-all duration-200 border-l-2 border-transparent hover:border-primary ml-1">
+                                <i class="fas fa-download w-5 text-xs text-primary"></i>
+                                <span>Ekspor Data</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pengaturan dengan submenu -->
+                <div class="nav-parent transition-all duration-200 rounded-xl text-slate-300 hover:bg-slate-700/50 hover:text-white">
+                    <div class="flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-cog w-5"></i>
+                            <span>Pengaturan</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-xs text-slate-400 transition-transform duration-200 icon-rotate"></i>
+                    </div>
+                    <div class="submenu-container overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0">
+                        <div class="pl-2 space-y-1 pt-1 pb-1">
+                            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/30 transition-all duration-200 border-l-2 border-transparent hover:border-primary ml-1">
+                                <i class="fas fa-sliders-h w-5 text-xs text-primary"></i>
+                                <span>Preferensi</span>
+                            </a>
+                            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/30 transition-all duration-200 border-l-2 border-transparent hover:border-primary ml-1">
+                                <i class="fas fa-shield-alt w-5 text-xs text-primary"></i>
+                                <span>Keamanan</span>
+                            </a>
+                            <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/30 transition-all duration-200 border-l-2 border-transparent hover:border-primary ml-1">
+                                <i class="fas fa-palette w-5 text-xs text-primary"></i>
+                                <span>Tampilan</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logout -->
+                <div class="pt-6 mt-6 border-t border-slate-700/50">
+                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-700/50 hover:text-red-300 transition-all duration-200">
+                        <i class="fas fa-sign-out-alt w-5"></i>
+                        <span>Keluar</span>
+                    </a>
+                </div>
+            </nav>
+
+            <!-- Profile card -->
+            <div class="p-4 border-t border-slate-700/60 mt-auto">
+                <div class="flex items-center gap-3 bg-slate-800/50 rounded-xl p-3">
+                    <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center shadow-md">
+                        <span class="text-sm font-bold">AD</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-semibold truncate">Admin Velora</p>
+                        <p class="text-xs text-slate-400 truncate">admin@velora.com</p>
+                    </div>
+                    <i class="fas fa-chevron-right text-slate-400 text-xs"></i>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ========== MAIN CONTENT ========== -->
+        <div class="flex-1 flex flex-col overflow-y-auto overflow-x-hidden">
+
+            <!-- Header -->
+            <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-10 border-b border-slate-200/70">
+                <div class="px-6 py-4 flex items-center justify-between">
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-800">Dashboard</h1>
+                        <nav class="text-sm mt-0.5">
+                            <ol class="list-none p-0 inline-flex items-center space-x-1.5">
+                                <li class="flex items-center">
+                                    <a href="#" class="text-slate-500 hover:text-primary transition">Beranda</a>
+                                    <i class="fas fa-chevron-right text-xs mx-1.5 text-slate-400"></i>
+                                </li>
+                                <li class="flex items-center">
+                                    <a href="#" class="text-slate-500 hover:text-primary transition">Admin</a>
+                                    <i class="fas fa-chevron-right text-xs mx-1.5 text-slate-400"></i>
+                                </li>
+                                <li class="text-primary font-medium">Dashboard</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <!-- Tombol untuk membuka modal building -->
+                        <button id="openBuildingModal" class="bg-primary text-white px-5 py-2.5 rounded-xl shadow-md hover:bg-primary-dark transition flex items-center gap-2 text-sm">
+                            <i class="fas fa-building"></i>
+                            <span>Lihat Building</span>
+                        </button>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-r from-primary to-indigo-500 flex items-center justify-center text-white text-sm font-bold shadow-md">
+                                AD
+                            </div>
+                            <span class="hidden sm:inline-block text-sm font-medium text-slate-700">Admin</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main -->
+            <main class="p-6 md:p-8">
+                <div class="mb-8 bg-gradient-to-r from-indigo-50 via-white to-purple-50 rounded-2xl p-5 shadow-sm border border-indigo-100">
+                    <div class="flex flex-wrap justify-between items-center">
+                        <div>
+                            <h2 class="text-2xl font-bold text-slate-800">Selamat datang kembali, <span class="text-primary">Admin!</span></h2>
+                            <p class="text-slate-500 mt-1">Klik tombol "Lihat Building" untuk melihat daftar building.</p>
+                        </div>
+                        <div class="mt-3 sm:mt-0">
+                            <span class="bg-white/60 text-slate-700 px-4 py-2 rounded-xl shadow-sm text-sm flex items-center gap-2"><i class="far fa-calendar-alt text-primary"></i> Kamis, 10 Juni 2026</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stat Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white rounded-2xl shadow-md p-5 border border-slate-100 hover:shadow-lg transition-all duration-300 group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-slate-500 text-sm font-medium">Total Pengguna</p>
+                                <h3 class="text-3xl font-bold text-slate-800 mt-2">12,543</h3>
+                                <span class="inline-flex items-center text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full mt-3"><i class="fas fa-arrow-up mr-1 text-[10px]"></i> +12%</span>
+                            </div>
+                            <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                <i class="fas fa-users text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-md p-5 border border-slate-100 hover:shadow-lg transition-all duration-300 group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-slate-500 text-sm font-medium">Pendapatan</p>
+                                <h3 class="text-3xl font-bold text-slate-800 mt-2">Rp 89.2Jt</h3>
+                                <span class="inline-flex items-center text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full mt-3"><i class="fas fa-arrow-up mr-1"></i> +23%</span>
+                            </div>
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-chart-line text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-md p-5 border border-slate-100 hover:shadow-lg transition-all duration-300 group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-slate-500 text-sm font-medium">Order Selesai</p>
+                                <h3 class="text-3xl font-bold text-slate-800 mt-2">1,892</h3>
+                                <span class="inline-flex items-center text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded-full mt-3"><i class="fas fa-chart-simple mr-1"></i> stabil</span>
+                            </div>
+                            <div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-600 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-shopping-cart text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-md p-5 border border-slate-100 hover:shadow-lg transition-all duration-300 group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-slate-500 text-sm font-medium">Tingkat Konversi</p>
+                                <h3 class="text-3xl font-bold text-slate-800 mt-2">68.9%</h3>
+                                <span class="inline-flex items-center text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full mt-3"><i class="fas fa-arrow-up mr-1"></i> +5.2%</span>
+                            </div>
+                            <div class="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-percent text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom action -->
+                <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 text-center md:text-left">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div>
+                            <h4 class="font-bold text-slate-800">Ingin menambahkan data produk?</h4>
+                            <p class="text-slate-500 text-sm mt-1">Klik tombol di samping untuk membuka form modal.</p>
+                        </div>
+                        <button id="openModalBtnSecond" class="bg-primary text-white px-5 py-2.5 rounded-xl shadow-md hover:bg-primary-dark transition flex items-center gap-2">
+                            <i class="fas fa-folder-plus"></i> Tambah Produk Baru
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+
+    <!-- HEADER -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+
+        <div>
+            <h2 class="text-2xl font-bold text-slate-800">
+                Daftar Clasher
+            </h2>
+
+            <p class="text-sm text-slate-500 mt-1">
+                Kelola data pemain Clash of Clans dan profil war mereka.
+            </p>
+        </div>
+
+        <div class="flex gap-2">
+
+            <button class="px-4 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition">
+                <i class="fa-solid fa-plus mr-2"></i>
+                Tambah Clasher
+            </button>
+
+            <a href="#"
+               class="inline-flex items-center px-4 py-2 rounded-xl bg-slate-700 text-white text-sm font-medium hover:bg-slate-800 transition">
+                <i class="fa-solid fa-building mr-2"></i>
+                Lihat Data TH & Building
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- TABLE CARD -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+
+        <div class="px-6 py-4 border-b border-slate-200">
+
+            <h3 class="font-semibold text-slate-800">
+                Data Clasher
+            </h3>
+            disini buatkkan saya button grup 3
+
+        </div>
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full text-sm">
+
+                <thead class="bg-slate-50">
+
+                    <tr class="text-slate-600">
+
+                        <th class="px-6 py-4 text-left font-semibold">Nama</th>
+                        <th class="px-6 py-4 text-left font-semibold">Tag</th>
+                        <th class="px-6 py-4 text-left font-semibold">Clan</th>
+                        <th class="px-6 py-4 text-left font-semibold">TH</th>
+                        <th class="px-6 py-4 text-left font-semibold">War Stars</th>
+                        <th class="px-6 py-4 text-left font-semibold">Level</th>
+                        <th class="px-6 py-4 text-center font-semibold">Aksi</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody class="divide-y divide-slate-100">
+
+                    <!-- ROW 1 -->
+                    <tr class="hover:bg-slate-50 transition">
+
+                        <td class="px-6 py-4 font-medium text-slate-800">
+                            Budi
+                        </td>
+
+                        <td class="px-6 py-4 font-mono text-slate-600">
+                            #ABC123
+                        </td>
+
+                        <td class="px-6 py-4">
+                            Avengers Clan
+                        </td>
+
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-medium">
+                                TH 12
+                            </span>
+                        </td>
+
+                        <td class="px-6 py-4">
+                            1200
+                        </td>
+
+                        <td class="px-6 py-4">
+                            150
+                        </td>
+
+                        <td class="px-6 py-4 text-center">
+                            <button class="px-3 py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700">
+                                Kelola Bangunan
+                            </button>
+                        </td>
+
+                    </tr>
+
+                    <!-- ROW 2 -->
+                    <tr class="hover:bg-slate-50 transition">
+
+                        <td class="px-6 py-4 font-medium text-slate-800">
+                            Andi
+                        </td>
+
+                        <td class="px-6 py-4 font-mono text-slate-600">
+                            #XYZ999
+                        </td>
+
+                        <td class="px-6 py-4">
+                            Dragon Clan
+                        </td>
+
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-medium">
+                                TH 10
+                            </span>
+                        </td>
+
+                        <td class="px-6 py-4">
+                            980
+                        </td>
+
+                        <td class="px-6 py-4">
+                            110
+                        </td>
+
+                        <td class="px-6 py-4 text-center">
+                            <button class="px-3 py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700">
+                                Kelola Bangunan
+                            </button>
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- PAGINATION (STATIC HTML) -->
+        <div class="flex items-center justify-between px-6 py-4 border-t border-slate-200 bg-slate-50">
+
+            <p class="text-sm text-slate-600">
+                Menampilkan 1 - 2 dari 2 data
+            </p>
+
+            <div class="flex gap-2">
+
+                <button class="px-3 py-1 rounded-lg border text-slate-600 hover:bg-slate-100">
+                    Prev
+                </button>
+
+                <button class="px-3 py-1 rounded-lg bg-blue-600 text-white">
+                    1
+                </button>
+
+                <button class="px-3 py-1 rounded-lg border text-slate-600 hover:bg-slate-100">
+                    Next
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+            </main>
+        </div>
+    </div>
+
+    <!-- ========== MODAL BUILDING (Hardcoded Data) ========== -->
+    <div id="buildingModalOverlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 invisible opacity-0 transition-all duration-300">
+        <div id="buildingModalContainer" class="bg-white rounded-2xl w-full max-w-2xl mx-4 shadow-2xl transform scale-95 transition-all duration-300 max-h-[90vh] flex flex-col">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center p-5 border-b border-slate-200 flex-shrink-0">
+                <h3 class="text-xl font-bold text-slate-800 flex gap-3 items-center">
+                    <i class="fas fa-building text-primary"></i>
+                    Daftar Building
+                    <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full font-medium">10</span>
+                </h3>
+                <button id="closeBuildingModal" class="text-slate-400 hover:text-slate-600 transition text-2xl leading-5">&times;</button>
+            </div>
+
+            <!-- Modal Body - List Building (Data langsung di HTML) -->
+            <div class="p-5 overflow-y-auto flex-1">
+                <div class="space-y-2">
+                    
+                    <!-- Building 1 -->
+                    <div class="flex items-center gap-4 p-3 rounded-xl border border-slate-100 hover:shadow-md transition-all duration-200 hover:border-primary/20 group">
+                        <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-sm flex-shrink-0">1</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-slate-800 group-hover:text-primary transition">Menara BCA</p>
+                            <p class="text-xs text-slate-400">Building ID: #B-001</p>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button class="p-2 rounded-lg hover:bg-primary/10 text-slate-400 hover:text-primary transition" title="Detail">
+                                <i class="fas fa-chevron-right text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Building 2 -->
+                    <div class="flex items-center gap-4 p-3 rounded-xl border border-slate-100 hover:shadow-md transition-all duration-200 hover:border-primary/20 group">
+                        <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center font-bold text-sm flex-shrink-0">2</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-slate-800 group-hover:text-primary transition">Wisma 46</p>
+                            <p class="text-xs text-slate-400">Building ID: #B-002</p>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button class="p-2 rounded-lg hover:bg-primary/10 text-slate-400 hover:text-primary transition" title="Detail">
+                                <i class="fas fa-chevron-right text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Building 3 -->
+                    <div class="flex items-center gap-4 p-3 rounded-xl border border-slate-100 hover:shadow-md transition-all duration-200 hover:border-primary/20 group">
+                        <div class="w-10 h-10 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center font-bold text-sm flex-shrink-0">3</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-slate-800 group-hover:text-primary transition">Gedung Sate</p>
+                            <p class="text-xs text-slate-400">Building ID: #B-003</p>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button class="p-2 rounded-lg hover:bg-primary/10 text-slate-400 hover:text-primary transition" title="Detail">
+                                <i class="fas fa-chevron-right text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Building 4 -->
+                    <div class="flex items-center gap-4 p-3 rounded-xl border border-slate-100 hover:shadow-md transition-all duration-200 hover:border-primary/20 group">
+                        <div class="w-10 h-10 rounded-lg bg-pink-50 text-pink-700 flex items-center justify-center font-bold text-sm flex-shrink-0">4</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-slate-800 group-hover:text-primary transition">Menara Mandiri</p>
+                            <p class="text-xs text-slate-400">Building ID: #B-004</p>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button class="p-2 rounded-lg hover:bg-primary/10 text-slate-400 hover:text-primary transition" title="Detail">
+                                <i class="fas fa-chevron-right text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Building 5 -->
+                    <div class="flex items-center gap-4 p-3 rounded-xl border border-slate-100 hover:shadow-md transition-all duration-200 hover:border-primary/20 group">
+                        <div class="w-10 h-10 rounded-lg bg-green-50 text-green-700 flex items-center justify-center font-bold text-sm flex-shrink-0">5</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-slate-800 group-hover:text-primary transition">Plaza Indonesia</p>
+                            <p class="text-xs text-slate-400">Building ID: #B-005</p>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button class="p-2 rounded-lg hover:bg-primary/10 text-slate-400 hover:text-primary transition" title="Detail">
+                                <i class="fas fa-chevron-right text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Building 6 -->
+                    <div class="flex items-center gap-4 p-3 rounded-xl border border-slate-100 hover:shadow-md transition-all duration-200 hover:border-primary/20 group">
+                        <div class="w-10 h-10 rounded-lg bg-yellow-50 text-yellow-700 flex items-center justify-center font-bold text-sm flex-shrink-0">6</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-slate-800 group-hover:text-primary transition">Gedung Pancasila</p>
+                            <p class="text-xs text-slate-400">Building ID: #B-006</p>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button class="p-2 rounded-lg hover:bg-primary/10 text-slate-400 hover:text-primary transition" title="Detail">
+                                <i class="fas fa-chevron-right text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Building 7 -->
+                    <div class="flex items-center gap-4 p-3 rounded-xl border border-slate-100 hover:shadow-md transition-all duration-200 hover:border-primary/20 group">
+                        <div class="w-10 h-10 rounded-lg bg-red-50 text-red-700 flex items-center justify-center font-bold text-sm flex-shrink-0">7</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-slate-800 group-hover:text-primary transition">Menara Jakarta</p>
+                            <p class="text-xs text-slate-400">Building ID: #B-007</p>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button class="p-2 rounded-lg hover:bg-primary/10 text-slate-400 hover:text-primary transition" title="Detail">
+                                <i class="fas fa-chevron-right text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Building 8 -->
+                    <div class="flex items-center gap-4 p-3 rounded-xl border border-slate-100 hover:shadow-md transition-all duration-200 hover:border-primary/20 group">
+                        <div class="w-10 h-10 rounded-lg bg-teal-50 text-teal-700 flex items-center justify-center font-bold text-sm flex-shrink-0">8</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-slate-800 group-hover:text-primary transition">Wisma Nusantara</p>
+                            <p class="text-xs text-slate-400">Building ID: #B-008</p>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button class="p-2 rounded-lg hover:bg-primary/10 text-slate-400 hover:text-primary transition" title="Detail">
+                                <i class="fas fa-chevron-right text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Building 9 -->
+                    <div class="flex items-center gap-4 p-3 rounded-xl border border-slate-100 hover:shadow-md transition-all duration-200 hover:border-primary/20 group">
+                        <div class="w-10 h-10 rounded-lg bg-orange-50 text-orange-700 flex items-center justify-center font-bold text-sm flex-shrink-0">9</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-slate-800 group-hover:text-primary transition">Gedung Merdeka</p>
+                            <p class="text-xs text-slate-400">Building ID: #B-009</p>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button class="p-2 rounded-lg hover:bg-primary/10 text-slate-400 hover:text-primary transition" title="Detail">
+                                <i class="fas fa-chevron-right text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Building 10 -->
+                    <div class="flex items-center gap-4 p-3 rounded-xl border border-slate-100 hover:shadow-md transition-all duration-200 hover:border-primary/20 group">
+                        <div class="w-10 h-10 rounded-lg bg-cyan-50 text-cyan-700 flex items-center justify-center font-bold text-sm flex-shrink-0">10</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-slate-800 group-hover:text-primary transition">Menara Jamsostek</p>
+                            <p class="text-xs text-slate-400">Building ID: #B-010</p>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button class="p-2 rounded-lg hover:bg-primary/10 text-slate-400 hover:text-primary transition" title="Detail">
+                                <i class="fas fa-chevron-right text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 border-t border-slate-200 flex-shrink-0 flex justify-end">
+                <button id="closeBuildingModalFooter" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition font-medium">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MODAL FORM (existing) ========== -->
+    <div id="modalOverlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 invisible opacity-0 transition-all duration-300">
+        <div id="modalContainer" class="bg-white rounded-2xl w-full max-w-md mx-4 shadow-2xl transform scale-95 transition-all duration-300">
+            <div class="flex justify-between items-center p-5 border-b border-slate-200">
+                <h3 class="text-xl font-bold text-slate-800 flex gap-2 items-center"><i class="fas fa-plus-circle text-primary"></i> Form Tambah Data</h3>
+                <button id="closeModalBtn" class="text-slate-400 hover:text-slate-600 transition text-2xl leading-5">&times;</button>
+            </div>
+            <div class="p-5">
+                <div class="mb-4">
+                    <label class="block text-slate-700 text-sm font-medium mb-1">Nama Lengkap</label>
+                    <input type="text" class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition" placeholder="Masukkan nama" />
+                </div>
+                <div class="mb-4">
+                    <label class="block text-slate-700 text-sm font-medium mb-1">Kategori / Item</label>
+                    <input type="text" class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition" placeholder="Contoh: Produk, Jasa, Layanan" />
+                </div>
+                <div class="mb-5">
+                    <label class="block text-slate-700 text-sm font-medium mb-1">Status</label>
+                    <select class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-primary/30 focus:border-primary">
+                        <option>Aktif</option>
+                        <option>Pending</option>
+                        <option>Selesai</option>
+                    </select>
+                </div>
+                <button class="w-full bg-primary text-white py-2.5 rounded-xl hover:bg-primary-dark transition font-medium shadow-sm">Simpan Data</button>
+                <p class="text-xs text-center text-slate-400 mt-3">*Halaman tampilan, tombol tidak menyimpan data</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== JAVASCRIPT ========== -->
+    <script>
+        // ============================================
+        // MODAL BUILDING CONTROLS
+        // ============================================
+        const buildingModalOverlay = document.getElementById('buildingModalOverlay');
+        const buildingModalContainer = document.getElementById('buildingModalContainer');
+        const openBuildingModalBtn = document.getElementById('openBuildingModal');
+        const closeBuildingModalBtn = document.getElementById('closeBuildingModal');
+        const closeBuildingModalFooter = document.getElementById('closeBuildingModalFooter');
+
+        function openBuildingModal() {
+            buildingModalOverlay.classList.remove('invisible', 'opacity-0');
+            buildingModalOverlay.classList.add('visible', 'opacity-100');
+            buildingModalContainer.classList.remove('scale-95');
+            buildingModalContainer.classList.add('scale-100');
+        }
+
+        function closeBuildingModal() {
+            buildingModalOverlay.classList.add('invisible', 'opacity-0');
+            buildingModalOverlay.classList.remove('visible', 'opacity-100');
+            buildingModalContainer.classList.add('scale-95');
+            buildingModalContainer.classList.remove('scale-100');
+        }
+
+        openBuildingModalBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openBuildingModal();
+        });
+
+        closeBuildingModalBtn.addEventListener('click', closeBuildingModal);
+        closeBuildingModalFooter.addEventListener('click', closeBuildingModal);
+
+        buildingModalOverlay.addEventListener('click', (e) => {
+            if (e.target === buildingModalOverlay) closeBuildingModal();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && buildingModalOverlay.classList.contains('visible')) {
+                closeBuildingModal();
+            }
+        });
+
+        // ============================================
+        // SUBMENU TOGGLE
+        // ============================================
+        document.querySelectorAll('.nav-parent').forEach(parent => {
+            const toggleBtn = parent.querySelector('.cursor-pointer');
+            const submenu = parent.querySelector('.submenu-container');
+            const icon = parent.querySelector('.icon-rotate');
+
+            toggleBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+
+                if (submenu.classList.contains('max-h-0')) {
+                    submenu.classList.remove('max-h-0', 'opacity-0');
+                    submenu.classList.add('max-h-96', 'opacity-100');
+                    icon.classList.add('rotate-180');
+                    parent.classList.add('bg-slate-700/30');
+                } else {
+                    submenu.classList.add('max-h-0', 'opacity-0');
+                    submenu.classList.remove('max-h-96', 'opacity-100');
+                    icon.classList.remove('rotate-180');
+                    parent.classList.remove('bg-slate-700/30');
+                }
+            });
+        });
+
+        // ============================================
+        // MODAL FORM (existing)
+        // ============================================
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalContainer = document.getElementById('modalContainer');
+        const openModalBtns = document.querySelectorAll('#openModalBtn, #openModalBtnAlt, #openModalBtnSecond');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        function openModal() {
+            modalOverlay.classList.remove('invisible', 'opacity-0');
+            modalOverlay.classList.add('visible', 'opacity-100');
+            modalContainer.classList.remove('scale-95');
+            modalContainer.classList.add('scale-100');
+        }
+
+        function closeModal() {
+            modalOverlay.classList.add('invisible', 'opacity-0');
+            modalOverlay.classList.remove('visible', 'opacity-100');
+            modalContainer.classList.add('scale-95');
+            modalContainer.classList.remove('scale-100');
+        }
+
+        openModalBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openModal();
+            });
+        });
+
+        closeModalBtn.addEventListener('click', closeModal);
+
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) closeModal();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modalOverlay.classList.contains('visible')) {
+                closeModal();
+            }
+        });
+    </script>
+
+</body>
+</html>
